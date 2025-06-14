@@ -23,8 +23,8 @@ async def main() -> None:
     dp.message.middleware(i18n_middleware)
     dp.callback_query.middleware(i18n_middleware)
 
-    dp.message.middleware(CheckSubscriptionMiddleware())
-    dp.callback_query.middleware(CheckSubscriptionMiddleware())
+    # dp.message.middleware(CheckSubscriptionMiddleware())
+    # dp.callback_query.middleware(CheckSubscriptionMiddleware())
 
     dp.include_router(v1_router)
     await dp.start_polling(bot)

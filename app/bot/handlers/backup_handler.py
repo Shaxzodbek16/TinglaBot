@@ -1,13 +1,13 @@
 from sqlalchemy.future import select
-from aiogram import Bot
 from aiogram.types import FSInputFile, Message
+from aiogram import Bot, Dispatcher
 
 from app.bot.models import Backup
 from app.core.databases.postgres import get_general_session
 from app.core.settings.config import get_settings, Settings
-from app.server.server import bot
 
 settings: Settings = get_settings()
+bot = Bot(settings.BOT_TOKEN)
 
 
 async def get_from_backup(url: str) -> Backup | None:

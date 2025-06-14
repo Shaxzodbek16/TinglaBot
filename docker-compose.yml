@@ -12,10 +12,11 @@ services:
       - "8443:8443"
       - "443:443"
       - "80:80"
+    command: [ "sh", "-c", "./entrypoint.sh" ]
     networks:
       - bot_network
     depends_on:
-      healthcheck:
+      postgres:
         condition: service_healthy
   postgres:
     image: postgres:17-alpine
@@ -26,9 +27,17 @@ services:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - bot_network
-
+    ports:
+      - "5432:5432"
     healthcheck:
       test: [ "CMD", "pg_isready", "-U", "${POSTGRES_USER}" ]
       interval: 10s
       timeout: 5s
       retries: 5
+
+volumes:
+  postgres_data:
+
+networks:
+  bot_network:
+    driver: bridge
