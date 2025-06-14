@@ -1,0 +1,30 @@
+# English translations for PROJECT.
+# Copyright (C) 2025 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2025-06-12 05:15+0500\n"
+"PO-Revision-Date: 2025-06-12 05:15+0500\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: en\n"
+"Language-Team: en <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.13.1\n"
+
+#~ msgid "Welcome to the PROJECT."
+#~ msgstr "Welcome to the PROJECT."
+
+# Translations for the PROJECT.
+msgid "Hello, World!"
+msgstr "Hello, World!"
+
+
+msgid "start"
+msgstr "🎉 Welcome to @TinglaBot!\n📥 With this bot, you can easily download videos and audio from platforms like:\n• Instagram, TikTok, YouTube, Threads\n• Snapchat, Likee, Pinterest, and more\n• 🎵 Identify songs via Shazam\n🔥 Just send a link to get started. Works in groups too!\n📌 You get 3 free requests per day. Invite friends using your referral link and earn extra rewards!"

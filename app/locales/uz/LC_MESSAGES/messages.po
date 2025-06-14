@@ -1,0 +1,24 @@
+# Uzbek translations for PROJECT.
+# Copyright (C) 2025 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2025-06-12 05:15+0500\n"
+"PO-Revision-Date: 2025-06-12 05:16+0500\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: uz\n"
+"Language-Team: uz <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.13.1\n"
+
+# Translations for the PROJECT.
+msgid "start"
+msgstr "🎉 Assalomu alaykum! @TinglaBot’ga xush kelibsiz!\n📥 Bu bot orqali siz quyidagi platformalardan videolarni sifatli va qulay tarzda yuklab olishingiz mumkin:\n• Instagram, TikTok, YouTube, Threads\n• Snapchat, Likee, Pinterest va boshqalar\n• 🎵 Shazam orqali qo‘shiq nomini aniqlash\n🔥 Botdan foydalanish uchun havolani yuboring. Guruhlarda ham ishlaydi!\n📌 Har kuni 3 ta bepul so‘rov beriladi. Ko‘proq so‘rov uchun do‘stlaringizni taklif qiling va mukofotga ega bo‘ling!"
+

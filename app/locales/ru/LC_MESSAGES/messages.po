@@ -1,0 +1,26 @@
+# Russian translations for PROJECT.
+# Copyright (C) 2025 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2025-06-12 05:15+0500\n"
+"PO-Revision-Date: 2025-06-12 05:15+0500\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: ru\n"
+"Language-Team: ru <LL@li.org>\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.13.1\n"
+
+msgid "Hello, World!"
+msgstr "Привет, мир!"
+
+msgid "start"
+msgstr "🎉 Добро пожаловать в @TinglaBot!\n📥 С помощью этого бота вы можете удобно и быстро скачивать видео и музыку с популярных платформ:\n• Instagram, TikTok, YouTube, Threads\n• Snapchat, Likee, Pinterest и др.\n• 🎵 Определение песни через Shazam\n🔥 Просто отправьте ссылку на видео. Бот работает и в группах!\n📌 Доступно 3 бесплатных запроса в день. Пригласите друзей по своей реферальной ссылке и получайте бонусы!"
