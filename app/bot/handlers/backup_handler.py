@@ -1,6 +1,7 @@
 from sqlalchemy.future import select
 from aiogram.types import FSInputFile, Message
-from aiogram import Bot, Dispatcher
+from aiogram import Bot
+from sqlalchemy.exc import MultipleResultsFound
 
 from app.bot.models import Backup
 from app.core.databases.postgres import get_general_session
@@ -22,5 +23,10 @@ async def add_to_backup(url: str, video_path: str) -> None:
     sent_msg: Message = await bot.send_video(chat_id=settings.CHANNEL_ID, video=video)
     async with get_general_session() as session:
         backup = Backup(url=url, message_id=sent_msg.message_id)
-        session.add(backup)
-        await session.commit()
+        session.get_transaction()
+        try:
+            session.add(backup)
+            await session.commit()
+        except MultipleResultsFound:
+            await session.rollback()
+            return

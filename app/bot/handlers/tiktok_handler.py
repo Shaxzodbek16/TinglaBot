@@ -7,8 +7,8 @@ from app.core.extensions.utils import WORKDIR
 async def get_tiktok_video(video_url: str) -> str:
     download_url = WORKDIR.parent / "media" / "tiktok"
     filename = str(uuid4())
-    downloader = TikTokDownloader(download_url)
-    return downloader.download_video(video_url, custom_name=filename)
+    with TikTokDownloader(headless=True) as downloader:
+        return downloader.download_video(video_url, download_url, filename)["file_path"]
 
 
 def validate_tiktok_url(url: str) -> str:
