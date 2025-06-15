@@ -26,15 +26,19 @@ async def handle_tiktok_link(message: Message):
             reply_markup=get_music_download_button("tiktok"),
         )
         return
-    video_path = await get_tiktok_video(tiktok_url)
-    video = FSInputFile(video_path)
-    await message.answer_video(
-        video,
-        caption="Here is your video from TikTok!",
-        reply_markup=get_music_download_button("tiktok"),
-    )
-    await add_to_backup(url=tiktok_url, video_path=video_path)
-    await atomic_clear(video_path)
+    try:
+        video_path = await get_tiktok_video(tiktok_url)
+        video = FSInputFile(video_path)
+        await message.answer_video(
+            video,
+            caption="Here is your video from TikTok!",
+            reply_markup=get_music_download_button("tiktok"),
+            supports_streaming=True,
+        )
+        await add_to_backup(url=tiktok_url, video_path=video_path)
+        await atomic_clear(video_path)
+    except Exception as e:
+        await message.answer(f"Failed to download video, try again.")
 
 
 @tiktok_router.callback_query(F.data.startswith("tiktok:"))

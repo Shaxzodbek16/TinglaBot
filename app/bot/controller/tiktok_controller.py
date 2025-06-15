@@ -19,29 +19,43 @@ class TikTokDownloader:
             headless (bool): Brauzer ko'rinadigan bo'lsin yoki yo'q
         """
         self.options = Options()
+
+        # Headless mode sozlamalari
         if headless:
             self.options.add_argument("--headless")
 
-        # Tezlashtirish uchun sozlamalar
+        # Umumiy sozlamalar
         self.options.add_argument("--no-sandbox")
         self.options.add_argument("--disable-dev-shm-usage")
         self.options.add_argument("--disable-gpu")
         self.options.add_argument("--disable-extensions")
         self.options.add_argument("--disable-plugins")
-        self.options.add_argument("--disable-images")
-        # JavaScript kerak, shuning uchun o'chirmaymiz
-        # self.options.add_argument('--disable-javascript')
-        self.options.add_argument("--disable-css")
+
+        # Non-headless mode uchun rasmlarni o'chirmaslik
+        if headless:
+            self.options.add_argument("--disable-images")
+
         self.options.add_argument("--window-size=1920,1080")
         self.options.add_argument("--page-load-strategy=normal")
 
-        # Prefs sozlamalari
-        prefs = {
-            "profile.managed_default_content_settings.images": 2,
-            "profile.default_content_settings.popups": 0,
-            "profile.managed_default_content_settings.media_stream": 2,
-        }
-        self.options.add_experimental_option("prefs", prefs)
+        # User agent qo'shish
+        self.options.add_argument(
+            "--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        )
+
+        # Bot detection oldini olish
+        self.options.add_argument("--disable-blink-features=AutomationControlled")
+        self.options.add_experimental_option("excludeSwitches", ["enable-automation"])
+        self.options.add_experimental_option("useAutomationExtension", False)
+
+        # Prefs sozlamalari - headless mode uchungina
+        if headless:
+            prefs = {
+                "profile.managed_default_content_settings.images": 2,
+                "profile.default_content_settings.popups": 0,
+                "profile.managed_default_content_settings.media_stream": 2,
+            }
+            self.options.add_experimental_option("prefs", prefs)
 
         self.driver = None
         self.wait = None
@@ -49,8 +63,15 @@ class TikTokDownloader:
     def __enter__(self):
         """Context manager enter"""
         self.driver = webdriver.Chrome(options=self.options)
-        self.driver.implicitly_wait(5)
-        self.wait = WebDriverWait(self.driver, 15)
+
+        # Bot detection oldini olish
+        self.driver.execute_script(
+            "Object.defineProperty(navigator, 'webdriver', {get: () => undefined})"
+        )
+
+        # Implicit wait o'rnatish
+        self.driver.implicitly_wait(10)
+        self.wait = WebDriverWait(self.driver, 30)  # Timeout ni oshirish
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
@@ -132,29 +153,114 @@ class TikTokDownloader:
             print("🌐 SSStiK saytiga kirilmoqda...")
             self.driver.get("https://ssstik.io")
 
+            # Sahifa to'liq yuklanishini kutish
+            time.sleep(3)
+
             # Input maydonini topish va URL kiritish
-            input_field = self.wait.until(
-                EC.presence_of_element_located((By.ID, "main_page_text"))
-            )
+            print("🔍 Input maydonini qidirilmoqda...")
+
+            # Bir nechta selector bilan urinish
+            input_selectors = [
+                (By.ID, "main_page_text"),
+                (By.CSS_SELECTOR, "input[type='text']"),
+                (By.CSS_SELECTOR, "input[placeholder*='URL']"),
+                (By.CSS_SELECTOR, "textarea"),
+                (By.CSS_SELECTOR, "#main_page_text"),
+            ]
+
+            input_field = None
+            for selector_type, selector_value in input_selectors:
+                try:
+                    input_field = self.wait.until(
+                        EC.presence_of_element_located((selector_type, selector_value))
+                    )
+                    print(f"✅ Input maydon topildi: {selector_value}")
+                    break
+                except TimeoutException:
+                    print(
+                        f"⚠️  {selector_value} topilmadi, keyingisini sinab ko'ramiz..."
+                    )
+                    continue
+
+            if not input_field:
+                raise Exception("Input maydoni topilmadi")
+
+            # URL kiritish
             input_field.clear()
+            time.sleep(1)  # Qisqa kutish
             input_field.send_keys(tiktok_url)
             print("✅ URL kiritildi")
 
-            # Download tugmasini bosish
-            submit_button = self.wait.until(
-                EC.element_to_be_clickable((By.ID, "submit"))
-            )
-            submit_button.click()
+            time.sleep(2)  # URL kiritishdan keyin kutish
+
+            # Submit tugmasini topish va bosish
+            print("🔍 Submit tugmasini qidirilmoqda...")
+
+            submit_selectors = [
+                (By.ID, "submit"),
+                (By.CSS_SELECTOR, "button[type='submit']"),
+                (By.CSS_SELECTOR, "input[type='submit']"),
+                (By.CSS_SELECTOR, "button"),
+                (By.XPATH, "//button[contains(text(), 'Download')]"),
+                (By.XPATH, "//input[@value='Download']"),
+            ]
+
+            submit_button = None
+            for selector_type, selector_value in submit_selectors:
+                try:
+                    submit_button = self.wait.until(
+                        EC.element_to_be_clickable((selector_type, selector_value))
+                    )
+                    print(f"✅ Submit tugma topildi: {selector_value}")
+                    break
+                except TimeoutException:
+                    print(
+                        f"⚠️  {selector_value} topilmadi, keyingisini sinab ko'ramiz..."
+                    )
+                    continue
+
+            if not submit_button:
+                raise Exception("Submit tugmasi topilmadi")
+
+            # Tugmani bosish
+            self.driver.execute_script("arguments[0].click();", submit_button)
             print("🔄 Jarayonlanmoqda...")
 
-            # "Without watermark" havolasini kutish
+            # Download tugmalarini kutish
             print("🔍 Download tugmalari kutilmoqda...")
-            download_link = self.wait.until(
-                EC.element_to_be_clickable((By.XPATH, '//*[@id="dl_btns"]/a[1]'))
-            )
 
-            # Qo'shimcha kutish - sahifa to'liq yuklanishi uchun
-            time.sleep(2)
+            # Bir nechta download selector
+            download_selectors = [
+                (By.XPATH, '//*[@id="dl_btns"]/a[1]'),
+                (By.CSS_SELECTOR, "#dl_btns a:first-child"),
+                (By.XPATH, "//a[contains(text(), 'Without watermark')]"),
+                (By.CSS_SELECTOR, "a[href*='.mp4']"),
+                (By.XPATH, "//a[contains(@href, 'download')]"),
+            ]
+
+            download_link = None
+            max_wait = 45  # Maksimal kutish vaqti
+            start_time = time.time()
+
+            while time.time() - start_time < max_wait:
+                for selector_type, selector_value in download_selectors:
+                    try:
+                        download_link = WebDriverWait(self.driver, 5).until(
+                            EC.element_to_be_clickable((selector_type, selector_value))
+                        )
+                        print(f"✅ Download havola topildi: {selector_value}")
+                        break
+                    except TimeoutException:
+                        continue
+
+                if download_link:
+                    break
+
+                print("⏳ Download tugmalari kutilmoqda...")
+                time.sleep(3)
+
+            if not download_link:
+                raise Exception("Download tugmalari topilmadi")
 
             # Download havola URLni olish
             download_url = download_link.get_attribute("href")
@@ -162,7 +268,11 @@ class TikTokDownloader:
             print(f"🔗 Download havola topildi: {download_url[:50]}...")
 
             # URL ni tekshirish
-            if not download_url or download_url == "javascript:void(0)":
+            if (
+                not download_url
+                or download_url == "javascript:void(0)"
+                or "javascript:" in download_url
+            ):
                 raise Exception("Download havola noto'g'ri yoki topilmadi")
 
             # Faylni yuklab olish
@@ -170,13 +280,17 @@ class TikTokDownloader:
 
             # Headers qo'shish
             headers = {
-                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
                 "Referer": "https://ssstik.io/",
                 "Accept": "video/webm,video/ogg,video/*;q=0.9,application/ogg;q=0.7,audio/*;q=0.6,*/*;q=0.5",
+                "Accept-Language": "en-US,en;q=0.9",
+                "Accept-Encoding": "gzip, deflate, br",
+                "Connection": "keep-alive",
+                "Upgrade-Insecure-Requests": "1",
             }
 
             response = requests.get(
-                download_url, stream=True, headers=headers, timeout=30
+                download_url, stream=True, headers=headers, timeout=60
             )
             response.raise_for_status()
 
@@ -211,7 +325,7 @@ class TikTokDownloader:
             return result
 
         except TimeoutException:
-            error_msg = "Sahifa yuklashda vaqt tugadi"
+            error_msg = "Sahifa yuklashda vaqt tugadi (timeout)"
             print(f"❌ Xatolik: {error_msg}")
             result["error"] = error_msg
 
@@ -231,68 +345,3 @@ class TikTokDownloader:
             result["error"] = error_msg
 
         return result
-
-
-# Context manager bilan foydalanish
-def download_tiktok_video(url, save_path=None, filename=None, headless=True):
-    """
-    TikTok videosini yuklab olish (yengil funksiya)
-
-    Args:
-        url (str): TikTok video havolasi
-        save_path (str): Saqlash yo'li
-        filename (str): Fayl nomi
-        headless (bool): Headless rejim
-
-    Returns:
-        dict: Download natijalari
-    """
-    with SSStiKDownloader(headless=headless) as downloader:
-        return downloader.download_video(url, save_path, filename)
-
-
-# Foydalanish misoli
-def main():
-    # URL kiritish
-    tiktok_url = input("TikTok video URL kiriting: ").strip()
-
-    if not tiktok_url:
-        print("❌ URL kiritilmadi!")
-        return
-
-    # Saqlash yo'li (ixtiyoriy)
-    save_path = input("Saqlash papkasi (Enter - default 'downloads'): ").strip()
-    if not save_path:
-        save_path = None
-
-    # Fayl nomi (ixtiyoriy)
-    filename = input("Fayl nomi (Enter - avtomatik): ").strip()
-    if not filename:
-        filename = None
-
-    # Context manager bilan download
-    print("\n" + "=" * 50)
-    result = download_tiktok_video(
-        url=tiktok_url,
-        save_path=save_path,
-        filename=filename,
-        headless=False,  # Ko'rinadigan rejim
-    )
-
-    print("=" * 50)
-
-    # Natijani ko'rsatish
-    if result["success"]:
-        print("🎉 MUVAFFAQIYATLI!")
-        print(f"📱 URL: {result['url']}")
-        print(f"📁 Saqlangan joy: {result['file_path']}")
-        print(f"📝 Fayl nomi: {result['filename']}")
-        print(f"🔗 Download URL: {result['download_url']}")
-    else:
-        print("❌ MUVAFFAQIYATSIZ!")
-        print(f"📱 URL: {result['url']}")
-        print(f"🚫 Xatolik: {result['error']}")
-
-
-if __name__ == "__main__":
-    main()

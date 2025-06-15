@@ -4,11 +4,13 @@ from app.bot.controller.tiktok_controller import TikTokDownloader
 from app.core.extensions.utils import WORKDIR
 
 
-async def get_tiktok_video(video_url: str) -> str:
+async def get_tiktok_video(video_url: str) -> str | None:
     download_url = WORKDIR.parent / "media" / "tiktok"
     filename = str(uuid4())
     with TikTokDownloader(headless=True) as downloader:
-        return downloader.download_video(video_url, download_url, filename)["file_path"]
+        return downloader.download_video(video_url, download_url, filename).get(
+            "file_path", None
+        )
 
 
 def validate_tiktok_url(url: str) -> str:

@@ -5,7 +5,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
-from selenium.common.exceptions import TimeoutException, WebDriverException
+from selenium.common.exceptions import TimeoutException
 import os
 import re
 
@@ -73,19 +73,16 @@ class LikeeDownloader:
             self.driver.get("https://likeedownloader.com/")
             time.sleep(2)  # Wait for page to fully load
 
-            # Wait for input field and enter URL
             input_field = WebDriverWait(self.driver, 10).until(
                 EC.presence_of_element_located((By.ID, "main_page_text"))
             )
 
-            # Wait for download button
             download_button = WebDriverWait(self.driver, 5).until(
                 EC.element_to_be_clickable(
                     (By.XPATH, "//*[@id='main_page_form']/div/span/button")
                 )
             )
 
-            # Clear and enter the URL
             input_field.clear()
             time.sleep(0.5)
             input_field.send_keys(likee_url)
