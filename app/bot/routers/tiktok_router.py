@@ -34,8 +34,6 @@ async def handle_tiktok_link(message: Message):
             caption="Here is your video from TikTok!",
             reply_markup=get_music_download_button("tiktok"),
             supports_streaming=True,
-            width=720,
-            height=1080,
         )
         await add_to_backup(url=tiktok_url, video_path=video_path)
         await atomic_clear(video_path)

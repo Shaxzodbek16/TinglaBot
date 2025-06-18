@@ -1,6 +1,5 @@
 from functools import cache
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from pydantic import PrivateAttr
 
 
 class Settings(BaseSettings):
@@ -17,9 +16,6 @@ class Settings(BaseSettings):
 
     # CHANNEL SETTINGS
     CHANNEL_ID: int
-
-    API_ID: str
-    API_HASH: str
 
     model_config = SettingsConfigDict(env_file=".env")
 
