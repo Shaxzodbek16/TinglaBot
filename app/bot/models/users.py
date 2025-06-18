@@ -66,7 +66,9 @@ class User(BaseModelWithData):
     def __repr__(self) -> str:
         return f"<User tg_id={self.tg_id!r} username={self.username!r}>"
 
-    def get_referral_link(self) -> str: ...  # todo: implement this method when needed
+    def get_referral_link(self, bot_username: str) -> str:
+        """Return a deep-link referral URL for this user."""
+        return f"https://t.me/{bot_username}?start={self.tg_id}"
 
     def is_active(self) -> bool:
         return self.last_active > datetime.now() - timedelta(days=30)
