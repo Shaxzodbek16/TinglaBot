@@ -219,7 +219,7 @@ async def process_update_name(message: Message, state: FSMContext):
 
     await message.answer(
         text="🔗 <b>Update Channel Link</b>\n\n"
-             "Send the new link or tap ⏭ Skip to keep the old one:",
+        "Send the new link or tap ⏭ Skip to keep the old one:",
         parse_mode="HTML",
         reply_markup=skip_kb("⏭ Skip"),
     )
