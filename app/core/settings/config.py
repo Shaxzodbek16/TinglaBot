@@ -17,6 +17,9 @@ class Settings(BaseSettings):
     # CHANNEL SETTINGS
     CHANNEL_ID: int
 
+    API_ID: str = "api_id"
+    API_HASH: str = "api_hash"
+
     model_config = SettingsConfigDict(env_file=".env")
 
     @property

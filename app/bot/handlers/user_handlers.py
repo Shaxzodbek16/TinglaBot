@@ -1,5 +1,6 @@
 from aiogram.types import Message
 
+from app.bot.handlers.admin import get_token_per_referral
 from app.bot.models import User
 from app.core.databases.postgres import get_general_session
 from sqlalchemy.future import select
@@ -36,7 +37,7 @@ async def update_user_by_message(message: Message) -> User:
     return await update_user_by_tg_id(message.from_user.id, data)
 
 
-async def create_user(message: Message) -> User:
+async def create_user(message: Message, ref_id: int | None = None) -> User:
     async with get_general_session() as session:
         existing_user = await get_user_by_tg_id(message.from_user.id)
         if existing_user:
@@ -50,16 +51,17 @@ async def create_user(message: Message) -> User:
             is_tg_premium=(
                 message.from_user.is_premium if message.from_user.is_premium else False
             ),
+            referred_by=ref_id,
         )
         session.add(user)
         await session.commit()
         return user
 
 
-async def add_limit_to_user(tg_id: int, limit: int) -> User:
+async def add_limit_to_user(tg_id: int) -> User:
     async with get_general_session() as session:
         user = await get_user_by_tg_id(tg_id)
-        user.limit += limit
+        user.limit += await get_token_per_referral()
         session.add(user)
         await session.commit()
         return user
@@ -94,3 +96,16 @@ async def remove_limit_from_user(tg_id: int, limit: int) -> User:
         session.add(user)
         await session.commit()
         return user
+
+
+async def get_referral_count(tg_id: int) -> int:
+    async with get_general_session() as session:
+        result = await session.execute(select(User).where(User.referred_by == tg_id))
+        return len(result.scalars().all())
+
+
+async def get_token_count(tg_id: int) -> int:
+    user = await get_user_by_tg_id(tg_id)
+    if user:
+        return user.limit
+    return 0

@@ -8,7 +8,7 @@ from app.core.settings.config import get_settings, Settings
 from app.core.extensions.utils import WORKDIR
 from aiogram.utils.i18n.middleware import FSMI18nMiddleware
 from app.core.middlewares.channel_join import CheckSubscriptionMiddleware
-from app.server.init import init
+from app.server.init import init, admin_init, set_default_commands
 
 settings: Settings = get_settings()
 i18n = I18n(path=WORKDIR / "locales", default_locale="uz", domain="messages")
@@ -27,6 +27,8 @@ async def main() -> None:
     # dp.callback_query.middleware(CheckSubscriptionMiddleware())
 
     dp.include_router(v1_router)
+    await set_default_commands(bot)
+    await admin_init()
     await dp.start_polling(bot)
 
 

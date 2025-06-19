@@ -1,8 +1,30 @@
 import logging
 import os
 from pathlib import Path
+from sqlalchemy.future import select
 
+from app.bot.models import AdminRequirements
 from app.core.extensions.utils import WORKDIR
+from app.core.databases.postgres import get_general_session
+
+
+async def admin_init():
+    async with get_general_session() as session:
+        result = await session.execute(select(AdminRequirements))
+        count = len(result.scalars().all())
+        if count > 0:
+            logging.info("Admin requirements already initialized.")
+            return
+    async with get_general_session() as session:
+        admin_requirements = AdminRequirements(
+            token_per_referral=10,
+        )
+        session.add(admin_requirements)
+        try:
+            await session.commit()
+        except Exception as e:
+            logging.error(f"Error initializing admin requirements: {e}")
+            await session.rollback()
 
 
 def init():
@@ -28,4 +50,21 @@ def init():
     os.makedirs(WORKDIR.parent / "media" / "tiktok", exist_ok=True)
     os.makedirs(WORKDIR.parent / "media" / "snapchat", exist_ok=True)
     os.makedirs(WORKDIR.parent / "media" / "likee", exist_ok=True)
+    os.makedirs(WORKDIR.parent / "media" / "xlsx", exist_ok=True)
     # todo: add folder for all
+
+
+from aiogram import Bot
+from aiogram.types import BotCommand
+
+
+async def set_default_commands(bot: Bot):
+    await bot.set_my_commands(
+        [
+            BotCommand(command="start", description="Start bot"),
+            BotCommand(command="lang", description="Change language"),
+            BotCommand(command="top", description="Refer friends and earn"),
+            BotCommand(command="new", description="Admin panel"),
+            BotCommand(command="help", description="Get help"),
+        ]
+    )

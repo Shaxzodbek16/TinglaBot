@@ -42,6 +42,9 @@ class User(BaseModelWithData):
     )
 
     limit: Mapped[int] = mapped_column(BigInteger, nullable=False, default=0)
+    referred_by: Mapped[int | None] = mapped_column(
+        BigInteger, nullable=True, default=None, index=True
+    )
 
     # one-to-one relationship to Statistics
     statistics: Mapped["Statistics"] = relationship(
@@ -67,8 +70,7 @@ class User(BaseModelWithData):
         return f"<User tg_id={self.tg_id!r} username={self.username!r}>"
 
     def get_referral_link(self, bot_username: str) -> str:
-        """Return a deep-link referral URL for this user."""
-        return f"https://t.me/{bot_username}?start={self.tg_id}"
+        return f"https://t.me/{bot_username}?start=" + str(self.tg_id)
 
     def is_active(self) -> bool:
         return self.last_active > datetime.now() - timedelta(days=30)

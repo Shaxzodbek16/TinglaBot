@@ -15,7 +15,7 @@ async def get_all_channels(is_active: bool | None = None) -> list[Channel]:
         query = select(Channel)
         if is_active is not None:
             query = query.where(Channel.is_active == is_active)
-        result = await session.execute(query)
+        result = await session.execute(query.order_by(Channel.name))
         return result.scalars().all()
 
 
@@ -35,6 +35,8 @@ async def add_channel(
 
 async def update_channel(
     channel_id: int,
+    /,
+    *,
     name: str | None = None,
     link: str | None = None,
     is_active: bool | None = None,
