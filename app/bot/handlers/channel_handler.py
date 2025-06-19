@@ -1,6 +1,7 @@
 from app.bot.models import Channel
 from app.core.databases.postgres import get_general_session
 from sqlalchemy.future import select
+from aiogram.exceptions import TelegramBadRequest
 
 
 async def get_channel_by_id(channel_id: int) -> Channel | None:
@@ -58,3 +59,20 @@ async def delete_channel(channel_id: int) -> None:
             raise ValueError("Channel not found.")
         await session.delete(channel)
         await session.commit()
+
+
+async def fetch_unsubscribed_channels(user_id: int, bot) -> list[Channel]:
+    unsubscribed: list[Channel] = []
+    channels = await get_all_channels(is_active=True)
+
+    for channel in channels:
+        try:
+            member = await bot.get_chat_member(
+                chat_id=channel.channel_id, user_id=user_id
+            )
+            if member.status not in ("member", "administrator", "creator"):
+                unsubscribed.append(channel)
+        except TelegramBadRequest:
+            continue
+
+    return unsubscribed

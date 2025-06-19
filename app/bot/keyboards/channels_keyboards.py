@@ -52,3 +52,13 @@ def skip_kb(label: str) -> ReplyKeyboardMarkup:
         resize_keyboard=True,
         one_time_keyboard=True,
     )
+
+
+async def get_channel_keyboard(not_joined: list[Channel]):
+    return InlineKeyboardMarkup(
+        inline_keyboard=[
+            [InlineKeyboardButton(text=f"📢 {ch.name}", url=ch.link)]
+            for ch in not_joined
+        ]
+        + [[InlineKeyboardButton(text="✅ Check", callback_data="check_subscription")]]
+    )

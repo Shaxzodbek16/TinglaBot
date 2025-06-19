@@ -1,4 +1,3 @@
-from aiogram import Router, F
 from aiogram.types import (
     Message,
     CallbackQuery,
@@ -9,6 +8,9 @@ from aiogram.types import (
 from aiogram.fsm.context import FSMContext
 from sqlalchemy.exc import IntegrityError
 from aiogram.enums.chat_action import ChatAction
+from aiogram import Router, F
+from aiogram.types import CallbackQuery
+from aiogram.exceptions import TelegramBadRequest
 
 from app.bot.keyboards.admin_keyboards import get_channel_crud_keyboard
 from app.bot.state.channel_state import ChannelForm, ChannelUpdateForm
@@ -18,6 +20,7 @@ from app.bot.handlers.channel_handler import (
     get_channel_by_id,
     update_channel,
     add_channel,
+    fetch_unsubscribed_channels,
 )
 from app.bot.keyboards.channels_keyboards import (
     channels_list_keyboard,
@@ -216,7 +219,7 @@ async def process_update_name(message: Message, state: FSMContext):
 
     await message.answer(
         text="🔗 <b>Update Channel Link</b>\n\n"
-        "Send the new link or tap ⏭ Skip to keep the old one:",
+             "Send the new link or tap ⏭ Skip to keep the old one:",
         parse_mode="HTML",
         reply_markup=skip_kb("⏭ Skip"),
     )
@@ -262,3 +265,30 @@ async def process_update_link(message: Message, state: FSMContext):
         reply_markup=get_channel_crud_keyboard(),
     )
     await state.clear()
+
+
+from app.bot.keyboards.channels_keyboards import get_channel_keyboard
+
+
+@channel_router.callback_query(F.data == "check_subscription")
+async def handle_check_subscription(callback_query: CallbackQuery):
+    user_id = callback_query.from_user.id
+    bot = callback_query.bot
+
+    unsubscribed = await fetch_unsubscribed_channels(user_id, bot)
+
+    if unsubscribed:
+        kb = await get_channel_keyboard(unsubscribed)
+        try:
+            await callback_query.message.edit_text(
+                text="🚫 You still need to join these channels.", reply_markup=kb
+            )
+        except TelegramBadRequest as e:
+            if "message is not modified" not in str(e):
+                raise
+    else:
+        try:
+            await callback_query.message.delete()
+        except TelegramBadRequest as e:
+            pass
+        await callback_query.message.answer("start")

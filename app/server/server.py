@@ -20,11 +20,12 @@ async def main() -> None:
 
     i18n_middleware = FSMI18nMiddleware(i18n)
     dp = Dispatcher()
+    dp.bot = bot
     dp.message.middleware(i18n_middleware)
     dp.callback_query.middleware(i18n_middleware)
 
-    # dp.message.middleware(CheckSubscriptionMiddleware())
-    # dp.callback_query.middleware(CheckSubscriptionMiddleware())
+    dp.message.middleware(CheckSubscriptionMiddleware())
+    dp.callback_query.middleware(CheckSubscriptionMiddleware())
 
     dp.include_router(v1_router)
     await set_default_commands(bot)

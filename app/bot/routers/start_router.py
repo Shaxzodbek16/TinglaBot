@@ -1,5 +1,5 @@
 from aiogram import Router
-from aiogram.filters import CommandStart
+from aiogram.filters import CommandStart, Command
 from aiogram.types import Message
 
 from app.bot.handlers.user_handlers import (
@@ -43,3 +43,14 @@ async def handle_start_deep_link(message: Message, command: CommandStart):
 @start_router.message(CommandStart())
 async def handle_start(message: Message):
     await start_function(message)
+
+
+@start_router.message(Command("help"))
+async def handle_help(message: Message):
+    await message.answer(
+        "ℹ️ <b>Help</b>\n\n"
+        "This bot allows you to download videos from various platforms. "
+        "Use the main menu to navigate and select the platform you want to use.",
+        parse_mode="HTML",
+        reply_markup=main_menu_keyboard(message),
+    )
