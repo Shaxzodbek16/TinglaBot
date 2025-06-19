@@ -36,6 +36,7 @@ async def handle_likee_link(message: Message):
         video,
         caption="Here is your video from Likee!",
         reply_markup=get_music_download_button("likee"),
+        supports_streaming=True
     )
 
     await add_to_backup(url=likee_url, video_path=video_path)
