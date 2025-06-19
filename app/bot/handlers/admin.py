@@ -107,20 +107,22 @@ bot = Bot(settings.BOT_TOKEN)
 
 
 async def run_broadcast(text: str, media: tuple[str, str] | None, admin_id: int):
-    await asyncio.sleep(1)
+    await asyncio.sleep(1)  # allow handler to return
     batch = 1000
+
     async with get_general_session() as session:
-        total = await session.execute(select(User))
-        total = len(total.scalars().all())
+        total = (await session.execute(select(User))).scalars().all()
+        total_count = len(total)
 
-    for offset in range(0, total, batch):
+    for offset in range(0, total_count, batch):
         async with get_general_session() as session:
-            result = await session.execute(
-                select(User.tg_id).offset(offset).limit(batch)
+            uids = (
+                (await session.execute(select(User.tg_id).offset(offset).limit(batch)))
+                .scalars()
+                .all()
             )
-            user_ids = result.scalars().all()
 
-        for uid in user_ids:
+        for uid in uids:
             try:
                 if media:
                     ctype, fid = media
@@ -140,7 +142,6 @@ async def run_broadcast(text: str, media: tuple[str, str] | None, admin_id: int)
                     await bot.send_message(uid, text, parse_mode="HTML")
             except:
                 pass
-
             await asyncio.sleep(0.05)
 
     await bot.send_message(

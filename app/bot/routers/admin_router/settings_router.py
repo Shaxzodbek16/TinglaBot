@@ -1,3 +1,5 @@
+import asyncio
+
 from aiogram import Router, F
 from aiogram.types import (
     Message,
@@ -111,6 +113,19 @@ async def start_broadcast(message: Message, state: FSMContext):
         parse_mode="HTML",
         reply_markup=back_to_admin_kb,
     )
+    await message.answer(
+        "📢 <b>Broadcast to All Users</b>\n\n"
+        "Send me your message using these HTML tags:\n\n"
+        "<b>bold</b> — <code>&lt;b&gt;bold&lt;/b&gt;</code>\n"
+        "<i>italic</i> — <code>&lt;i&gt;italic&lt;/i&gt;</code>\n"
+        "<u>underline</u> — <code>&lt;u&gt;underline&lt;/u&gt;</code>\n"
+        '<a href="URL">link</a> — <code>&lt;a href="URL"&gt;link&lt;/a&gt;</code>\n'
+        "<code>inline code</code> — <code>&lt;code&gt;…&lt;/code&gt;</code>\n"
+        "<pre>preformatted</pre> — <code>&lt;pre&gt;…&lt;/pre&gt;</code>\n\n"
+        "Then hit Send. I’ll parse it as HTML and broadcast it.",
+        parse_mode="HTML",
+        reply_markup=back_to_admin_kb,
+    )
     await state.set_state(BroadcastForm.waiting_for_text)
 
 
@@ -118,53 +133,48 @@ async def start_broadcast(message: Message, state: FSMContext):
 async def process_broadcast_text(message: Message, state: FSMContext):
     await state.update_data(text=message.text)
     await message.answer(
-        "🎞 Would you like to include a photo/video/document?", reply_markup=ask_media_kb
+        "🎞 Would you like to include a photo, video, or document?",
+        reply_markup=ask_media_kb,
     )
     await state.set_state(BroadcastForm.waiting_for_media)
 
 
-# 5️⃣ Skip media → kick off broadcast
 @settings_router.message(
     AdminFilter(), BroadcastForm.waiting_for_media, F.text == "⏭ Skip Media"
 )
 async def skip_broadcast_media(message: Message, state: FSMContext):
     data = await state.get_data()
-    await run_broadcast(text=data["text"], media=None, admin_id=message.chat.id)
+    asyncio.create_task(
+        run_broadcast(text=data["text"], media=None, admin_id=message.chat.id)
+    )
     await message.answer(
-        "✅ Broadcast started in background.\n"
-        "You’ll get no flood, and I’ll ping you when it’s done.",
-        reply_markup=get_admin_panel_keyboard(),
+        "✅ Broadcast started in background. I’ll ping you when it’s done.",
         parse_mode="HTML",
+        reply_markup=get_admin_panel_keyboard(),
     )
     await state.clear()
 
 
-# 6️⃣ Admin wants to add media
 @settings_router.message(
     AdminFilter(),
     BroadcastForm.waiting_for_media,
     F.content_type.in_([ContentType.PHOTO, ContentType.VIDEO, ContentType.DOCUMENT]),
 )
 async def process_broadcast_media(message: Message, state: FSMContext):
-    media = None
     if message.photo:
-        media = message.photo[-1].file_id
-        ctype = ContentType.PHOTO
+        media = (ContentType.PHOTO, message.photo[-1].file_id)
     elif message.video:
-        media = message.video.file_id
-        ctype = ContentType.VIDEO
+        media = (ContentType.VIDEO, message.video.file_id)
     else:
-        media = message.document.file_id
-        ctype = ContentType.DOCUMENT
+        media = (ContentType.DOCUMENT, message.document.file_id)
 
     data = await state.get_data()
-    await run_broadcast(
-        text=data["text"], media=(ctype, media), admin_id=message.chat.id
+    asyncio.create_task(
+        run_broadcast(text=data["text"], media=media, admin_id=message.chat.id)
     )
-
     await message.answer(
         "✅ Broadcast with media started in background.",
-        reply_markup=get_admin_panel_keyboard(),
         parse_mode="HTML",
+        reply_markup=get_admin_panel_keyboard(),
     )
     await state.clear()
