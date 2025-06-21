@@ -1,6 +1,7 @@
 from aiogram import Router
 
 from app.bot.routers.admin_router import admin_router
+from app.bot.routers.music_router import music_router
 from app.bot.routers.start_router import start_router
 from app.bot.routers.language_router import language_router
 from app.bot.routers.instagram_router import instagram_router
@@ -20,6 +21,7 @@ v1_router.include_routers(
     likee_router,
     user_router,
     admin_router,
+    music_router,
 )
 
 __all__ = ("v1_router",)
