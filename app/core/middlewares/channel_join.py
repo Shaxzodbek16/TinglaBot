@@ -1,10 +1,11 @@
 from typing import Callable, Awaitable, Dict, Any, Union
 
 from aiogram import BaseMiddleware
-from aiogram.types import Message, CallbackQuery, InlineKeyboardMarkup
+from aiogram.types import Message, CallbackQuery
 from aiogram.exceptions import TelegramBadRequest
 
 from app.bot.handlers.channel_handler import fetch_unsubscribed_channels
+from app.bot.handlers.referral_handler import is_free_for_month
 from app.bot.keyboards.channels_keyboards import get_channel_keyboard
 
 
@@ -33,8 +34,14 @@ class CheckSubscriptionMiddleware(BaseMiddleware):
         #     return None
 
         if isinstance(event, Message):
+            if await is_free_for_month(user_id):
+                return await handler(event, data)
             text = event.text or ""
-            if text.startswith("/help"):
+            if (
+                text.startswith("/help")
+                or text.startswith("/top")
+                or text.startswith("/new")
+            ):
                 return await handler(event, data)
             unsubscribed = await fetch_unsubscribed_channels(user_id, bot)
             if unsubscribed:

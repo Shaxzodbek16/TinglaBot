@@ -70,7 +70,6 @@ async def export_users_to_excel(
             "Language",
             "Premium",
             "Last Active",
-            "Limit",
             "Referred By",
             "Active Status",
             "Created At",
@@ -84,7 +83,6 @@ async def export_users_to_excel(
 
         offset = 0
         while True:
-            # Fetch batch
             result = await session.execute(
                 select(User).offset(offset).limit(BATCH_SIZE).order_by(User.id)
             )
@@ -94,7 +92,6 @@ async def export_users_to_excel(
                 break
 
             for user in users_batch:
-                # Create new sheet if needed
                 if current_ws is None or current_row > SAFE_ROWS_PER_SHEET:
                     sheet_name = (
                         f"Users_Page_{current_sheet_idx}"
@@ -129,7 +126,6 @@ async def export_users_to_excel(
                         if user.last_active
                         else "N/A"
                     ),
-                    user.limit,
                     user.referred_by or "N/A",
                     active_status,
                     (

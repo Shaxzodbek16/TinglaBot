@@ -3,7 +3,6 @@ from app.bot.models.admin import AdminRequirements
 from app.bot.models.channels import Channel
 from app.bot.models.statistics import Statistics
 from app.bot.models.referral import Referral
-from app.bot.models.subscription import Subscription
 from app.bot.models.backup import Backup
 
 __all__ = [
@@ -12,6 +11,5 @@ __all__ = [
     "Channel",
     "Statistics",
     "Referral",
-    "Subscription",
     "Backup",
 ]

@@ -58,54 +58,7 @@ async def create_user(message: Message, ref_id: int | None = None) -> User:
         return user
 
 
-async def add_limit_to_user(tg_id: int) -> User:
-    async with get_general_session() as session:
-        user = await get_user_by_tg_id(tg_id)
-        user.limit += await get_token_per_referral()
-        session.add(user)
-        await session.commit()
-        return user
-
-
-async def remove_limit_from_user(tg_id: int, limit: int) -> User:
-    """
-    Removes a specified limit from a user's current limit.
-
-    This asynchronous function modifies a user's account by reducing their set limit
-    by a given amount. If the user has no limit or the reduction amount exceeds the
-    current limit, a ValueError is raised.
-
-    Args:
-        tg_id (int): The Telegram ID of the user.
-        limit (int): The limit amount to be removed.
-
-    Returns:
-        User: The updated user object after the limit is reduced.
-
-    Raises:
-        ValueError: If the user has no limit to remove or if the reduction amount
-        exceeds the user's current limit.
-    """
-    async with get_general_session() as session:
-        user = await get_user_by_tg_id(tg_id)
-        if user.limit == 0:
-            raise ValueError("User has no limit to remove")
-        if user.limit < limit:
-            raise ValueError("Insufficient limit")
-        user.limit -= limit
-        session.add(user)
-        await session.commit()
-        return user
-
-
 async def get_referral_count(tg_id: int) -> int:
     async with get_general_session() as session:
         result = await session.execute(select(User).where(User.referred_by == tg_id))
         return len(result.scalars().all())
-
-
-async def get_token_count(tg_id: int) -> int:
-    user = await get_user_by_tg_id(tg_id)
-    if user:
-        return user.limit
-    return 0

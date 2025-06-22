@@ -17,7 +17,7 @@ async def admin_init():
             return
     async with get_general_session() as session:
         admin_requirements = AdminRequirements(
-            token_per_referral=10,
+            referral_count_for_free_month=10,
         )
         session.add(admin_requirements)
         try:
@@ -63,8 +63,8 @@ async def set_default_commands(bot: Bot):
         [
             BotCommand(command="start", description="Start bot"),
             BotCommand(command="lang", description="Change language"),
-            BotCommand(command="top", description="Refer friends and earn"),
-            BotCommand(command="new", description="Admin panel"),
+            BotCommand(command="top", description="Top 10 music in the world"),
+            BotCommand(command="new", description="Top 10 new music in the world"),
             BotCommand(command="help", description="Get help"),
         ]
     )

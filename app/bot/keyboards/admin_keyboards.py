@@ -3,7 +3,7 @@ from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 
 def get_admin_panel_keyboard() -> ReplyKeyboardMarkup:
     buttons = [
-        [KeyboardButton(text="📊 Statistics"), KeyboardButton(text="👥 Last Users")],
+        [KeyboardButton(text="📁 Users excel"), KeyboardButton(text="📊 Statistics")],
         [KeyboardButton(text="🔧 Settings"), KeyboardButton(text="📈 Channels")],
         [KeyboardButton(text="🔙 Back to Main Menu")],
     ]

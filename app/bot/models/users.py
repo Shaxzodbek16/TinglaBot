@@ -6,7 +6,6 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from app.bot.models.statistics import Statistics
     from app.bot.models.referral import Referral
-    from app.bot.models.subscription import Subscription
 
 from app.core.models.base import BaseModelWithData
 from sqlalchemy import BigInteger, Boolean, String, DateTime
@@ -41,9 +40,12 @@ class User(BaseModelWithData):
         default=datetime.now(),
     )
 
-    limit: Mapped[int] = mapped_column(BigInteger, nullable=False, default=0)
     referred_by: Mapped[int | None] = mapped_column(
         BigInteger, nullable=True, default=None, index=True
+    )
+
+    subscription_expiry: Mapped[datetime | None] = mapped_column(
+        DateTime, nullable=True, default=None, index=True
     )
 
     # one-to-one relationship to Statistics
@@ -53,12 +55,6 @@ class User(BaseModelWithData):
     # one-to-one relationship to Referral
     referral: Mapped["Referral"] = relationship(
         "Referral", back_populates="user", uselist=False, cascade="all, delete-orphan"
-    )
-    subscription: Mapped["Subscription"] = relationship(
-        "Subscription",
-        back_populates="user",
-        uselist=False,
-        cascade="all, delete-orphan",
     )
 
     @hybrid_property
@@ -85,7 +81,12 @@ class User(BaseModelWithData):
             "language_code": self.language_code,
             "is_tg_premium": self.is_tg_premium,
             "last_active": self.last_active,
-            "limit": self.limit,
             "created_at": self.created_at,
             "updated_at": self.updated_at,
         }
+
+    def is_premium(self) -> bool:
+        return self.subscription_expiry and self.subscription_expiry >= datetime.now()
+
+    def set_premium(self) -> None:
+        setattr(self, "subscription_expiry", datetime.now() + timedelta(days=30))

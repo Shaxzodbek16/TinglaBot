@@ -124,17 +124,25 @@ async def process_link(message: Message, state: FSMContext):
 @channel_router.message(ChannelForm.waiting_for_id)
 async def process_id(message: Message, state: FSMContext):
     text = message.text.strip()
-    if not text.isdigit():
-        await message.answer(
-            "⚠️ ID must be a number. Please send digits only.", parse_mode="HTML"
-        )
-        return
 
-    await state.update_data(channel_id=int(text))
-    await message.answer(
-        "✅ Should this channel be active?", parse_mode="HTML", reply_markup=active_kb
-    )
-    await state.set_state(ChannelForm.waiting_for_active)
+    try:
+        channel_id = int(text)
+        if not str(channel_id).startswith("-100") or len(str(channel_id)) < 10:
+            raise ValueError("Invalid format")
+
+        await state.update_data(channel_id=channel_id)
+        await message.answer(
+            "✅ Should this channel be active?",
+            parse_mode="HTML",
+            reply_markup=active_kb,
+        )
+        await state.set_state(ChannelForm.waiting_for_active)
+
+    except ValueError:
+        await message.answer(
+            "❗️ Please send a valid numeric channel ID (example: <code>-1001234567890</code>).",
+            parse_mode="HTML",
+        )
 
 
 @channel_router.message(ChannelForm.waiting_for_active)
@@ -180,7 +188,7 @@ async def process_active(message: Message, state: FSMContext):
         return
 
     await message.answer(
-        f"🎉 Channel <b>{channel.name}</b> has been added successfully!",
+        f"🎉 Channel <b>{channel.name}</b> has been added successfully!\nMake sure to set the channel's privacy settings to allow the bot to access it.",
         parse_mode="HTML",
         reply_markup=get_channel_crud_keyboard(),
     )

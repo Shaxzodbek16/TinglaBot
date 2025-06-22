@@ -2,6 +2,8 @@ import asyncio, logging, sys
 
 from aiogram import Bot, Dispatcher
 from aiogram.utils.i18n import I18n
+from aiogram.fsm.storage.memory import MemoryStorage
+
 
 from app.bot.routers import v1_router
 from app.core.settings.config import get_settings, Settings
@@ -9,6 +11,7 @@ from app.core.extensions.utils import WORKDIR
 from aiogram.utils.i18n.middleware import FSMI18nMiddleware
 from app.core.middlewares.channel_join import CheckSubscriptionMiddleware
 from app.server.init import init, admin_init, set_default_commands
+
 
 settings: Settings = get_settings()
 i18n = I18n(path=WORKDIR / "locales", default_locale="uz", domain="messages")
@@ -19,7 +22,7 @@ async def main() -> None:
     init()
 
     i18n_middleware = FSMI18nMiddleware(i18n)
-    dp = Dispatcher()
+    dp = Dispatcher(storage=MemoryStorage())
     dp.bot = bot
     dp.message.middleware(i18n_middleware)
     dp.callback_query.middleware(i18n_middleware)

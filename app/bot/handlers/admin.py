@@ -17,7 +17,7 @@ async def get_token_per_referral() -> int:
     async with get_general_session() as session:
         query = select(AdminRequirements)
         result = await session.execute(query)
-        return result.scalars().first().token_per_referral
+        return result.scalars().first().referral_count_for_free_month
 
 
 async def update_token_per_referral(new_value: int) -> None:
@@ -26,7 +26,7 @@ async def update_token_per_referral(new_value: int) -> None:
         result = await session.execute(query)
         admin_req = result.scalars().first()
         if admin_req:
-            admin_req.token_per_referral = new_value
+            admin_req.referral_count_for_free_month = new_value
             session.add(admin_req)
             await session.commit()
         else:

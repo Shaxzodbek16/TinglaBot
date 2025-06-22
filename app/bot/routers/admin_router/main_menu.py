@@ -9,11 +9,13 @@ from aiogram.fsm.context import FSMContext
 from app.bot.controller.admin_controller import export_users_to_excel
 from app.bot.filters.admin_filter import AdminFilter
 from app.bot.handlers.admin import get_last_7_days_statistics
+from app.bot.handlers.channel_handler import get_all_channels
 from app.bot.keyboards.admin_keyboards import (
     get_admin_panel_keyboard,
     get_channel_crud_keyboard,
 )
 from app.bot.keyboards.general_buttons import main_menu_keyboard
+from app.bot.models import Channel
 
 main_menu_router = Router()
 
@@ -31,7 +33,7 @@ async def handle_admin_panel(message: Message):
     )
 
 
-@main_menu_router.message(AdminFilter(), F.text == "📊 Statistics")
+@main_menu_router.message(AdminFilter(), F.text == "📁 Users excel")
 async def handle_statistics(message: Message):
     await message.bot.send_chat_action(message.chat.id, ChatAction.UPLOAD_DOCUMENT)
     file_path: str = await export_users_to_excel()
@@ -56,10 +58,11 @@ async def handle_statistics(message: Message):
             os.remove(file_path)
 
 
-@main_menu_router.message(AdminFilter(), F.text == "👥 Last Users")
+@main_menu_router.message(AdminFilter(), F.text == "📊 Statistics")
 async def handle_last_users(message: Message):
     await message.bot.send_chat_action(message.chat.id, ChatAction.TYPING)
     stats = await get_last_7_days_statistics()
+    channels: list[Channel] = await get_all_channels()
     lines = [
         "👥 <b>User Growth & Referral Leaders</b>\n",
         f"📅 Today: <b>{stats['today']}</b> new",
@@ -68,15 +71,26 @@ async def handle_last_users(message: Message):
         f"📅 Last month: <b>{stats['last_month']}</b>",
         f"📅 Last year: <b>{stats['last_year']}</b>",
         f"📅 All time: <b>{stats['all_time']}</b>\n",
-        "🔥 <b>Top 10 Referrers</b>:",
     ]
 
     for idx, ref in enumerate(stats["top_referrers"], start=1):
+        lines.append('"🔥 <b>Top 10 Referrers</b>:",')
         lines.append(
             f"{idx}. {ref['name']} (<code>{ref['tg_id']}</code>) — {ref['count']} refs"
         )
 
-    await message.answer("\n".join(lines), parse_mode="HTML")
+    if channels:
+        lines.append("\n📡 <b>Connected Telegram Channels</b>:")
+
+        for idx, ch in enumerate(channels, start=1):
+            status = "🟢 Active" if ch.is_active else "🔴 Inactive"
+            lines.append(f"{idx}. <a href='{ch.link}'>{ch.name}</a> — {status}")
+    else:
+        lines.append("No channels connected.")
+
+    await message.answer(
+        "\n".join(lines), parse_mode="HTML", disable_web_page_preview=True
+    )
 
 
 @main_menu_router.message(AdminFilter(), F.text == "🔧 Settings")
