@@ -34,8 +34,6 @@ async def handle_tiktok_link(message: Message):
             caption="Here is your video from TikTok!",
             reply_markup=get_music_download_button("tiktok"),
             supports_streaming=True,
-            width=720,
-            height=1280,
         )
     except Exception as e:
         await message.answer(f"Failed to download video, try again. {e}")
