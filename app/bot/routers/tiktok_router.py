@@ -35,17 +35,15 @@ async def handle_tiktok_link(message: Message):
             reply_markup=get_music_download_button("tiktok"),
             supports_streaming=True,
         )
-        await add_to_backup(url=tiktok_url, video_path=video_path)
-        await atomic_clear(video_path)
     except Exception as e:
-        await message.answer(f"Failed to download video, try again.")
+        await message.answer(f"Failed to download video, try again. {e}")
 
 
 @tiktok_router.callback_query(F.data.startswith("tiktok:"))
 async def handle_tiktok_callback(callback_query):
     action = callback_query.data.split(":")[1]
     if action == "download_music":
-        await callback_query.answer("Downloading music from TikTok...")
+        await callback_query.message.answer("Downloading music from TikTok...")
         await callback_query.message.answer(
             "Music download feature is not implemented yet."
         )
