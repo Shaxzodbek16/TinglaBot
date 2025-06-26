@@ -51,6 +51,7 @@ def init():
     os.makedirs(WORKDIR.parent / "media" / "snapchat", exist_ok=True)
     os.makedirs(WORKDIR.parent / "media" / "likee", exist_ok=True)
     os.makedirs(WORKDIR.parent / "media" / "xlsx", exist_ok=True)
+    os.makedirs(WORKDIR.parent / "static" / "cookie", exist_ok=True)
     # todo: add folder for all
 
 

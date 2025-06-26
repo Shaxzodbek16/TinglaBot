@@ -37,6 +37,7 @@ AUDIO_OPTS_SMART = {
     "socket_timeout": 10,
     "retries": 2,
     "fragment_retries": 2,
+    "cookies": "static/cookie/www.youtube.com_cookies.txt",
     # Dynamic postprocessor - only convert if not m4a/mp3
 }
 
@@ -52,9 +53,15 @@ VIDEO_OPTS = {
 }
 
 
-def _get_smart_audio_opts(convert_to_mp3: bool = False) -> dict:
-    """Get audio options with conditional postprocessing."""
+def _get_smart_audio_opts(
+    convert_to_mp3: bool = False, allow_large: bool = False
+) -> dict:
     opts = AUDIO_OPTS_SMART.copy()
+
+    if allow_large:
+        opts["format"] = (
+            "bestaudio[ext=m4a]/" "bestaudio[acodec=aac]/" "bestaudio/" "best"
+        )
 
     if convert_to_mp3:
         opts["postprocessors"] = [
@@ -73,7 +80,7 @@ def _audio_sync(query: str) -> Optional[str]:
     """Smart audio download with format detection."""
     try:
         # First attempt: Try to get best audio format without conversion
-        with yt_dlp.YoutubeDL(_get_smart_audio_opts(convert_to_mp3=False)) as ydl:
+        with yt_dlp.YoutubeDL(_get_smart_audio_opts(False, False)) as ydl:
             info = ydl.extract_info(f"ytsearch1:{query}", download=True)
 
             if not info or not info.get("entries") or not info["entries"][0]:
@@ -110,7 +117,7 @@ def _audio_sync(query: str) -> Optional[str]:
             actual_file.unlink(missing_ok=True)
 
         # Second attempt: Convert to mp3
-        with yt_dlp.YoutubeDL(_get_smart_audio_opts(convert_to_mp3=True)) as ydl:
+        with yt_dlp.YoutubeDL(_get_smart_audio_opts(True, True)) as ydl:
             info = ydl.extract_info(f"ytsearch1:{query}", download=True)
 
             if not info or not info.get("entries") or not info["entries"][0]:
