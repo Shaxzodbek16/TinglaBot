@@ -9,6 +9,7 @@ services:
     volumes:
       - .:/app  # kodni qayta build qilish shart emas!
       - ./data:/app/data
+      - ./static/cookie:/app/static/cookie:ro
     ports:
       - "8443:8443"
       - "443:443"

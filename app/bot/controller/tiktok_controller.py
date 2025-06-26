@@ -3,6 +3,8 @@ import os
 import re
 import time
 
+from app.core.extensions.utils import WORKDIR
+
 
 class TikTokDownloader:
     def __init__(self, headless=True):
@@ -34,13 +36,18 @@ class TikTokDownloader:
             "outtmpl": output_path,
             "format": "bestvideo+bestaudio/best",
             "merge_output_format": "mp4",
-            "quiet": True,
+            "quiet": False,  # Debug uchun False
             "noplaylist": True,
+            "cookies": "static/cookie/tiktok.txt",  # Docker ichidagi to'g'ri path
+            "verbose": True,  # Debug loglar uchun
         }
 
         try:
+            print(f"📥 Downloading TikTok video: {url}")
+            print(f"📁 Output path: {output_path}")
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                 ydl.download([url])
-            return output_path
-        except Exception:
+            return output_path if os.path.exists(output_path) else None
+        except Exception as e:
+            print(f"❌ TikTok download error: {e}")
             return None
