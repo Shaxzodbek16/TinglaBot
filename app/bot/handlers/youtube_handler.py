@@ -37,7 +37,7 @@ AUDIO_OPTS_SMART = {
     "socket_timeout": 10,
     "retries": 2,
     "fragment_retries": 2,
-    "cookies": "static/cookie/www.youtube.com_cookies.txt",
+    "cookiefile": WORKDIR.parent / "static" / "cookie" / "youtube.txt",
     # Dynamic postprocessor - only convert if not m4a/mp3
 }
 

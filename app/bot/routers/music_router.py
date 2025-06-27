@@ -413,11 +413,6 @@ async def download_and_send_audio(destination: Message, status: Message, info: D
                 await status.edit_text("❌ Downloaded file is empty.")
                 return
 
-            if file_size > 50 * 1024 * 1024:  # 50MB limit
-                await status.edit_text("❌ File too large to send.")
-                await atomic_clear(file_path)
-                return
-
             await destination.answer_audio(
                 FSInputFile(file_path),
                 title=info["title"][:100],  # Telegram limits
