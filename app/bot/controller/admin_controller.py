@@ -5,6 +5,7 @@ from openpyxl.styles import Font, PatternFill, Border, Side, Alignment
 from openpyxl.utils import get_column_letter
 from sqlalchemy.future import select
 from sqlalchemy import func
+from sqlalchemy.orm import selectinload
 
 from app.core.extensions.utils import WORKDIR
 
@@ -74,6 +75,14 @@ async def export_users_to_excel(
             "Active Status",
             "Created At",
             "Updated At",
+            "Text Downloads",
+            "Voice Downloads",
+            "YouTube Downloads",
+            "TikTok Downloads",
+            "Likee Downloads",
+            "Snapchat Downloads",
+            "Instagram Downloads",
+            "Twitter Downloads",
         ]
 
         # Process users in batches
@@ -84,7 +93,11 @@ async def export_users_to_excel(
         offset = 0
         while True:
             result = await session.execute(
-                select(User).offset(offset).limit(BATCH_SIZE).order_by(User.id)
+                select(User)
+                .options(selectinload(User.statistics))
+                .offset(offset)
+                .limit(BATCH_SIZE)
+                .order_by(User.id)
             )
             users_batch = result.scalars().all()
 
@@ -113,7 +126,7 @@ async def export_users_to_excel(
                 # User data
                 active_status = "✅ Active" if user.is_active() else "❌ Inactive"
                 premium_status = "⭐ Premium" if user.is_tg_premium else "Standard"
-
+                stats = user.statistics
                 row_data = [
                     user.id,
                     user.tg_id,
@@ -138,6 +151,14 @@ async def export_users_to_excel(
                         if hasattr(user, "updated_at") and user.updated_at
                         else "N/A"
                     ),
+                    stats.from_text if stats else 0,
+                    stats.from_voice if stats else 0,
+                    stats.from_youtube if stats else 0,
+                    stats.from_tiktok if stats else 0,
+                    stats.from_like if stats else 0,
+                    stats.from_snapchat if stats else 0,
+                    stats.from_instagram if stats else 0,
+                    stats.from_twitter if stats else 0,
                 ]
 
                 # Write row

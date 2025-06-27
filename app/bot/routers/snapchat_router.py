@@ -2,7 +2,6 @@ from aiogram import Router, F
 from aiogram.types import Message, FSInputFile
 
 from app.bot.extensions.clear import atomic_clear
-from app.bot.handlers.backup_handler import get_from_backup, add_to_backup
 from app.bot.handlers.tiktok_handler import get_tiktok_video, validate_tiktok_url
 from app.bot.keyboards.general_buttons import get_music_download_button
 from app.core.settings.config import get_settings, Settings

@@ -27,7 +27,9 @@ class Statistics(BaseModel):
     from_instagram: Mapped[int] = mapped_column(BigInteger, nullable=False, default=0)
     from_twitter: Mapped[int] = mapped_column(BigInteger, nullable=False, default=0)
 
-    user: Mapped[User] = relationship(back_populates="statistics", uselist=False)
+    user: Mapped[User] = relationship(
+        back_populates="statistics", uselist=False, lazy="selectin"
+    )
 
     def add_one(self, field: str) -> bool:
         """

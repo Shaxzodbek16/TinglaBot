@@ -3,7 +3,7 @@ import asyncio, logging, sys
 from aiogram import Bot, Dispatcher
 from aiogram.utils.i18n import I18n
 from aiogram.fsm.storage.memory import MemoryStorage
-
+from aiogram.client.telegram import TelegramAPIServer
 
 from app.bot.routers import v1_router
 from app.core.settings.config import get_settings, Settings
@@ -12,15 +12,17 @@ from aiogram.utils.i18n.middleware import FSMI18nMiddleware
 from app.core.middlewares.channel_join import CheckSubscriptionMiddleware
 from app.server.init import init, admin_init, set_default_commands
 
-
 settings: Settings = get_settings()
 i18n = I18n(path=WORKDIR / "locales", default_locale="uz", domain="messages")
-bot = Bot(settings.BOT_TOKEN)
 
 
 async def main() -> None:
+    if settings.DEBUG:
+        bot = Bot(token=settings.BOT_TOKEN)
+    else:
+        local_server = TelegramAPIServer.from_base("http://localhost:8081")
+        bot = Bot(token=settings.BOT_TOKEN, server=local_server)
     init()
-
     i18n_middleware = FSMI18nMiddleware(i18n)
     dp = Dispatcher(storage=MemoryStorage())
     dp.bot = bot

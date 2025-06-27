@@ -1,4 +1,5 @@
 from sqlalchemy.future import select
+from sqlalchemy import func
 
 from app.bot.models import Statistics
 from app.core.databases.postgres import get_general_session
@@ -44,3 +45,33 @@ async def update(tg_id: int, **kwargs) -> Statistics:
         session.add(statistics)
         await session.commit()
         return statistics
+
+
+async def get_all_statistics() -> dict[str, int]:
+    async with get_general_session() as session:
+        query = select(
+            func.coalesce(func.sum(Statistics.from_text), 0).label("from_text"),
+            func.coalesce(func.sum(Statistics.from_voice), 0).label("from_voice"),
+            func.coalesce(func.sum(Statistics.from_youtube), 0).label("from_youtube"),
+            func.coalesce(func.sum(Statistics.from_tiktok), 0).label("from_tiktok"),
+            func.coalesce(func.sum(Statistics.from_like), 0).label("from_like"),
+            func.coalesce(func.sum(Statistics.from_snapchat), 0).label("from_snapchat"),
+            func.coalesce(func.sum(Statistics.from_instagram), 0).label(
+                "from_instagram"
+            ),
+            func.coalesce(func.sum(Statistics.from_twitter), 0).label("from_twitter"),
+        )
+
+        result = await session.execute(query)
+        row = result.one_or_none()
+
+        return {
+            "from_text": row.from_text,
+            "from_voice": row.from_voice,
+            "from_youtube": row.from_youtube,
+            "from_tiktok": row.from_tiktok,
+            "from_like": row.from_like,
+            "from_snapchat": row.from_snapchat,
+            "from_instagram": row.from_instagram,
+            "from_twitter": row.from_twitter,
+        }

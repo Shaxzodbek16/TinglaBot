@@ -10,6 +10,7 @@ from app.bot.controller.admin_controller import export_users_to_excel
 from app.bot.filters.admin_filter import AdminFilter
 from app.bot.handlers.admin import get_last_7_days_statistics
 from app.bot.handlers.channel_handler import get_all_channels
+from app.bot.handlers.statistics_handler import get_all_statistics
 from app.bot.keyboards.admin_keyboards import (
     get_admin_panel_keyboard,
     get_channel_crud_keyboard,
@@ -63,6 +64,7 @@ async def handle_last_users(message: Message):
     await message.bot.send_chat_action(message.chat.id, ChatAction.TYPING)
     stats = await get_last_7_days_statistics()
     channels: list[Channel] = await get_all_channels()
+    statistics = await get_all_statistics()
     lines = [
         "👥 <b>User Growth & Referral Leaders</b>\n",
         f"📅 Today: <b>{stats['today']}</b> new",
@@ -73,20 +75,39 @@ async def handle_last_users(message: Message):
         f"📅 All time: <b>{stats['all_time']}</b>\n",
     ]
 
-    for idx, ref in enumerate(stats["top_referrers"], start=1):
-        lines.append('"🔥 <b>Top 10 Referrers</b>:",')
-        lines.append(
-            f"{idx}. {ref['name']} (<code>{ref['tg_id']}</code>) — {ref['count']} refs"
-        )
-
+    if stats["top_referrers"]:
+        lines.append("🔥 <b>Top 10 Referrers</b>:")
+        for idx, ref in enumerate(stats["top_referrers"], start=1):
+            lines.append(
+                f"{idx}. {ref['name']} (<code>{ref['tg_id']}</code>) — {ref['count']} refs"
+            )
     if channels:
         lines.append("\n📡 <b>Connected Telegram Channels</b>:")
-
         for idx, ch in enumerate(channels, start=1):
             status = "🟢 Active" if ch.is_active else "🔴 Inactive"
             lines.append(f"{idx}. <a href='{ch.link}'>{ch.name}</a> — {status}")
     else:
-        lines.append("No channels connected.")
+        lines.append("\nNo channels connected.")
+
+    lines.append("\n📊 <b>Usage Statistics</b>:")
+    lines.append(f"• Matndan foydalanishlar soni: <b>{statistics['from_text']}</b>")
+    lines.append(f"• Ovoizdan foydalanishlar soni: <b>{statistics['from_voice']}</b>")
+    lines.append(
+        f"• YouTube'dan foydalanishlar soni: <b>{statistics['from_youtube']}</b>"
+    )
+    lines.append(
+        f"• TikTok'dan foydalanishlar soni: <b>{statistics['from_tiktok']}</b>"
+    )
+    lines.append(f"• Likee'dan foydalanishlar soni: <b>{statistics['from_like']}</b>")
+    lines.append(
+        f"• Snapchat'dan foydalanishlar soni: <b>{statistics['from_snapchat']}</b>"
+    )
+    lines.append(
+        f"• Instagram'dan foydalanishlar soni: <b>{statistics['from_instagram']}</b>"
+    )
+    lines.append(
+        f"• Twitter'dan foydalanishlar soni: <b>{statistics['from_twitter']}</b>"
+    )
 
     await message.answer(
         "\n".join(lines), parse_mode="HTML", disable_web_page_preview=True
