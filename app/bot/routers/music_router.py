@@ -451,11 +451,6 @@ async def download_and_send_video(destination: Message, status: Message, info: D
                 await status.edit_text("❌ Downloaded video is empty.")
                 return
 
-            if file_size > 50 * 1024 * 1024:  # 50MB limit
-                await status.edit_text("❌ Video too large (>50MB). Try audio instead.")
-                await atomic_clear(file_path)
-                return
-
             await destination.answer_video(
                 FSInputFile(file_path),
                 caption=f"🎬 <b>{info['title'][:100]}</b>",
