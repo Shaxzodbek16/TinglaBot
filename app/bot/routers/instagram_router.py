@@ -43,6 +43,7 @@ async def handle_instagram_link(message: Message):
         reply_markup=get_music_download_button("instagram"),
     )
 
+
 @instagram_router.callback_query(F.data.startswith("instagram:"))
 async def handle_instagram_callback(callback_query: CallbackQuery):
     action = callback_query.data.split(":")[1]

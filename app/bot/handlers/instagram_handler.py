@@ -7,25 +7,32 @@ from pathlib import Path
 from app.core.extensions.utils import WORKDIR
 
 
+import asyncio
+from uuid import uuid4
+from pathlib import Path
+from app.core.extensions.utils import WORKDIR
+from yt_dlp import YoutubeDL
+
+
 async def download_instagram_video_only_mp4(url: str) -> str:
     filename = str(uuid4())
-    loader = Instaloader(
-        download_video_thumbnails=False,
-        download_geotags=False,
-        download_comments=False,
-        save_metadata=False,
-        compress_json=False,
-        post_metadata_txt_pattern="",
-        filename_pattern=filename,
-    )
-
-    shortcode = url.strip("/").split("/")[-1]
-    post = Post.from_shortcode(loader.context, shortcode)
-
     target_folder = WORKDIR.parent / "media" / "instagram"
-    loader.download_post(post, target=target_folder)
+    target_folder.mkdir(parents=True, exist_ok=True)
 
-    return str(target_folder / filename) + ".mp4"
+    output_path = str(target_folder / f"{filename}.%(ext)s")
+
+    ydl_opts = {
+        "outtmpl": output_path,  # where to save the file
+        "format": "bv*+ba/b[ext=mp4]/bv[ext=mp4]",  # prefer mp4, max 720p
+        "quiet": True,
+        "noplaylist": True,
+        "merge_output_format": "mp4",
+        "cookiefile": WORKDIR.parent / "static" / "cookie" / "instagram.txt",
+    }
+    with YoutubeDL(ydl_opts) as ydl:
+        ydl.download([url])
+
+    return str(target_folder / f"{filename}.mp4")
 
 
 def validate_instagram_url(url: str) -> str:
