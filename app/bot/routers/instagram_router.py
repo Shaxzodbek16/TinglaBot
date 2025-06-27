@@ -43,10 +43,6 @@ async def handle_instagram_link(message: Message):
         reply_markup=get_music_download_button("instagram"),
     )
 
-    await add_to_backup(url=instagram_url, video_path=video_path)
-    await atomic_clear(video_path)
-
-
 @instagram_router.callback_query(F.data.startswith("instagram:"))
 async def handle_instagram_callback(callback_query: CallbackQuery):
     action = callback_query.data.split(":")[1]
