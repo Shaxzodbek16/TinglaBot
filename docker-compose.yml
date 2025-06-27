@@ -6,11 +6,12 @@ services:
     restart: on-failure
     env_file:
       - .env
+    environment:
+      - PYTHONPATH="$(pwd)"
     volumes:
-      - .:/app  # kodni qayta build qilish shart emas!
       - ./media:/media
       - ./service:/service
-      - ./static/cookie:/app/static/cookie:ro
+      - ./static/cookie:/app/static/cookie
     ports:
       - "8443:8443"
       - "443:443"
