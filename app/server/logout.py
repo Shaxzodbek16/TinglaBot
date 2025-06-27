@@ -10,4 +10,7 @@ bot = Bot(token=settings.BOT_TOKEN)
 
 async def log_out(sleep_time: int = 5) -> None:
     await asyncio.sleep(sleep_time)
-    await bot.log_out()
+    try:
+        await bot.close()
+    except Exception as e:
+        print(f"Error during bot logout: {e}")
