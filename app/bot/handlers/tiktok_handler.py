@@ -48,7 +48,6 @@ async def extract_audio_from_tiktok_video_smart(url: str) -> str:
         audio = video.audio
         audio.write_audiofile(audio_path, logger=None)
 
-        # Clean up
         audio.close()
         video.close()
         os.remove(video_path)

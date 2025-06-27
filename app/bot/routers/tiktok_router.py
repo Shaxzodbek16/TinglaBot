@@ -4,7 +4,6 @@ from aiogram import Router, F
 from aiogram.types import Message, FSInputFile, CallbackQuery
 
 from app.bot.extensions.clear import atomic_clear
-from app.bot.handlers.backup_handler import get_from_backup, add_to_backup
 from app.bot.handlers.tiktok_handler import (
     get_tiktok_video,
     validate_tiktok_url,
@@ -32,21 +31,6 @@ async def handle_tiktok_link(message: Message):
     user_id = message.from_user.id
     tiktok_url = validate_tiktok_url(message.text)
     user_sessions[user_id] = {"url": tiktok_url}
-
-    backup = await get_from_backup(url=tiktok_url)
-    if backup:
-        user_sessions[user_id]["backup_message_id"] = backup.message_id
-        await message.bot.copy_message(
-            chat_id=message.chat.id,
-            from_chat_id=settings.CHANNEL_ID,
-            message_id=backup.message_id,
-        )
-        await message.answer(
-            "✅ This video has already been processed. Here it is again:",
-            reply_markup=get_music_download_button("tiktok"),
-        )
-        return
-
     try:
         video_path = await get_tiktok_video(tiktok_url)
         user_sessions[user_id]["video_path"] = video_path
@@ -57,7 +41,6 @@ async def handle_tiktok_link(message: Message):
             reply_markup=get_music_download_button("tiktok"),
         )
 
-        await add_to_backup(url=tiktok_url, video_path=video_path)
         await atomic_clear(video_path)
 
     except Exception as e:
@@ -89,7 +72,6 @@ async def handle_tiktok_callback(callback_query: CallbackQuery):
             await callback_query.message.answer("❌ Could not extract audio.")
             return
 
-        # 2. Shazam orqali aniqlash
         shazam_hits = await shz.recognise_music_from_audio(audio_path)
         if not shazam_hits:
             await callback_query.message.answer(
@@ -97,7 +79,6 @@ async def handle_tiktok_callback(callback_query: CallbackQuery):
             )
             return
 
-        # 3. YouTube qidiruv
         track = shazam_hits[0]["track"]
         title, artist = track["title"], track["subtitle"]
         search_query = f"{title} {artist}"

@@ -8,7 +8,6 @@ from app.bot.handlers.instagram_handler import (
     extract_audio_from_instagram_video,
 )
 from app.bot.keyboards.general_buttons import get_music_download_button
-from app.bot.handlers.backup_handler import get_from_backup, add_to_backup
 from app.bot.routers.music_router import (
     format_page_text,
     create_keyboard,
@@ -35,23 +34,6 @@ async def handle_instagram_link(message: Message):
 
     # Saqlab qo‘yamiz
     user_sessions[user_id] = {"url": instagram_url}
-
-    # Oldin yuklangan bo‘lsa, backup dan jo‘natamiz
-    backup = await get_from_backup(url=instagram_url)
-    if backup:
-        user_sessions[user_id]["backup_message_id"] = backup.message_id
-        await message.bot.copy_message(
-            chat_id=message.chat.id,
-            from_chat_id=settings.CHANNEL_ID,
-            message_id=backup.message_id,
-        )
-        await message.answer(
-            "✅ This video has already been processed. Here it is again:",
-            reply_markup=get_music_download_button("instagram"),
-        )
-        return
-
-    # Video yuklash
     video_path = await download_instagram_video_only_mp4(instagram_url)
     user_sessions[user_id]["video_path"] = video_path
 

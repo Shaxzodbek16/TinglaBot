@@ -161,3 +161,10 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 .idea/
 media/*
+
+*.mp3
+*.mp4
+*.mkv
+*.part
+*.ytdl
+telegram-bot-api/
