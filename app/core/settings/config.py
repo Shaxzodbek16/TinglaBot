@@ -13,10 +13,6 @@ class Settings(BaseSettings):
     POSTGRES_DB: str
     POSTGRES_HOST: str
     POSTGRES_PORT: int
-
-    API_ID: str = "api_id"
-    API_HASH: str = "api_hash"
-
     DEBUG: bool = False
 
     model_config = SettingsConfigDict(env_file=".env")

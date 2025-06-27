@@ -8,12 +8,14 @@ services:
       - .env
     volumes:
       - .:/app  # kodni qayta build qilish shart emas!
-      - ./data:/app/data
+      - ./media:/media
+      - ./service:/service
       - ./static/cookie:/app/static/cookie:ro
     ports:
       - "8443:8443"
       - "443:443"
       - "80:80"
+      - "8081:8081"
     command: [ "sh", "-c", "./entrypoint.sh" ]
     networks:
       - bot_network

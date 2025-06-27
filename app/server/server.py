@@ -11,6 +11,7 @@ from app.core.extensions.utils import WORKDIR
 from aiogram.utils.i18n.middleware import FSMI18nMiddleware
 from app.core.middlewares.channel_join import CheckSubscriptionMiddleware
 from app.server.init import init, admin_init, set_default_commands
+from app.server.logout import log_out
 
 settings: Settings = get_settings()
 i18n = I18n(path=WORKDIR / "locales", default_locale="uz", domain="messages")
@@ -20,6 +21,7 @@ async def main() -> None:
     if settings.DEBUG:
         bot = Bot(token=settings.BOT_TOKEN)
     else:
+        await log_out(10)
         local_server = TelegramAPIServer.from_base("http://localhost:8081")
         bot = Bot(token=settings.BOT_TOKEN, server=local_server)
     init()

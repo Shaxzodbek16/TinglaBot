@@ -15,10 +15,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-COPY entrypoint.sh ./
+COPY entrypoint.sh .
 
 RUN chmod +x entrypoint.sh
 
-EXPOSE 8443
-EXPOSE 443
-EXPOSE 80
+EXPOSE 8443 443 80 8081
