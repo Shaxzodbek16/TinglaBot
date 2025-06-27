@@ -50,6 +50,7 @@ VIDEO_OPTS = {
     "ignoreerrors": True,
     "socket_timeout": 15,
     "retries": 2,
+    "cookiefile": WORKDIR.parent / "static" / "cookie" / "youtube.txt",
 }
 
 
