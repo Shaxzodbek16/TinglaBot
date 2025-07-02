@@ -20,42 +20,11 @@ msgstr ""
 
 #~ msgid "Welcome to the PROJECT."
 #~ msgstr "Welcome to the PROJECT."
+
+# Translations for the PROJECT.
+msgid "Hello, World!"
+msgstr "Hello, World!"
+
+
 msgid "start"
-msgstr "Welcome to bot!"
-
-msgid "language"
-msgstr "Please select a language:"
-
-msgid "help"
-msgstr "How can I help you?"
-
-msgid "admin_panel"
-msgstr "⚙️ Admin Panel"
-
-msgid "reference"
-msgstr "📥 Refer Friends and Earn"
-
-msgid "share_with_friends"
-msgstr "Share with Friends"
-
-msgid "share_with_friends_text"
-msgstr "Share your referral link with friends and earn rewards when they join!"
-
-msgid "users_excel"
-msgstr "Users Excel Report"
-
-msgid "statistics"
-msgstr "Statistics"
-
-msgid "settings"
-msgstr "🔧 Settings"
-
-msgid "channels"
-msgstr "📈 Channels"
-
-msgid "back_main_menu"
-msgstr "🔙 Back to Main Menu"
-
-msgid "update_token"
-msgstr "Update Tokens per Referral"
-
+msgstr "Killcha salom!"

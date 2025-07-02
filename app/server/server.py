@@ -38,7 +38,7 @@ async def main() -> None:
     dp.include_router(v1_router)
     await set_default_commands(bot)
     await admin_init()
-    await dp.start_polling(bot)
+    await dp.start_polling(bot, drop_pending_updates=True)
 
 
 if __name__ == "__main__":
