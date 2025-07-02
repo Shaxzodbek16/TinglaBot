@@ -26,6 +26,7 @@ async def main() -> None:
         local_server = TelegramAPIServer.from_base("http://localhost:8081")
         bot = Bot(token=settings.BOT_TOKEN, server=local_server)
     init()
+    await bot.delete_webhook(drop_pending_updates=True)
     i18n_middleware = UserI18nMiddleware(i18n)
     dp = Dispatcher(storage=MemoryStorage())
     dp.bot = bot
