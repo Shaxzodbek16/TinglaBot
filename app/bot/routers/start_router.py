@@ -1,6 +1,7 @@
 from aiogram import Router
 from aiogram.filters import CommandStart, Command
 from aiogram.types import Message
+from aiogram.utils.i18n import gettext as _
 
 from app.bot.handlers.user_handlers import (
     get_user_by_tg_id,
@@ -22,7 +23,7 @@ async def start_function(message: Message, ref_id=None):
             "👋 Welcome! Please choose your language:", reply_markup=kb
         )
     else:
-        await message.answer("start", reply_markup=main_menu_keyboard(message))
+        await message.answer(_("start"), reply_markup=main_menu_keyboard(message))
 
 
 @start_router.message(CommandStart(deep_link=True))

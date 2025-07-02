@@ -6,6 +6,7 @@ from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.client.telegram import TelegramAPIServer
 
 from app.bot.routers import v1_router
+from app.core.middlewares.language_middleware import UserI18nMiddleware
 from app.core.settings.config import get_settings, Settings
 from app.core.extensions.utils import WORKDIR
 from aiogram.utils.i18n.middleware import FSMI18nMiddleware
@@ -25,7 +26,7 @@ async def main() -> None:
         local_server = TelegramAPIServer.from_base("http://localhost:8081")
         bot = Bot(token=settings.BOT_TOKEN, server=local_server)
     init()
-    i18n_middleware = FSMI18nMiddleware(i18n)
+    i18n_middleware = UserI18nMiddleware(i18n)
     dp = Dispatcher(storage=MemoryStorage())
     dp.bot = bot
     dp.message.middleware(i18n_middleware)

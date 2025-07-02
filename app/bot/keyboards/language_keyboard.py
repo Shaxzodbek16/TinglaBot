@@ -6,7 +6,7 @@ async def language_keyboard(selected_lang: str | None) -> InlineKeyboardMarkup:
         ("English", "en"),
         ("Русский", "ru"),
         ("O‘zbek", "uz"),
-        ("Ўзбек", "уз"),
+        ("Ўзбек", "kr"),
     ]
 
     buttons = []
