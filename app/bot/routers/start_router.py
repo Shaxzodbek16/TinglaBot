@@ -3,6 +3,7 @@ from aiogram.filters import CommandStart, Command
 from aiogram.types import Message
 from aiogram.utils.i18n import gettext as _
 
+from app.bot.handlers.statistics_handler import create_statistics
 from app.bot.handlers.user_handlers import (
     get_user_by_tg_id,
     create_user,
@@ -29,6 +30,7 @@ async def start_function(message: Message, ref_id=None):
 @start_router.message(CommandStart(deep_link=True))
 async def handle_start_deep_link(message: Message, command: CommandStart):
     user = await get_user_by_tg_id(message.from_user.id)
+    await create_statistics(message.from_user.id)
     referrer_id = command.args if command.args and command.args.isdigit() else None
     if user is None:
         if referrer_id:

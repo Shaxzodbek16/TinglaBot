@@ -6,6 +6,7 @@ from app.bot.handlers.likee_handler import (
     download_likee_video_only_mp4,
     validate_likee_url,
 )
+from app.bot.handlers.statistics_handler import update_statistics
 from app.bot.keyboards.general_buttons import get_music_download_button
 from app.core.settings.config import get_settings, Settings
 
@@ -28,6 +29,7 @@ async def handle_likee_link(message: Message):
         supports_streaming=True,
     )
     await atomic_clear(video_path)
+    await update_statistics(message.from_user.id, field="from_like")
 
 
 @likee_router.callback_query(F.data.startswith("likee:"))

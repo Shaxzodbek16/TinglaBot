@@ -18,13 +18,16 @@ async def create_statistics(
     statistics = Statistics(
         tg_id=tg_id,
     )
+    exists = await get_statistics_by_tg_id(tg_id)
+    if exists:
+        return exists
     async with get_general_session() as session:
         session.add(statistics)
         await session.commit()
         return statistics
 
 
-async def update(tg_id: int, **kwargs) -> Statistics:
+async def update_statistics(tg_id: int, field: str) -> Statistics:
     """
     Fields:
     - user_id: ID of the user
@@ -36,11 +39,12 @@ async def update(tg_id: int, **kwargs) -> Statistics:
     - from_snapchat: Count of Snapchat links shared by the user
     - from_instagram: Count of Instagram links shared by the user
     - from_twitter: Count of Twitter links shared by the user
+    - from_video: Count of videos shared by the user
     """
     statistics = await get_statistics_by_tg_id(tg_id)
     if not statistics:
         statistics = await create_statistics(tg_id)
-    statistics.add_one(**kwargs)
+    statistics.add_one(field)
     async with get_general_session() as session:
         session.add(statistics)
         await session.commit()

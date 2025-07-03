@@ -26,6 +26,7 @@ class Statistics(BaseModel):
     from_snapchat: Mapped[int] = mapped_column(BigInteger, nullable=False, default=0)
     from_instagram: Mapped[int] = mapped_column(BigInteger, nullable=False, default=0)
     from_twitter: Mapped[int] = mapped_column(BigInteger, nullable=False, default=0)
+    from_video: Mapped[int] = mapped_column(BigInteger, nullable=False, default=0)
 
     user: Mapped[User] = relationship(
         back_populates="statistics", uselist=False, lazy="selectin"
@@ -43,6 +44,7 @@ class Statistics(BaseModel):
         - from_snapchat: Count of Snapchat links shared by the user
         - from_instagram: Count of Instagram links shared by the user
         - from_twitter: Count of Twitter links shared by the user
+        - from_video: Count of videos shared by the user
         """
         if hasattr(self, field):
             current_value = getattr(self, field, 0)
@@ -65,4 +67,5 @@ class Statistics(BaseModel):
             "from_snapchat": self.from_snapchat,
             "from_instagram": self.from_instagram,
             "from_twitter": self.from_twitter,
+            "from_video": self.from_video,
         }

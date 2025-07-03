@@ -4,6 +4,7 @@ from aiogram import Router, F
 from aiogram.types import Message, FSInputFile, CallbackQuery
 
 from app.bot.extensions.clear import atomic_clear
+from app.bot.handlers.statistics_handler import update_statistics
 from app.bot.handlers.tiktok_handler import (
     get_tiktok_video,
     validate_tiktok_url,
@@ -45,6 +46,7 @@ async def handle_tiktok_link(message: Message):
 
     except Exception as e:
         await message.answer(f"❌ Failed to download video: {e}")
+    await update_statistics(user_id, field="from_tiktok")
 
 
 @tiktok_router.callback_query(F.data.startswith("tiktok:"))

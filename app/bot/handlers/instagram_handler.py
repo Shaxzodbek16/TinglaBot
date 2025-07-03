@@ -4,7 +4,7 @@ import subprocess
 import os
 from pathlib import Path
 
-from app.bot.extensions.get_random_cookie import get_random_cookie
+from app.bot.extensions.get_random_cookie import get_random_cookie_for_instagram
 from app.core.extensions.enums import CookieType
 from app.core.extensions.utils import WORKDIR
 
@@ -32,7 +32,7 @@ async def download_instagram_video_only_mp4(url: str) -> str:
         "merge_output_format": "mp4",  # Ensure final file is in .mp4
         "noplaylist": True,  # Prevent downloading playlists
         "quiet": True,  # Suppress output logs
-        "cookiefile": get_random_cookie(
+        "cookiefile": get_random_cookie_for_instagram(
             CookieType.INSTAGRAM.value
         ),  # Use rotating cookies
         "prefer_ffmpeg": True,  # Use ffmpeg for merging

@@ -2,6 +2,7 @@ from aiogram import Router, F
 from aiogram.types import Message, FSInputFile
 
 from app.bot.extensions.clear import atomic_clear
+from app.bot.handlers.statistics_handler import update_statistics
 from app.bot.handlers.tiktok_handler import get_tiktok_video, validate_tiktok_url
 from app.bot.keyboards.general_buttons import get_music_download_button
 from app.core.settings.config import get_settings, Settings
@@ -16,6 +17,10 @@ async def handle_snapchat_link(message: Message):
     await message.answer(
         "Snapchat link detected! Processing...",
         reply_markup=get_music_download_button("snapchat"),
+    )
+    await update_statistics(message.from_user.id, field="from_snapchat")
+    await message.answer(
+        "Sorry, Snapchat is not supported yet. Please try another link."
     )
 
 

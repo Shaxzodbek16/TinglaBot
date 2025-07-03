@@ -7,6 +7,7 @@ from app.bot.handlers.instagram_handler import (
     validate_instagram_url,
     extract_audio_from_instagram_video,
 )
+from app.bot.handlers.statistics_handler import update_statistics
 from app.bot.keyboards.general_buttons import get_music_download_button
 from app.bot.routers.music_router import (
     format_page_text,
@@ -42,6 +43,7 @@ async def handle_instagram_link(message: Message):
         caption="📽 Here is your video from Instagram!",
         reply_markup=get_music_download_button("instagram"),
     )
+    await update_statistics(message.from_user.id, field="from_instagram")
 
 
 @instagram_router.callback_query(F.data.startswith("instagram:"))

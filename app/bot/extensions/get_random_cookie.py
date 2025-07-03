@@ -5,7 +5,7 @@ import os
 COOKIE_CYCLES = {}
 
 
-def get_random_cookie(_cookie_type: str) -> str:
+def get_random_cookie_for_instagram(_cookie_type: str) -> str:
     cookies_path = WORKDIR.parent / "static" / "cookie" / _cookie_type
     if _cookie_type not in COOKIE_CYCLES:
         items = os.listdir(cookies_path)
@@ -13,3 +13,16 @@ def get_random_cookie(_cookie_type: str) -> str:
         COOKIE_CYCLES[_cookie_type] = cycle(items)
 
     return next(COOKIE_CYCLES[_cookie_type])
+
+
+COOKIE_CYCLES_YOUTUBE = {}
+
+
+def get_random_cookie_for_youtube(_cookie_type: str) -> str:
+    cookies_path = WORKDIR.parent / "static" / "cookie" / _cookie_type
+    if _cookie_type not in COOKIE_CYCLES_YOUTUBE:
+        items = os.listdir(cookies_path)
+        items.sort()
+        COOKIE_CYCLES_YOUTUBE[_cookie_type] = cycle(items)
+
+    return next(COOKIE_CYCLES_YOUTUBE[_cookie_type])

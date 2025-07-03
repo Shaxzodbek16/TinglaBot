@@ -3,7 +3,7 @@ import os
 import re
 import time
 
-from app.bot.extensions.get_random_cookie import get_random_cookie
+from app.bot.extensions.get_random_cookie import get_random_cookie_for_instagram
 from app.core.extensions.enums import CookieType
 from app.core.extensions.utils import WORKDIR
 
@@ -40,7 +40,7 @@ class TikTokDownloader:
             "merge_output_format": "mp4",
             "quiet": False,  # Debug uchun False
             "noplaylist": True,
-            "cookiefile": get_random_cookie(CookieType.TIKTOK.value),
+            "cookiefile": get_random_cookie_for_instagram(CookieType.TIKTOK.value),
             "verbose": True,  # Debug loglar uchun
         }
 

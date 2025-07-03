@@ -19,6 +19,7 @@ from aiogram.types import (
 from app.bot.controller.shazam_controller import ShazamController
 from app.bot.extensions.clear import atomic_clear
 from app.bot.handlers import shazam_handler as shz
+from app.bot.handlers.statistics_handler import update_statistics
 
 logger = logging.getLogger(__name__)
 
@@ -89,11 +90,11 @@ def create_keyboard(
     nav_row = []
     if page > 0:
         nav_row.append(
-            InlineKeyboardButton(text="⬅️", callback_data=f"music:page:{page-1}")
+            InlineKeyboardButton(text="⬅️", callback_data=f"music:page:{page - 1}")
         )
     if end < len(hits):
         nav_row.append(
-            InlineKeyboardButton(text="➡️", callback_data=f"music:page:{page+1}")
+            InlineKeyboardButton(text="➡️", callback_data=f"music:page:{page + 1}")
         )
 
     if nav_row:
@@ -259,6 +260,7 @@ async def handle_text_query(message: Message):
     except Exception as e:
         logger.error(f"Text search error: {e}")
         await status_message.edit_text("❌ Search failed. Please try again.")
+    await update_statistics(message.from_user.id, field="from_text")
 
 
 @music_router.message(F.voice | F.audio | F.video | F.video_note)
@@ -325,6 +327,10 @@ async def handle_media_query(message: Message):
     except Exception as e:
         logger.error(f"Media recognition error: {e}")
         await status_message.edit_text("❌ Recognition failed. Please try again.")
+    if message.video:
+        await update_statistics(message.from_user.id, field="from_video")
+    if message.voice or message.audio:
+        await update_statistics(message.from_user.id, field="from_voice")
 
 
 # ── callback handlers ─────────────────────────────────────────────────────────
@@ -365,6 +371,7 @@ async def handle_callbacks(callback: CallbackQuery):
             asyncio.create_task(
                 download_and_send_video(callback.message, status_message, hit)
             )
+            await update_statistics(callback.from_user.id, field="from_youtube")
 
         elif action == "sel":
             index = int(parts[1])
