@@ -168,3 +168,4 @@ media/*
 *.part
 *.ytdl
 telegram-bot-api/
+/*.txt
