@@ -4,8 +4,9 @@ import subprocess
 import os
 from pathlib import Path
 
+from app.bot.extensions.get_random_cookie import get_random_cookie
+from app.core.extensions.enums import CookieType
 from app.core.extensions.utils import WORKDIR
-
 
 import asyncio
 from uuid import uuid4
@@ -22,13 +23,25 @@ async def download_instagram_video_only_mp4(url: str) -> str:
     output_path = str(target_folder / f"{filename}.%(ext)s")
 
     ydl_opts = {
-        "outtmpl": output_path,  # where to save the file
-        "format": "bv*+ba/b[ext=mp4]/bv[ext=mp4]",  # prefer mp4, max 720p
-        "quiet": True,
-        "noplaylist": True,
-        "merge_output_format": "mp4",
-        "cookiefile": WORKDIR.parent / "static" / "cookie" / "instagram.txt",
+        "outtmpl": output_path,  # Full path with filename to save the video
+        "format": (
+            "bestvideo[ext=mp4][height<=720]+bestaudio[ext=m4a]/"  # Try best quality up to 720p (video + audio)
+            "best[ext=mp4][height<=720]/"  # Fallback: single MP4 stream
+            "best"  # Final fallback: any best available format
+        ),
+        "merge_output_format": "mp4",  # Ensure final file is in .mp4
+        "noplaylist": True,  # Prevent downloading playlists
+        "quiet": True,  # Suppress output logs
+        "cookiefile": get_random_cookie(
+            CookieType.INSTAGRAM.value
+        ),  # Use rotating cookies
+        "prefer_ffmpeg": True,  # Use ffmpeg for merging
+        "geo_bypass": True,  # Bypass geo restrictions if needed
+        "nocheckcertificate": True,  # Avoid SSL errors (optional, if you face issues)
+        "outmpl": output_path,  # Ensure consistent saving
     }
+
+    print(ydl_opts["cookiefile"])
     with YoutubeDL(ydl_opts) as ydl:
         ydl.download([url])
 
@@ -39,6 +52,7 @@ def validate_instagram_url(url: str) -> str:
     base_url = url.split("?")[0].strip().rstrip("/")
 
     parts = base_url.split("/")
+
     if len(parts) >= 5 and "instagram.com" in parts:
         for i in range(len(parts)):
             if parts[i] in ["reel", "reels"] and i + 1 < len(parts):
