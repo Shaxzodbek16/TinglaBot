@@ -3,6 +3,8 @@ import os
 import re
 import time
 
+from app.bot.extensions.get_random_cookie import get_random_cookie
+from app.core.extensions.enums import CookieType
 from app.core.extensions.utils import WORKDIR
 
 
@@ -38,7 +40,9 @@ class TikTokDownloader:
             "merge_output_format": "mp4",
             "quiet": False,  # Debug uchun False
             "noplaylist": True,
-            "cookies": "static/cookie/tiktok.txt",  # Docker ichidagi to'g'ri path
+            "cookiefile": get_random_cookie(
+            CookieType.TIKTOK.value
+        ),
             "verbose": True,  # Debug loglar uchun
         }
 

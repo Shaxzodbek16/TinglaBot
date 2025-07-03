@@ -455,6 +455,7 @@ async def download_and_send_video(destination: Message, status: Message, info: D
                 FSInputFile(file_path),
                 caption=f"🎬 <b>{info['title'][:100]}</b>",
                 parse_mode="HTML",
+                supports_streaming=True,
             )
 
             await atomic_clear(file_path)

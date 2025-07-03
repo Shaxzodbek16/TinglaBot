@@ -7,6 +7,9 @@ import time
 from pathlib import Path
 from typing import Optional
 import yt_dlp
+
+from app.bot.extensions.get_random_cookie import get_random_cookie
+from app.core.extensions.enums import CookieType
 from app.core.extensions.utils import WORKDIR
 
 logger = logging.getLogger(__name__)
@@ -20,14 +23,12 @@ _pool = concurrent.futures.ThreadPoolExecutor(
     max_workers=min(16, (os.cpu_count() or 1) * 4), thread_name_prefix="yt-dl"
 )
 
-# Smart format selection - try best formats first
+# Improved format selection with proper fallbacks
 AUDIO_OPTS_SMART = {
+    # More robust format selection with better fallbacks
     "format": (
-        "bestaudio[ext=m4a][filesize<50M]/"
-        "bestaudio[ext=aac][filesize<50M]/"
-        "bestaudio[acodec=aac][filesize<50M]/"
-        "bestaudio[filesize<50M]/"
-        "best[filesize<50M]/best"
+        "bestaudio[ext=m4a]/bestaudio[ext=aac]/bestaudio[ext=mp3]/"
+        "bestaudio[acodec=aac]/bestaudio[acodec=mp3]/bestaudio/best"
     ),
     "outtmpl": f"{MUSIC_DIR}/%(title).60s-%(id)s.%(ext)s",
     "quiet": True,
@@ -35,33 +36,47 @@ AUDIO_OPTS_SMART = {
     "noplaylist": True,
     "ignoreerrors": True,
     "socket_timeout": 10,
-    "retries": 2,
-    "fragment_retries": 2,
-    "cookiefile": WORKDIR.parent / "static" / "cookie" / "youtube.txt",
-    # Dynamic postprocessor - only convert if not m4a/mp3
+    "retries": 3,
+    "fragment_retries": 3,
+    "cookiefile": get_random_cookie(CookieType.YOUTUBE.value),
+    # Add extractaudio for audio-only downloads
+    "extractaudio": True,
+    # Prefer free formats when available
+    "prefer_free_formats": True,
 }
+print("Youtube audio handler: ", AUDIO_OPTS_SMART["cookiefile"])
 
+# Improved video format selection
 VIDEO_OPTS = {
-    "format": "best[height<=720][filesize<45M]/best[filesize<45M]/best",
+    # Better video format selection with size limits and fallbacks
+    "format": (
+        "bestvideo[height<=720][filesize<45M]+bestaudio[ext=m4a]/best[height<=720][filesize<45M]/"
+        "bestvideo[height<=720]+bestaudio/best[height<=720]/best[filesize<45M]/best"
+    ),
     "outtmpl": f"{MUSIC_DIR}/%(title).40s-%(id)s.%(ext)s",
     "quiet": True,
     "no_warnings": True,
     "noplaylist": True,
     "ignoreerrors": True,
     "socket_timeout": 15,
-    "retries": 2,
-    "cookiefile": WORKDIR.parent / "static" / "cookie" / "youtube.txt",
+    "retries": 3,
+    "fragment_retries": 3,
+    "cookiefile": get_random_cookie(CookieType.YOUTUBE.value),
+    "merge_output_format": "mp4",  # Ensure consistent output format
 }
+print("Youtube video handler: ", VIDEO_OPTS["cookiefile"])
 
 
 def _get_smart_audio_opts(
-    convert_to_mp3: bool = False, allow_large: bool = False
+        convert_to_mp3: bool = False, allow_large: bool = False
 ) -> dict:
     opts = AUDIO_OPTS_SMART.copy()
 
     if allow_large:
+        # Remove filesize restrictions for large files
         opts["format"] = (
-            "bestaudio[ext=m4a]/" "bestaudio[acodec=aac]/" "bestaudio/" "best"
+            "bestaudio[ext=m4a]/bestaudio[ext=aac]/bestaudio[ext=mp3]/"
+            "bestaudio[acodec=aac]/bestaudio[acodec=mp3]/bestaudio/best"
         )
 
     if convert_to_mp3:
@@ -69,36 +84,69 @@ def _get_smart_audio_opts(
             {
                 "key": "FFmpegExtractAudio",
                 "preferredcodec": "mp3",
-                "preferredquality": "128",
+                "preferredquality": "192",  # Slightly better quality
             }
         ]
-        opts["postprocessor_args"] = ["-threads", "4", "-loglevel", "error"]
+        opts["postprocessor_args"] = [
+            "-threads", str(min(4, os.cpu_count() or 1)),
+            "-loglevel", "error"
+        ]
+        # Remove extractaudio when using postprocessor
+        opts.pop("extractaudio", None)
 
     return opts
 
 
 def _audio_sync(query: str) -> Optional[str]:
-    """Smart audio download with format detection."""
+    """Smart audio download with improved format detection and fallbacks."""
     try:
-        # First attempt: Try to get best audio format without conversion
+        # First attempt: Try to get audio in preferred format
         with yt_dlp.YoutubeDL(_get_smart_audio_opts(False, False)) as ydl:
-            info = ydl.extract_info(f"ytsearch1:{query}", download=True)
+            try:
+                info = ydl.extract_info(f"ytsearch1:{query}", download=False)
+                if not info or not info.get("entries") or not info["entries"][0]:
+                    logger.warning(f"No search results for: {query}")
+                    return None
 
-            if not info or not info.get("entries") or not info["entries"][0]:
-                return None
+                # Check available formats before downloading
+                entry = info["entries"][0]
+                formats = entry.get("formats", [])
 
-            entry = info["entries"][0]
+                # Log available formats for debugging
+                audio_formats = [f for f in formats if f.get("acodec") != "none"]
+                logger.info(f"Available audio formats for '{query}': {len(audio_formats)}")
+
+                # Now download with the same options
+                info = ydl.extract_info(f"ytsearch1:{query}", download=True)
+                entry = info["entries"][0]
+
+            except yt_dlp.utils.DownloadError as e:
+                logger.warning(f"First audio download attempt failed for '{query}': {e}")
+                # Try with more permissive format selection
+                fallback_opts = _get_smart_audio_opts(False, True)
+                fallback_opts["format"] = "bestaudio/best"
+
+                with yt_dlp.YoutubeDL(fallback_opts) as fallback_ydl:
+                    info = fallback_ydl.extract_info(f"ytsearch1:{query}", download=True)
+                    entry = info["entries"][0]
+
+            # Find the downloaded file
             original_path = Path(ydl.prepare_filename(entry))
 
-            # Check what format was actually downloaded
+            # Check for various possible file extensions
+            possible_extensions = [".m4a", ".aac", ".mp3", ".webm", ".opus", ".mp4"]
             actual_file = None
-            for possible_path in [original_path] + [
-                original_path.with_suffix(ext)
-                for ext in [".m4a", ".webm", ".opus", ".mp4", ".aac"]
-            ]:
-                if possible_path.exists() and possible_path.stat().st_size > 1000:
-                    actual_file = possible_path
-                    break
+
+            # First check the exact path
+            if original_path.exists() and original_path.stat().st_size > 1000:
+                actual_file = original_path
+            else:
+                # Check with different extensions
+                for ext in possible_extensions:
+                    test_path = original_path.with_suffix(ext)
+                    if test_path.exists() and test_path.stat().st_size > 1000:
+                        actual_file = test_path
+                        break
 
             if not actual_file:
                 logger.warning(f"No audio file found for: {query}")
@@ -106,47 +154,89 @@ def _audio_sync(query: str) -> Optional[str]:
 
             file_ext = actual_file.suffix.lower()
 
-            # If it's already m4a or mp3, return directly
+            # If it's already in a good format, return it
             if file_ext in [".m4a", ".mp3", ".aac"]:
                 logger.info(f"Downloaded {file_ext} directly: {actual_file.name}")
                 return str(actual_file)
 
-            # If it's other format, convert to mp3
-            logger.info(f"Converting {file_ext} to mp3 for: {query}")
+            # If it's in a less optimal format, try to convert
+            if file_ext in [".webm", ".opus", ".mp4"]:
+                logger.info(f"Converting {file_ext} to mp3 for: {query}")
 
-            # Remove the downloaded file and try again with conversion
-            actual_file.unlink(missing_ok=True)
+                # Remove the original file
+                actual_file.unlink(missing_ok=True)
 
-        # Second attempt: Convert to mp3
-        with yt_dlp.YoutubeDL(_get_smart_audio_opts(True, True)) as ydl:
-            info = ydl.extract_info(f"ytsearch1:{query}", download=True)
+                # Download again with conversion
+                with yt_dlp.YoutubeDL(_get_smart_audio_opts(True, True)) as convert_ydl:
+                    info = convert_ydl.extract_info(f"ytsearch1:{query}", download=True)
+                    entry = info["entries"][0]
 
-            if not info or not info.get("entries") or not info["entries"][0]:
-                return None
+                    mp3_path = Path(convert_ydl.prepare_filename(entry)).with_suffix(".mp3")
 
-            entry = info["entries"][0]
-            mp3_path = Path(ydl.prepare_filename(entry)).with_suffix(".mp3")
+                    if mp3_path.exists() and mp3_path.stat().st_size > 1000:
+                        logger.info(f"Converted to mp3: {mp3_path.name}")
+                        return str(mp3_path)
 
-            if mp3_path.exists() and mp3_path.stat().st_size > 1000:
-                logger.info(f"Converted to mp3: {mp3_path.name}")
-                return str(mp3_path)
+            # If we get here, return the original file even if not ideal
+            logger.info(f"Returning {file_ext} file: {actual_file.name}")
+            return str(actual_file)
 
     except Exception as e:
         logger.error(f"Audio download error for '{query}': {e}")
+
+        # Final fallback: try with most basic settings
+        try:
+            basic_opts = {
+                "format": "bestaudio/best",
+                "outtmpl": f"{MUSIC_DIR}/%(title).60s-%(id)s.%(ext)s",
+                "quiet": True,
+                "no_warnings": True,
+                "noplaylist": True,
+                "ignoreerrors": True,
+                "cookiefile": get_random_cookie(CookieType.YOUTUBE.value),
+            }
+
+            with yt_dlp.YoutubeDL(basic_opts) as basic_ydl:
+                info = basic_ydl.extract_info(f"ytsearch1:{query}", download=True)
+                if info and info.get("entries") and info["entries"][0]:
+                    entry = info["entries"][0]
+                    file_path = Path(basic_ydl.prepare_filename(entry))
+
+                    # Check for the file with various extensions
+                    for ext in [".webm", ".m4a", ".mp3", ".opus", ".mp4"]:
+                        test_path = file_path.with_suffix(ext)
+                        if test_path.exists() and test_path.stat().st_size > 1000:
+                            logger.info(f"Fallback download successful: {test_path.name}")
+                            return str(test_path)
+
+        except Exception as fallback_error:
+            logger.error(f"Fallback download also failed for '{query}': {fallback_error}")
 
     return None
 
 
 def _video_sync(video_id: str, title: str) -> Optional[str]:
-    """Optimized video download with better error handling."""
+    """Optimized video download with better error handling and fallbacks."""
     safe_title = "".join(c for c in title if c.isalnum() or c in " -_")[:40]
 
     try:
+        # First attempt with optimal settings
         with yt_dlp.YoutubeDL(VIDEO_OPTS) as ydl:
             url = f"https://youtube.com/watch?v={video_id}"
-            ydl.download([url])
 
-            # Check for downloaded file with multiple possible names
+            try:
+                ydl.download([url])
+            except yt_dlp.utils.DownloadError as e:
+                logger.warning(f"Primary video download failed for '{video_id}': {e}")
+
+                # Fallback with simpler format selection
+                fallback_opts = VIDEO_OPTS.copy()
+                fallback_opts["format"] = "best[filesize<45M]/best"
+
+                with yt_dlp.YoutubeDL(fallback_opts) as fallback_ydl:
+                    fallback_ydl.download([url])
+
+            # Check for downloaded file with multiple possible names and extensions
             base_patterns = [
                 f"{safe_title}-{video_id}",
                 f"*{video_id}*",
@@ -154,7 +244,7 @@ def _video_sync(video_id: str, title: str) -> Optional[str]:
             ]
 
             for pattern in base_patterns:
-                for ext in ("mp4", "webm", "mkv", "avi"):
+                for ext in ("mp4", "webm", "mkv", "avi", "flv"):
                     for file_path in MUSIC_DIR.glob(f"{pattern}.{ext}"):
                         if file_path.exists() and file_path.stat().st_size > 1000:
                             logger.info(f"Downloaded video: {file_path.name}")
@@ -166,9 +256,9 @@ def _video_sync(video_id: str, title: str) -> Optional[str]:
     return None
 
 
-# Faster async wrappers
+# Faster async wrappers with improved error handling
 async def download_music_from_youtube(title: str, artist: str) -> Optional[str]:
-    """Smart music download with format optimization."""
+    """Smart music download with format optimization and better error handling."""
     if not title or not artist:
         return None
 
@@ -178,7 +268,7 @@ async def download_music_from_youtube(title: str, artist: str) -> Optional[str]:
     try:
         return await asyncio.wait_for(
             loop.run_in_executor(_pool, _audio_sync, query),
-            timeout=40,  # Balanced timeout for both scenarios
+            timeout=60,  # Increased timeout for better reliability
         )
     except asyncio.TimeoutError:
         logger.warning(f"Audio timeout: {title} - {artist}")
@@ -189,7 +279,7 @@ async def download_music_from_youtube(title: str, artist: str) -> Optional[str]:
 
 
 async def download_video_from_youtube(video_id: str, title: str) -> Optional[str]:
-    """Fast video download with improved error handling."""
+    """Fast video download with improved error handling and fallbacks."""
     if not video_id or not title:
         return None
 
@@ -197,7 +287,8 @@ async def download_video_from_youtube(video_id: str, title: str) -> Optional[str
 
     try:
         return await asyncio.wait_for(
-            loop.run_in_executor(_pool, _video_sync, video_id, title), timeout=60
+            loop.run_in_executor(_pool, _video_sync, video_id, title),
+            timeout=90  # Increased timeout for video downloads
         )
     except asyncio.TimeoutError:
         logger.warning(f"Video timeout: {video_id}")
@@ -218,15 +309,8 @@ async def cleanup_old_files(max_age: int = 1800) -> None:
     try:
         # Support all possible audio and video formats
         patterns = [
-            "*.m4a",
-            "*.mp3",
-            "*.aac",
-            "*.opus",
-            "*.webm",
-            "*.mp4",
-            "*.mkv",
-            "*.avi",
-            "*.flv",
+            "*.m4a", "*.mp3", "*.aac", "*.opus", "*.webm", "*.mp4",
+            "*.mkv", "*.avi", "*.flv", "*.ogg", "*.wav"
         ]
 
         for pattern in patterns:
