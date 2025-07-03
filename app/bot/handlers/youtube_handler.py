@@ -44,7 +44,7 @@ AUDIO_OPTS_SMART = {
     # Prefer free formats when available
     "prefer_free_formats": True,
 }
-print("Youtube audio handler: ", AUDIO_OPTS_SMART["cookiefile"])
+
 
 # Improved video format selection
 VIDEO_OPTS = {
@@ -99,6 +99,7 @@ def _get_smart_audio_opts(
 
 def _audio_sync(query: str) -> Optional[str]:
     """Smart audio download with improved format detection and fallbacks."""
+    print("Youtube audio handler: ", AUDIO_OPTS_SMART["cookiefile"])
     try:
         # First attempt: Try to get audio in preferred format
         with yt_dlp.YoutubeDL(_get_smart_audio_opts(False, False)) as ydl:
@@ -217,6 +218,7 @@ def _audio_sync(query: str) -> Optional[str]:
 
 def _video_sync(video_id: str, title: str) -> Optional[str]:
     """Optimized video download with better error handling and fallbacks."""
+    print("Youtube audio handler: ", VIDEO_OPTS["cookiefile"])
     safe_title = "".join(c for c in title if c.isalnum() or c in " -_")[:40]
 
     try:
