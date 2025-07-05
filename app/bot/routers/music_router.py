@@ -368,9 +368,9 @@ async def handle_callbacks(callback: CallbackQuery):
 
             hit = _cache[user_id]["hits"][index]
             status_message = await callback.message.answer("⏳ Downloading video...")
-            asyncio.create_task(
-                download_and_send_video(callback.message, status_message, hit)
-            )
+
+            await download_and_send_video(callback.message, status_message, hit)
+
             await update_statistics(callback.from_user.id, field="from_youtube")
 
         elif action == "sel":
@@ -393,9 +393,9 @@ async def handle_callbacks(callback: CallbackQuery):
             status_message = await callback.message.answer(
                 f"⏳ Downloading {hit['title']}..."
             )
-            asyncio.create_task(
-                download_and_send_audio(callback.message, status_message, hit)
-            )
+
+            await download_and_send_audio(callback.message, status_message, hit)
+
 
     except (ValueError, IndexError) as e:
         logger.error(f"Callback parsing error: {e}")
