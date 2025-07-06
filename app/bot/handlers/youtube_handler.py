@@ -8,7 +8,10 @@ from pathlib import Path
 from typing import Optional
 import yt_dlp
 
-from app.bot.extensions.get_random_cookie import get_random_cookie_for_youtube,get_all_youtube_cookies
+from app.bot.extensions.get_random_cookie import (
+    get_random_cookie_for_youtube,
+    get_all_youtube_cookies,
+)
 from app.bot.handlers.youtube_handler_pytube import download_audio_with_pytube
 from app.core.extensions.enums import CookieType
 from app.core.extensions.utils import WORKDIR
@@ -135,7 +138,6 @@ def _audio_sync(query: str) -> Optional[str]:
     return None
 
 
-
 def _video_sync(video_id: str, title: str) -> Optional[str]:
     cookies = get_all_youtube_cookies(CookieType.YOUTUBE.value)
 
@@ -170,7 +172,6 @@ def _video_sync(video_id: str, title: str) -> Optional[str]:
     return None
 
 
-
 # Faster async wrappers with improved error handling
 async def download_music_from_youtube(title: str, artist: str) -> str | None:
     """Audio download using pytubefix."""
@@ -191,6 +192,7 @@ async def download_music_from_youtube(title: str, artist: str) -> str | None:
     except Exception as e:
         logger.error(f"Audio download error: {e}")
         return None
+
 
 async def download_video_from_youtube(video_id: str, title: str) -> Optional[str]:
     """Fast video download with improved error handling and fallbacks."""

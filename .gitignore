@@ -167,5 +167,5 @@ media/*
 *.mkv
 *.part
 *.ytdl
-telegram-bot-api/
+telegram-bot-api/*
 /*.txt

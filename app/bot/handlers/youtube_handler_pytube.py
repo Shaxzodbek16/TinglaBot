@@ -43,7 +43,9 @@ def download_audio_with_pytube(query: str) -> str | None:
             logger.info(f"Downloaded audio: {out_path.name}")
             return str(out_path)
         else:
-            logger.warning(f"Downloaded file is too small or not found: {out_path.name}")
+            logger.warning(
+                f"Downloaded file is too small or not found: {out_path.name}"
+            )
             return None
 
     except Exception as e:

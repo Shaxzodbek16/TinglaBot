@@ -396,7 +396,6 @@ async def handle_callbacks(callback: CallbackQuery):
 
             await download_and_send_audio(callback.message, status_message, hit)
 
-
     except (ValueError, IndexError) as e:
         logger.error(f"Callback parsing error: {e}")
         await callback.message.answer("❌ Invalid request.")

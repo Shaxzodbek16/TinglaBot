@@ -28,7 +28,6 @@ def get_random_cookie_for_youtube(_cookie_type: str) -> str:
     return next(COOKIE_CYCLES_YOUTUBE[_cookie_type])
 
 
-
 def get_all_youtube_cookies(_cookie_type: str) -> list[str]:
     cookies_path = WORKDIR.parent / "static" / "cookie" / _cookie_type
     if not cookies_path.exists():
