@@ -14,6 +14,7 @@ class Settings(BaseSettings):
     POSTGRES_HOST: str
     POSTGRES_PORT: int
     DEBUG: bool = False
+    SELENIUM_REMOTE_URL: str
 
     model_config = SettingsConfigDict(env_file=".env")
 

@@ -104,3 +104,5 @@ yarl==1.20.1
 yt-dlp==2025.6.9
 moviepy>=1.0.3
 pytubefix>=1.11.5
+webdriver-manager
+selenium

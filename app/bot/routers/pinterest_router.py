@@ -35,7 +35,9 @@ def extract_audio_from_video(video_path: str) -> str | None:
         return None
 
 
-@pinterest_router.message(F.text.regexp(r"(https?://)?(www\.)?(pin\.it|pinterest\.com)/[^\s]+"))
+@pinterest_router.message(
+    F.text.regexp(r"(https?://)?(www\.)?(pin\.it|pinterest\.com)/[^\s]+")
+)
 async def handle_pinterest_link(message: Message):
     await message.answer("📎 Pinterest link detected! Processing...")
 
@@ -83,7 +85,9 @@ async def handle_pinterest_callback(callback_query: CallbackQuery):
 
     session = user_sessions.get(user_id)
     if not session or not session.get("video_path"):
-        await callback_query.message.answer("❌ Session expired. Please resend the link.")
+        await callback_query.message.answer(
+            "❌ Session expired. Please resend the link."
+        )
         return
 
     try:
@@ -94,7 +98,9 @@ async def handle_pinterest_callback(callback_query: CallbackQuery):
 
         shazam_hits = await shz.recognise_music_from_audio(audio_path)
         if not shazam_hits:
-            await callback_query.message.answer("😕 Could not recognize any music in this video.")
+            await callback_query.message.answer(
+                "😕 Could not recognize any music in this video."
+            )
             return
 
         track = shazam_hits[0]["track"]
@@ -133,6 +139,8 @@ async def handle_pinterest_callback(callback_query: CallbackQuery):
         await atomic_clear(audio_path)
 
     except Exception as e:
-        await callback_query.message.answer(f"❌ Error during recognition: {str(e)[:100]}")
+        await callback_query.message.answer(
+            f"❌ Error during recognition: {str(e)[:100]}"
+        )
 
     user_sessions.pop(user_id, None)

@@ -8,10 +8,12 @@ services:
       - .env
     environment:
       - PYTHONPATH="$(pwd)"
+      - SELENIUM_REMOTE_URL=http://selenium:4444/wd/hub   # 🆕 Qo‘shildi
     volumes:
       - ./media:/media
       - ./service:/service
       - ./static/cookie:/app/static/cookie
+      - /dev/shm:/dev/shm     # Chromium uchun zarur
     ports:
       - "8443:8443"
       - "443:443"
@@ -22,6 +24,9 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      selenium:
+        condition: service_started
+
 
   postgres:
     image: postgres:17
@@ -43,6 +48,16 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+
+  # 🆕 --- Selenium + Chrome container qo‘shildi ---
+  selenium:
+    image: seleniarm/standalone-chromium:latest  # Arm64 (Mac M1/M2), agar amd64 bo‘lsa, selenium/standalone-chrome:latest
+    restart: always
+    ports:
+      - "4444:4444"
+    shm_size: 2g
+    networks:
+      - bot_network
 
 volumes:
   postgres_data:

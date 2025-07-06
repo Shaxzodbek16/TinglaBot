@@ -16,10 +16,10 @@ v1_router = Router()
 v1_router.include_routers(
     start_router,
     pinterest_router,
+    snapchat_router,
     language_router,
     instagram_router,
     tiktok_router,
-    snapchat_router,
     likee_router,
     user_router,
     admin_router,
