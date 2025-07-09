@@ -17,8 +17,198 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.13.1\n"
+msgid "start_welcome"
+msgstr "👋 Xush kelibsiz! Iltimos, tilni tanlang:"
 
-# Translations for the PROJECT.
 msgid "start"
-msgstr "🎉 Assalomu alaykum! @TinglaBot’ga xush kelibsiz!\n📥 Bu bot orqali siz quyidagi platformalardan videolarni sifatli va qulay tarzda yuklab olishingiz mumkin:\n• Instagram, TikTok, YouTube, Threads\n• Snapchat, Likee, Pinterest va boshqalar\n• 🎵 Shazam orqali qo‘shiq nomini aniqlash\n🔥 Botdan foydalanish uchun havolani yuboring. Guruhlarda ham ishlaydi!\n📌 Har kuni 3 ta bepul so‘rov beriladi. Ko‘proq so‘rov uchun do‘stlaringizni taklif qiling va mukofotga ega bo‘ling!"
+msgstr "👋 Yana bir bor xush kelibsiz! Davom etish uchun menyudan foydalaning."
 
+msgid "help_message"
+msgstr "ℹ️ <b>Yordam</b>\n\nBu bot turli platformalardan videolarni yuklab olish imkonini beradi. Kerakli platformani tanlash uchun menyudan foydalaning."
+
+msgid "ig_detected"
+msgstr "📎 Instagram havolasi aniqlandi! Qayta ishlanmoqda..."
+
+msgid "ig_video_ready"
+msgstr "📽 Instagram videongiz tayyor!"
+
+msgid "ig_unknown_action"
+msgstr "❌ Nomaʼlum amal."
+
+msgid "ig_extracting"
+msgstr "🔍 Musiqa ajratilmoqda va aniqlanmoqda..."
+
+msgid "ig_session_expired"
+msgstr "❌ Sessiya tugagan. Iltimos, havolani qayta yuboring."
+
+msgid "ig_extract_failed"
+msgstr "❌ Audio ajratib bo‘lmadi."
+
+msgid "ig_music_not_recognized"
+msgstr "😕 Videodan musiqa aniqlanmadi."
+
+msgid "ig_music_found"
+msgstr "🎶 <b>{title}</b>\n👤 {artist}"
+
+msgid "ig_recognition_error"
+msgstr "❌ Aniqlash jarayonida xatolik yuz berdi."
+
+msgid "lang_choose"
+msgstr "🌐 Iltimos, tilni tanlang:"
+
+msgid "developer_info"
+msgstr "🤖 Ushbu bot <a href='https://t.me/tmshaxzodbek'>@tmshaxzodbek</a> tomonidan yaratilgan.\n\n"
+"🌐 Sayt: <a href='https://shaxzodbek.com'>Shaxzodbek</a>\n"
+"💼 LinkedIn: <a href='https://linkedin.com/in/shaxzodbek-muxtorov-59144a294'>shaxzodbek</a>\n"
+"📧 Email: <a href='mailto:muxtorovshaxzodbek16@gmail.com'>muxtorovshaxzodbek16@gmail.com</a>\n"
+"📱 GitHub: <a href='https://github.com/Shaxzodbek16'>github.com/Shaxzodbek16</a>\n"
+"📞 Telefon: +998 91 526 01 12"
+
+msgid "likee_detected"
+msgstr "📎 Likee havolasi aniqlandi! Qayta ishlanmoqda..."
+
+msgid "likee_video_ready"
+msgstr "📽 Likee videosi tayyor!"
+
+msgid "likee_downloading_music"
+msgstr "🎵 Likee'dan musiqa yuklanmoqda..."
+
+msgid "likee_music_not_implemented"
+msgstr "❌ Musiqa yuklash funksiyasi hali ishlab chiqilmagan."
+
+msgid "searching"
+msgstr "🔍 Qidirilmoqda..."
+
+msgid "analyzing_audio"
+msgstr "🔍 Audioni tahlil qilinyapti..."
+
+msgid "no_results"
+msgstr "😕 Hech qanday natija topilmadi."
+
+msgid "search_min_chars"
+msgstr "⚠️ Qidiruv uchun kamida 2 ta belgidan foydalaning."
+
+msgid "please_retry"
+msgstr "❌ Iltimos, havolani qaytadan yuboring yoki keyinroq urinib ko‘ring."
+
+msgid "tiktok_detected"
+msgstr "📎 TikTok havolasi topildi! Qayta ishlanmoqda..."
+
+msgid "tiktok_video_ready"
+msgstr "📽 Mana sizning TikTok videongiz!"
+
+msgid "unknown_action"
+msgstr "❌ Noma'lum amal."
+
+msgid "extracting"
+msgstr "🔍 Musiqa aniqlanmoqda..."
+
+msgid "session_expired"
+msgstr "❌ Sessiya tugagan. Iltimos, havolani qayta yuboring."
+
+msgid "extract_failed"
+msgstr "❌ Audio ajratib bo‘lmadi."
+
+msgid "music_not_recognized"
+msgstr "😕 Videodan musiqa aniqlanmadi."
+
+msgid "music_found"
+msgstr "🎶 <b>{title}</b>\n👤 {artist}"
+
+msgid "recognition_error"
+msgstr "❌ Musiqa aniqlashda xatolik yuz berdi."
+
+msgid "download_failed"
+msgstr "❌ Videoni yuklab bo‘lmadi"
+
+msgid "refer_button"
+msgstr "📥 Do‘stlarni taklif qiling va mukofot oling"
+
+msgid "refer_bot_username_missing"
+msgstr "❌ Xatolik: Bot foydalanuvchi nomi yo‘q. Admin bilan bog‘laning."
+
+msgid "refer_message"
+msgstr ""
+"🎁 <b>Taklif qil va yutib ol</b>\n\n"
+"💸 <b>1 do‘st = 1 sovrin!</b>\n"
+"🎯 Siz taklif qilganlar soni: <code>{count}</code>\n"
+"🏆 Har bir do‘st uchun sizga <b>{token_count}</b> token — <b>1 oy BEPUL</b> taqdim etiladi!\n\n"
+"📲 <b>1-qadam:</b> Havolangizni ulashing 👇\n"
+"<code>{referral_link}</code>\n\n"
+"🚀 <b>2-qadam:</b> Do‘stingiz qo‘shilsin va token ishlang!\n\n"
+"✨ <i>Keling, birga o‘saylik!</i>"
+
+msgid "refer_share_btn"
+msgstr "📤 Do‘stlar bilan ulashish"
+
+msgid "refer_share_text"
+msgstr "Menga qo‘shiling va tokenlarga ega bo‘ling!"
+
+msgid "snapchat_detected"
+msgstr "📎 Snapchat havolasi aniqlandi! Qayta ishlanmoqda..."
+
+msgid "snapchat_download_failed"
+msgstr "❌ Snapchat mediaini yuklab bo‘lmadi."
+
+msgid "snapchat_video_ready"
+msgstr "📽 Mana sizning Snapchat videongiz!"
+
+msgid "snapchat_download_error"
+msgstr "❌ Snapchat mediaini yuklab olishda xatolik yuz berdi."
+
+msgid "unknown_action"
+msgstr "❌ Noma'lum amal."
+
+msgid "extracting"
+msgstr "🔍 Musiqa aniqlanmoqda..."
+
+msgid "session_expired"
+msgstr "❌ Sessiya tugagan. Iltimos, havolani qayta yuboring."
+
+msgid "extract_failed"
+msgstr "❌ Audio ajratib bo‘lmadi."
+
+msgid "music_not_recognized"
+msgstr "😕 Videodan musiqa aniqlanmadi."
+
+msgid "music_found"
+msgstr "🎶 <b>{title}</b>\n👤 {artist}"
+
+msgid "recognition_error"
+msgstr "❌ Musiqa aniqlashda xatolik yuz berdi."
+
+msgid "your_referral_link"
+msgstr "🔗 Sizning referal havolangiz: {link}"
+
+msgid "pinterest_detected"
+msgstr "📎 Pinterest havolasi aniqlandi! Qayta ishlanmoqda..."
+
+msgid "pinterest_download_failed"
+msgstr "❌ Pinterest mediaini yuklab bo‘lmadi."
+
+msgid "pinterest_video_ready"
+msgstr "📽 Mana sizning Pinterest videongiz!"
+
+msgid "pinterest_download_error"
+msgstr "❌ Pinterest mediaini yuklab olishda xatolik yuz berdi."
+
+msgid "unknown_action"
+msgstr "❌ Noma'lum amal."
+
+msgid "extracting"
+msgstr "🔍 Musiqa aniqlanmoqda..."
+
+msgid "session_expired"
+msgstr "❌ Sessiya tugagan. Iltimos, havolani qayta yuboring."
+
+msgid "extract_failed"
+msgstr "❌ Audio ajratib bo‘lmadi."
+
+msgid "music_not_recognized"
+msgstr "😕 Videodan musiqa aniqlanmadi."
+
+msgid "music_found"
+msgstr "🎶 <b>{title}</b>\n👤 {artist}"
+
+msgid "recognition_error"
+msgstr "❌ Musiqa aniqlashda xatolik yuz berdi."

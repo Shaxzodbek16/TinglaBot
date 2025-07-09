@@ -1,9 +1,6 @@
 from aiogram.types import (
     Message,
-    CallbackQuery,
     ReplyKeyboardRemove,
-    InlineKeyboardButton,
-    InlineKeyboardMarkup,
 )
 from aiogram.fsm.context import FSMContext
 from sqlalchemy.exc import IntegrityError

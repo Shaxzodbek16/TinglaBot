@@ -15,7 +15,7 @@ async def ask_language(message: Message):
     user: User = await get_user_by_tg_id(message.from_user.id)
     current_lang = user.language_code
     kb = await language_keyboard(selected_lang=current_lang)
-    await message.answer("🌐 Please choose your language:", reply_markup=kb)
+    await message.answer(_("lang_choose"), reply_markup=kb)
 
 
 @language_router.callback_query(F.data.startswith("set_lang:"))
@@ -30,12 +30,7 @@ async def on_language_selected(callback: CallbackQuery):
 @language_router.message(Command("developer"))
 async def handle_developer_command(message: Message):
     await message.answer(
-        "🤖 This bot was created by <a href='https://t.me/tmshaxzodbek'>@tmshaxzodbek</a>.\n\n"
-        "🌐 Website: <a href='https://shaxzodbek.com'>Shaxzodbek/a>\n"
-        "💼 LinkedIn: <a href='https://linkedin.com/in/shaxzodbek-muxtorov-59144a294'>shaxzodbek</a>\n"
-        "📧 Email: <a href='mailto:muxtorovshaxzodbek16@gmail.com'>muxtorovshaxzodbek16@gmail.com</a>\n"
-        "📱 GitHub: <a href='https://github.com/Shaxzodbek16'>github.com/Shaxzodbek16</a>\n"
-        "📞 Phone: +998 91 526 01 12",
+        _("developer_info"),
         parse_mode="HTML",
         disable_web_page_preview=False,
     )

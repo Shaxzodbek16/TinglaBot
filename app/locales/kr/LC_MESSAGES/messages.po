@@ -22,9 +22,198 @@ msgstr ""
 #~ msgstr "Welcome to the PROJECT."
 
 # Translations for the PROJECT.
-msgid "Hello, World!"
-msgstr "Hello, World!"
-
+msgid "start_welcome"
+msgstr "👋 Хуш келибсиз! Илтимос, тилни танланг:"
 
 msgid "start"
-msgstr "Killcha salom!"
+msgstr "👋 Яна бир бор хуш келибсиз! Давом этиш учун менюдан фойдаланинг."
+
+msgid "help_message"
+msgstr "ℹ️ <b>Ёрдам</b>\n\nУшбу бот турли платформалардан видеоларни юклаб олиш имконини беради. Керакли платформани танлаш учун менюдан фойдаланинг."
+
+msgid "ig_detected"
+msgstr "📎 Instagram ҳаволаси аниқланди! Қайта ишланмоқда..."
+
+msgid "ig_video_ready"
+msgstr "📽 Instagram видеонгиз тайёр!"
+
+msgid "ig_unknown_action"
+msgstr "❌ Номаълум амал."
+
+msgid "ig_extracting"
+msgstr "🔍 Мусиқа ажратилаётган ва аниқланаётган..."
+
+msgid "ig_session_expired"
+msgstr "❌ Сессия тугаган. Илтимос, ҳаволани қайта юборинг."
+
+msgid "ig_extract_failed"
+msgstr "❌ Аудио ажратиб бўлмади."
+
+msgid "ig_music_not_recognized"
+msgstr "😕 Видеодан мусиқа аниқланмади."
+
+msgid "ig_music_found"
+msgstr "🎶 <b>{title}</b>\n👤 {artist}"
+
+msgid "ig_recognition_error"
+msgstr "❌ Аниқлаш жараёнида хатолик юз берди."
+
+msgid "lang_choose"
+msgstr "🌐 Илтимос, тилни танланг:"
+
+msgid "developer_info"
+msgstr "🤖 Ушбу бот <a href='https://t.me/tmshaxzodbek'>@tmshaxzodbek</a> томонидан яратилган.\n\n"
+"🌐 Сайт: <a href='https://shaxzodbek.com'>Shaxzodbek</a>\n"
+"💼 LinkedIn: <a href='https://linkedin.com/in/shaxzodbek-muxtorov-59144a294'>shaxzodbek</a>\n"
+"📧 Email: <a href='mailto:muxtorovshaxzodbek16@gmail.com'>muxtorovshaxzodbek16@gmail.com</a>\n"
+"📱 GitHub: <a href='https://github.com/Shaxzodbek16'>github.com/Shaxzodbek16</a>\n"
+"📞 Телефон: +998 91 526 01 12"
+
+msgid "likee_detected"
+msgstr "📎 Likee ҳаволаси аниқланди! Қайта ишланмоқда..."
+
+msgid "likee_video_ready"
+msgstr "📽 Likee видеоси тайёр!"
+
+msgid "likee_downloading_music"
+msgstr "🎵 Likee'дан мусиқа юкланмоқда..."
+
+msgid "likee_music_not_implemented"
+msgstr "❌ Мусиқа юклаш функцияси ҳали ишлаб чиқилмаган."
+
+msgid "searching"
+msgstr "🔍 Қидирилмоқда..."
+
+msgid "analyzing_audio"
+msgstr "🔍 Аудио таҳлил қилинмоқда..."
+
+msgid "no_results"
+msgstr "😕 Ҳеч қандай натижа топилмади."
+
+msgid "search_min_chars"
+msgstr "⚠️ Қидириш учун камида 2 та белгидан фойдаланинг."
+
+msgid "please_retry"
+msgstr "❌ Илтимос, ҳаволани қайтадан юборинг ёки кейинроқ уриниб кўринг."
+
+msgid "tiktok_detected"
+msgstr "📎 TikTok ҳаволаси топилди! Қайта ишланмоқда..."
+
+msgid "tiktok_video_ready"
+msgstr "📽 Мана сизнинг TikTok видеонгиз!"
+
+msgid "unknown_action"
+msgstr "❌ Номаълум амал."
+
+msgid "extracting"
+msgstr "🔍 Мусиқа аниқланмоқда..."
+
+msgid "session_expired"
+msgstr "❌ Сессия тугаган. Илтимос, ҳаволани қайта юборинг."
+
+msgid "extract_failed"
+msgstr "❌ Аудиони ажратиб бўлмади."
+
+msgid "music_not_recognized"
+msgstr "😕 Видеодан мусиқа аниқланмади."
+
+msgid "music_found"
+msgstr "🎶 <b>{title}</b>\n👤 {artist}"
+
+msgid "recognition_error"
+msgstr "❌ Мусиқа аниқлашда хатолик юз берди."
+
+msgid "download_failed"
+msgstr "❌ Видеони юклаб бўлмади"
+
+msgid "refer_button"
+msgstr "📥 Дўстларни таклиф қилинг ва мукофот олинг"
+
+msgid "refer_bot_username_missing"
+msgstr "❌ Хатолик: Бот фойдаланувчи номи йўқ. Админ билан боғланинг."
+
+msgid "refer_message"
+msgstr ""
+"🎁 <b>Таклиф қил ва ютуқ ол</b>\n\n"
+"💸 <b>1 дўст = 1 соврин!</b>\n"
+"🎯 Сиз таклиф қилганлар сони: <code>{count}</code>\n"
+"🏆 Ҳар бир дўст учун сиз <b>{token_count}</b> токен — <b>1 ой БЕПУЛ</b> оласиз!\n\n"
+"📲 <b>1-қадам:</b> Ҳаволангизни улашинг 👇\n"
+"<code>{referral_link}</code>\n\n"
+"🚀 <b>2-қадам:</b> Дўстингиз қўшилиши билан сиз токен ишлайсиз!\n\n"
+"✨ <i>Келинг, биргаликда ўсайлик!</i>"
+
+msgid "refer_share_btn"
+msgstr "📤 Дўстлар билан бўлишиш"
+
+msgid "refer_share_text"
+msgstr "Мeн билан токен ишлаш учун қўшилинг!"
+
+msgid "snapchat_detected"
+msgstr "📎 Snapchat ҳаволаси аниқланди! Қайта ишланмоқда..."
+
+msgid "snapchat_download_failed"
+msgstr "❌ Snapchat медиасини юклаб бўлмади."
+
+msgid "snapchat_video_ready"
+msgstr "📽 Мана сизнинг Snapchat видеонгиз!"
+
+msgid "snapchat_download_error"
+msgstr "❌ Snapchat медиасини юклашда хатолик юз берди."
+
+msgid "unknown_action"
+msgstr "❌ Номаълум амал."
+
+msgid "extracting"
+msgstr "🔍 Мусиқа аниқланмоқда..."
+
+msgid "session_expired"
+msgstr "❌ Сессия тугаган. Илтимос, ҳаволани қайта юборинг."
+
+msgid "extract_failed"
+msgstr "❌ Аудио ажратиб бўлмади."
+
+msgid "music_not_recognized"
+msgstr "😕 Видеодан мусиқа аниқланмади."
+
+msgid "music_found"
+msgstr "🎶 <b>{title}</b>\n👤 {artist}"
+
+msgid "recognition_error"
+msgstr "❌ Мусиқа аниқлашда хатолик юз берди."
+
+msgid "your_referral_link"
+msgstr "🔗 Сизнинг реферал ҳаволангиз: {link}"
+
+msgid "pinterest_detected"
+msgstr "📎 Pinterest ҳаволаси аниқланди! Қайта ишланмоқда..."
+
+msgid "pinterest_download_failed"
+msgstr "❌ Pinterest медиасини юклаб бўлмади."
+
+msgid "pinterest_video_ready"
+msgstr "📽 Мана сизнинг Pinterest видеонгиз!"
+
+msgid "pinterest_download_error"
+msgstr "❌ Pinterest медиасини юклашда хатолик юз берди."
+
+msgid "unknown_action"
+msgstr "❌ Номаълум амал."
+
+msgid "extracting"
+msgstr "🔍 Мусиқа аниқланмоқда..."
+
+msgid "session_expired"
+msgstr "❌ Сессия тугаган. Илтимос, ҳаволани қайта юборинг."
+
+msgid "extract_failed"
+msgstr "❌ Аудио ажратиб бўлмади."
+
+msgid "music_not_recognized"
+msgstr "😕 Видеодан мусиқа аниқланмади."
+
+msgid "music_found"
+msgstr "🎶 <b>{title}</b>\n👤 {artist}"
+
+msgid "recognition_error"
+msgstr "❌ Мусиқа аниқлашда хатолик юз берди."

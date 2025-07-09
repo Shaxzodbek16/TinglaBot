@@ -1,6 +1,7 @@
 from aiogram import Router
 from aiogram.filters import Command
 from aiogram.types import Message
+from aiogram.utils.i18n import gettext as _
 
 from app.bot.handlers.user_handlers import get_user_by_tg_id
 
@@ -12,4 +13,5 @@ async def send_referral_link(message: Message):
     user = await get_user_by_tg_id(message.from_user.id)
     bot_username = (await message.bot.get_me()).username
     link = user.get_referral_link(bot_username)
-    await message.answer(f"Your referral link: {link}")
+
+    await message.answer(_("your_referral_link").format(link=link))

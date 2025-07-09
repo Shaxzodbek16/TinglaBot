@@ -20,9 +20,7 @@ async def start_function(message: Message, ref_id=None):
     user: User = await get_user_by_tg_id(message.from_user.id)
     if user.language_code is None:
         kb = await language_keyboard(selected_lang=None)
-        await message.answer(
-            "👋 Welcome! Please choose your language:", reply_markup=kb
-        )
+        await message.answer(_("start_welcome"), reply_markup=kb)
     else:
         await message.answer(_("start"), reply_markup=main_menu_keyboard(message))
 
@@ -49,9 +47,7 @@ async def handle_start(message: Message):
 @start_router.message(Command("help"))
 async def handle_help(message: Message):
     await message.answer(
-        "ℹ️ <b>Help</b>\n\n"
-        "This bot allows you to download videos from various platforms. "
-        "Use the main menu to navigate and select the platform you want to use.",
+        _("help_message"),
         parse_mode="HTML",
         reply_markup=main_menu_keyboard(message),
     )

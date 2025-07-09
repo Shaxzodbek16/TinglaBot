@@ -2,6 +2,7 @@ import time
 
 from aiogram import Router, F
 from aiogram.types import Message, FSInputFile, CallbackQuery
+from aiogram.utils.i18n import gettext as _
 
 from app.bot.extensions.clear import atomic_clear
 from app.bot.handlers.statistics_handler import update_statistics
@@ -27,7 +28,7 @@ user_sessions = {}
 
 @tiktok_router.message(F.text.contains("tiktok.com"))
 async def handle_tiktok_link(message: Message):
-    await message.answer("📎 TikTok link detected! Processing...")
+    await message.answer(_("tiktok_detected"))
 
     user_id = message.from_user.id
     tiktok_url = validate_tiktok_url(message.text)
@@ -38,14 +39,14 @@ async def handle_tiktok_link(message: Message):
 
         await message.answer_video(
             FSInputFile(video_path),
-            caption="📽 Here is your video from TikTok!",
+            caption=_("tiktok_video_ready"),
             reply_markup=get_music_download_button("tiktok"),
         )
 
         await atomic_clear(video_path)
 
     except Exception as e:
-        await message.answer(f"❌ Failed to download video: {e}")
+        await message.answer(_("download_failed") + f": {e}")
     await update_statistics(user_id, field="from_tiktok")
 
 
@@ -55,30 +56,25 @@ async def handle_tiktok_callback(callback_query: CallbackQuery):
     user_id = callback_query.from_user.id
 
     if action != "download_music":
-        await callback_query.answer("❌ Unknown action.")
+        await callback_query.answer(_("unknown_action"))
         return
 
-    await callback_query.answer("🔍 Extracting and recognizing music...")
+    await callback_query.answer(_("extracting"))
 
     session = user_sessions.get(user_id)
     if not session or not session.get("url"):
-        await callback_query.message.answer(
-            "❌ Session expired. Please resend the link."
-        )
+        await callback_query.message.answer(_("session_expired"))
         return
 
     try:
-        # 1. Audio ajratish
         audio_path = await extract_audio_from_tiktok_video_smart(session["url"])
         if not audio_path:
-            await callback_query.message.answer("❌ Could not extract audio.")
+            await callback_query.message.answer(_("extract_failed"))
             return
 
         shazam_hits = await shz.recognise_music_from_audio(audio_path)
         if not shazam_hits:
-            await callback_query.message.answer(
-                "😕 Could not recognize any music in this video."
-            )
+            await callback_query.message.answer(_("music_not_recognized"))
             return
 
         track = shazam_hits[0]["track"]
@@ -98,11 +94,11 @@ async def handle_tiktok_callback(callback_query: CallbackQuery):
                 )
             ]
 
-        # 4. Natijani ko‘rsatish
         await callback_query.message.answer(
-            f"🎶 <b>{title}</b>\n👤 {artist}",
+            _("music_found").format(title=title, artist=artist),
             parse_mode="HTML",
         )
+
         _cache[user_id] = {
             "hits": youtube_hits,
             "timestamp": time.time(),
@@ -118,7 +114,7 @@ async def handle_tiktok_callback(callback_query: CallbackQuery):
 
     except Exception as e:
         await callback_query.message.answer(
-            f"❌ Error during recognition: {str(e)[:100]}"
+            _("recognition_error") + f": {str(e)[:100]}"
         )
 
     user_sessions.pop(user_id, None)

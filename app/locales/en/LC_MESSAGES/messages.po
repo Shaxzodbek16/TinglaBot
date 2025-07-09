@@ -18,44 +18,200 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.13.1\n"
 
-#~ msgid "Welcome to the PROJECT."
-#~ msgstr "Welcome to the PROJECT."
+msgid "start_welcome"
+msgstr "👋 Welcome! Please choose your language:"
+
 msgid "start"
-msgstr "Welcome to bot!"
+msgstr "👋 Welcome back! Use the menu below to get started."
 
-msgid "language"
-msgstr "Please select a language:"
+msgid "help_message"
+msgstr "ℹ️ <b>Help</b>\n\nThis bot allows you to download videos from various platforms. Use the main menu to navigate and select the platform you want to use."
 
-msgid "help"
-msgstr "How can I help you?"
+msgid "ig_detected"
+msgstr "📎 Instagram link detected! Processing..."
 
-msgid "admin_panel"
-msgstr "⚙️ Admin Panel"
+msgid "ig_video_ready"
+msgstr "📽 Here is your video from Instagram!"
 
-msgid "reference"
+msgid "ig_unknown_action"
+msgstr "❌ Unknown action."
+
+msgid "ig_extracting"
+msgstr "🔍 Extracting and recognizing music..."
+
+msgid "ig_session_expired"
+msgstr "❌ Session expired. Please resend the link."
+
+msgid "ig_extract_failed"
+msgstr "❌ Could not extract audio."
+
+msgid "ig_music_not_recognized"
+msgstr "😕 Could not recognize any music in this video."
+
+msgid "ig_music_found"
+msgstr "🎶 <b>{title}</b>\n👤 {artist}"
+
+msgid "ig_recognition_error"
+msgstr "❌ Something went wrong during recognition."
+
+msgid "lang_choose"
+msgstr "🌐 Please choose your language:"
+
+msgid "developer_info"
+msgstr "🤖 This bot was created by <a href='https://t.me/tmshaxzodbek'>@tmshaxzodbek</a>.\n\n"
+"🌐 Website: <a href='https://shaxzodbek.com'>Shaxzodbek</a>\n"
+"💼 LinkedIn: <a href='https://linkedin.com/in/shaxzodbek-muxtorov-59144a294'>shaxzodbek</a>\n"
+"📧 Email: <a href='mailto:muxtorovshaxzodbek16@gmail.com'>muxtorovshaxzodbek16@gmail.com</a>\n"
+"📱 GitHub: <a href='https://github.com/Shaxzodbek16'>github.com/Shaxzodbek16</a>\n"
+"📞 Phone: +998 91 526 01 12"
+
+
+msgid "likee_detected"
+msgstr "📎 Likee link detected! Processing..."
+
+msgid "likee_video_ready"
+msgstr "📽 Here is your video from Likee!"
+
+msgid "likee_downloading_music"
+msgstr "🎵 Downloading music from Likee..."
+
+msgid "likee_music_not_implemented"
+msgstr "❌ Music download feature is not implemented yet."
+
+msgid "please_retry"
+msgstr "❌ Please resend the link or try again later."
+
+msgid "searching"
+msgstr "🔍 Searching..."
+
+msgid "analyzing_audio"
+msgstr "🔍 Analyzing audio..."
+
+msgid "no_results"
+msgstr "😕 No results found."
+
+msgid "search_min_chars"
+msgstr "⚠️ Please enter at least 2 characters to search."
+
+msgid "tiktok_detected"
+msgstr "📎 TikTok link detected! Processing..."
+
+msgid "tiktok_video_ready"
+msgstr "📽 Here is your video from TikTok!"
+
+msgid "unknown_action"
+msgstr "❌ Unknown action."
+
+msgid "extracting"
+msgstr "🔍 Extracting and recognizing music..."
+
+msgid "session_expired"
+msgstr "❌ Session expired. Please resend the link."
+
+msgid "extract_failed"
+msgstr "❌ Could not extract audio."
+
+msgid "music_not_recognized"
+msgstr "😕 Could not recognize any music in this video."
+
+msgid "music_found"
+msgstr "🎶 <b>{title}</b>\n👤 {artist}"
+
+msgid "recognition_error"
+msgstr "❌ Error during recognition"
+
+msgid "download_failed"
+msgstr "❌ Failed to download video"
+
+
+msgid "refer_button"
 msgstr "📥 Refer Friends and Earn"
 
-msgid "share_with_friends"
-msgstr "Share with Friends"
+msgid "refer_bot_username_missing"
+msgstr "❌ Error: Bot username is not set. Please contact the bot administrator."
 
-msgid "share_with_friends_text"
-msgstr "Share your referral link with friends and earn rewards when they join!"
+msgid "refer_message"
+msgstr ""
+"🎁 <b>Invite & Earn</b>\n\n"
+"💸 <b>1 Friend = 1 Reward!</b>\n"
+"🎯 You’ve invited: <code>{count}</code> friend(s)\n"
+"🏆 Each referral gives you <b>{token_count}</b> tokens — enough for <b>1 month FREE</b>!\n\n"
+"📲 <b>Step 1:</b> Share your referral link 👇\n"
+"<code>{referral_link}</code>\n\n"
+"🚀 <b>Step 2:</b> Wait for your friend to join and start earning!\n\n"
+"✨ <i>Let's grow together — bring your friends on board!</i>"
 
-msgid "users_excel"
-msgstr "Users Excel Report"
+msgid "refer_share_btn"
+msgstr "📤 Share with Friends"
 
-msgid "statistics"
-msgstr "Statistics"
+msgid "refer_share_text"
+msgstr "Join and earn tokens with me!"
 
-msgid "settings"
-msgstr "🔧 Settings"
+msgid "snapchat_detected"
+msgstr "📎 Snapchat link detected! Processing..."
 
-msgid "channels"
-msgstr "📈 Channels"
+msgid "snapchat_download_failed"
+msgstr "❌ Can't download Snapchat media."
 
-msgid "back_main_menu"
-msgstr "🔙 Back to Main Menu"
+msgid "snapchat_video_ready"
+msgstr "📽 Here is your video from Snapchat!"
 
-msgid "update_token"
-msgstr "Update Tokens per Referral"
+msgid "snapchat_download_error"
+msgstr "❌ Failed to download Snapchat media."
 
+msgid "unknown_action"
+msgstr "❌ Unknown action."
+
+msgid "extracting"
+msgstr "🔍 Extracting and recognizing music..."
+
+msgid "session_expired"
+msgstr "❌ Session expired. Please resend the link."
+
+msgid "extract_failed"
+msgstr "❌ Could not extract audio."
+
+msgid "music_not_recognized"
+msgstr "😕 Could not recognize any music in this video."
+
+msgid "music_found"
+msgstr "🎶 <b>{title}</b>\n👤 {artist}"
+
+msgid "recognition_error"
+msgstr "❌ Error during recognition"
+
+msgid "your_referral_link"
+msgstr "🔗 Your referral link: {link}"
+
+msgid "pinterest_detected"
+msgstr "📎 Pinterest link detected! Processing..."
+
+msgid "pinterest_download_failed"
+msgstr "❌ Can't download Pinterest media."
+
+msgid "pinterest_video_ready"
+msgstr "📽 Here is your video from Pinterest!"
+
+msgid "pinterest_download_error"
+msgstr "❌ Failed to download Pinterest media."
+
+msgid "unknown_action"
+msgstr "❌ Unknown action."
+
+msgid "extracting"
+msgstr "🔍 Extracting and recognizing music..."
+
+msgid "session_expired"
+msgstr "❌ Session expired. Please resend the link."
+
+msgid "extract_failed"
+msgstr "❌ Could not extract audio."
+
+msgid "music_not_recognized"
+msgstr "😕 Could not recognize any music in this video."
+
+msgid "music_found"
+msgstr "🎶 <b>{title}</b>\n👤 {artist}"
+
+msgid "recognition_error"
+msgstr "❌ Error during recognition"

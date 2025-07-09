@@ -1,5 +1,6 @@
 from aiogram import Router, F
 from aiogram.types import Message, FSInputFile
+from aiogram.utils.i18n import gettext as _
 
 from app.bot.extensions.clear import atomic_clear
 from app.bot.handlers.likee_handler import (
@@ -11,20 +12,19 @@ from app.bot.keyboards.general_buttons import get_music_download_button
 from app.core.settings.config import get_settings, Settings
 
 settings: Settings = get_settings()
-
 likee_router = Router()
 
 
 @likee_router.message(F.text.contains("likee.video"))
 async def handle_likee_link(message: Message):
-    await message.answer("Likee link detected! Processing...")
+    await message.answer(_("likee_detected"))
     likee_url = validate_likee_url(message.text)
     video_path = await download_likee_video_only_mp4(likee_url)
     video = FSInputFile(video_path)
 
     await message.answer_video(
         video,
-        caption="Here is your video from Likee!",
+        caption=_("likee_video_ready"),
         reply_markup=get_music_download_button("likee"),
         supports_streaming=True,
     )
@@ -36,7 +36,5 @@ async def handle_likee_link(message: Message):
 async def handle_likee_callback(callback_query):
     action = callback_query.data.split(":")[1]
     if action == "download_music":
-        await callback_query.answer("Downloading music from Likee...")
-        await callback_query.message.answer(
-            "Music download feature is not implemented yet."
-        )
+        await callback_query.answer(_("likee_downloading_music"))
+        await callback_query.message.answer(_("likee_music_not_implemented"))

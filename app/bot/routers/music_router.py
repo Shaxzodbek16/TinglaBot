@@ -441,7 +441,6 @@ async def download_and_send_audio(destination: Message, status: Message, info: D
 
 
 async def download_and_send_video(destination: Message, status: Message, info: Dict):
-    """Download and send video with comprehensive error handling."""
     try:
         video_id = info.get("id")
         if not video_id:
