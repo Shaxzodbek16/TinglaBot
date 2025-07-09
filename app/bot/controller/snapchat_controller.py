@@ -11,6 +11,7 @@ from selenium.webdriver.chrome.service import Service
 
 logger = logging.getLogger(__name__)
 
+
 class SnapchatController:
     def __init__(self):
         chrome_options = Options()
@@ -20,8 +21,9 @@ class SnapchatController:
         chrome_options.add_argument("--disable-gpu")
         chrome_options.add_argument("--window-size=1920x1080")
 
-
-        self.driver = webdriver.Chrome(service=Service("/usr/bin/chromedriver"), options=chrome_options)
+        self.driver = webdriver.Chrome(
+            service=Service("/usr/bin/chromedriver"), options=chrome_options
+        )
 
     def download_snapchat_video(self, url: str, save_dir: Path) -> str | None:
         try:

@@ -25,7 +25,7 @@ services:
       postgres:
         condition: service_healthy
       selenium:
-        condition: service_started
+        condition: service_healthy
 
 
   postgres:
@@ -51,13 +51,28 @@ services:
 
   # 🆕 --- Selenium + Chrome container qo‘shildi ---
   selenium:
-    image: seleniarm/standalone-chromium:latest  # Arm64 (Mac M1/M2), agar amd64 bo‘lsa, selenium/standalone-chrome:latest
+    image: seleniarm/standalone-chromium:latest
     restart: always
     ports:
       - "4444:4444"
+      - "7900:7900"  # VNC port for debugging
     shm_size: 2g
+    environment:
+      - SE_VNC_NO_PASSWORD=1
+      - SE_NODE_MAX_INSTANCES=2
+      - SE_NODE_MAX_SESSIONS=2
+      - SE_NODE_SESSION_TIMEOUT=300
+      - SE_NODE_OVERRIDE_MAX_SESSIONS=true
+    volumes:
+      - /dev/shm:/dev/shm
     networks:
       - bot_network
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:4444/wd/hub/status || exit 1" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 90s
 
 volumes:
   postgres_data:

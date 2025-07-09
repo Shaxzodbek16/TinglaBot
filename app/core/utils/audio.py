@@ -4,6 +4,7 @@ import moviepy
 
 logger = logging.getLogger(__name__)
 
+
 def extract_audio_from_video(video_path: str) -> str | None:
     try:
         video = moviepy.VideoFileClip(video_path)

@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 user_sessions = {}
 
 
-@snapchat_router.message(F.text.regexp(r"(https?://)?(www\.)?(snapchat\.com)/spotlight/[^\s]+"))
+@snapchat_router.message(F.text.contains("snapchat.com"))
 async def handle_snapchat_link(message: Message):
     await message.answer("📎 Snapchat link detected! Processing...")
 
@@ -67,7 +67,9 @@ async def handle_snapchat_callback(callback_query: CallbackQuery):
 
     session = user_sessions.get(user_id)
     if not session or not session.get("video_path"):
-        await callback_query.message.answer("❌ Session expired. Please resend the link.")
+        await callback_query.message.answer(
+            "❌ Session expired. Please resend the link."
+        )
         return
 
     try:
@@ -78,7 +80,9 @@ async def handle_snapchat_callback(callback_query: CallbackQuery):
 
         shazam_hits = await shz.recognise_music_from_audio(audio_path)
         if not shazam_hits:
-            await callback_query.message.answer("😕 Could not recognize any music in this video.")
+            await callback_query.message.answer(
+                "😕 Could not recognize any music in this video."
+            )
             return
 
         track = shazam_hits[0]["track"]
@@ -88,12 +92,14 @@ async def handle_snapchat_callback(callback_query: CallbackQuery):
         youtube_hits = await get_controller().search(search_query)
         if not youtube_hits:
             youtube_hits = [
-                get_controller().ytdict_to_info({
-                    "title": title,
-                    "artist": artist,
-                    "duration": 0,
-                    "id": track.get("key", ""),
-                })
+                get_controller().ytdict_to_info(
+                    {
+                        "title": title,
+                        "artist": artist,
+                        "duration": 0,
+                        "id": track.get("key", ""),
+                    }
+                )
             ]
 
         await callback_query.message.answer(
