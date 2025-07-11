@@ -1,7 +1,7 @@
 from aiogram import Router, F, Bot
 from aiogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.utils.i18n import gettext as _
-
+from aiogram.utils.i18n import lazy_gettext as __
 from app.bot.handlers.admin import get_token_per_referral
 from app.bot.handlers.user_handlers import get_referral_count
 from app.core.settings.config import get_settings, Settings
@@ -11,7 +11,7 @@ settings: Settings = get_settings()
 bot = Bot(settings.BOT_TOKEN)
 
 
-@user_router.message(F.text == _("refer_button"))
+@user_router.message(F.text == __("refer_button"))
 async def handle_refer_friends(message: Message):
     count = await get_referral_count(message.from_user.id)
     token_count = await get_token_per_referral()

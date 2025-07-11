@@ -16,6 +16,8 @@ class Settings(BaseSettings):
     DEBUG: bool = False
     SELENIUM_REMOTE_URL: str
 
+    LIKEE_API_KEY: str
+
     model_config = SettingsConfigDict(env_file=".env")
 
     @property
