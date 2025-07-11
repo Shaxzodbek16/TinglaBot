@@ -212,3 +212,30 @@ msgstr "🎶 <b>{title}</b>\n👤 {artist}"
 
 msgid "recognition_error"
 msgstr "❌ Musiqa aniqlashda xatolik yuz berdi."
+
+msgid "threads_invalid_url"
+msgstr "❌ Noto'g'ri Threads URL!\nIltimos, to'g'ri post linkini yuboring.\nMasalan: https://threads.net/@username/post/abc123"
+
+msgid "threads_loading"
+msgstr "🔄 Threads posti tahlil qilinmoqda..."
+
+msgid "threads_sending_files"
+msgstr "✅ {count} ta fayl yuklandi!\n📤 Yuborilmoqda..."
+
+msgid "threads_success"
+msgstr "🎉 Threads posti muvaffaqiyatli yuklandi!\n📁 Jami: {total} ta fayl{failed_info}"
+
+msgid "threads_failed"
+msgstr"⚠️ {failed} ta fayl yuklanmadi"
+
+msgid "threads_no_files"
+msgstr "❌ Yuborish uchun fayl topilmadi."
+
+msgid "threads_error"
+msgstr "❌ Threads linkni qayta ishlashda xatolik yuz berdi. Iltimos, yana urinib ko‘ring."
+
+msgid "threads_video_too_large"
+msgstr "⚠️ Video fayl hajmi juda katta: {name}\n📁 Fayl: {path}\n📏 Hajm: {size} MB"
+
+msgid "threads_video_send_error"
+msgstr "❌ Videolarni yuborishda xatolik yuz berdi."

@@ -48,11 +48,12 @@ def init():
     os.makedirs(WORKDIR.parent / "media", exist_ok=True)
     os.makedirs(WORKDIR.parent / "media" / "instagram", exist_ok=True)  # done
     os.makedirs(WORKDIR.parent / "media" / "tiktok", exist_ok=True)  # done
-    os.makedirs(WORKDIR.parent / "media" / "snapchat", exist_ok=True)  # todo: do
-    os.makedirs(WORKDIR.parent / "media" / "likee", exist_ok=True)  # todo: do
+    os.makedirs(WORKDIR.parent / "media" / "snapchat", exist_ok=True)  # done
+    os.makedirs(WORKDIR.parent / "media" / "threads", exist_ok=True)  # done
+    os.makedirs(WORKDIR.parent / "media" / "likee", exist_ok=True)  # done
     os.makedirs(WORKDIR.parent / "media" / "xlsx", exist_ok=True)  # done
     os.makedirs(WORKDIR.parent / "static" / "pinterest", exist_ok=True)  # done
-    os.makedirs(WORKDIR.parent / "static" / "threads", exist_ok=True)  # todo: do
+    os.makedirs(WORKDIR.parent / "static" / "threads", exist_ok=True)  # done
     os.makedirs(WORKDIR.parent / "static" / "cookie" / "instagram", exist_ok=True)
     os.makedirs(WORKDIR.parent / "static" / "cookie" / "youtube", exist_ok=True)
     os.makedirs(WORKDIR.parent / "static" / "cookie" / "tiktok", exist_ok=True)

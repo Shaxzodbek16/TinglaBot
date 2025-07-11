@@ -215,3 +215,33 @@ msgstr "🎶 <b>{title}</b>\n👤 {artist}"
 
 msgid "recognition_error"
 msgstr "❌ Error during recognition"
+
+msgid "threads_invalid_url"
+msgstr "❌ Invalid Threads URL!\nPlease send a correct post link.\nExample: https://threads..com/@username/post/abc123"
+
+msgid "threads_loading"
+msgstr "🔄 Analyzing the Threads post..."
+
+msgid "threads_sending_files"
+msgstr "✅ {count} files downloaded!\n📤 Sending..."
+
+msgid "threads_success"
+msgstr "🎉 Successfully downloaded Threads post!\n📁 Total: {total} files{failed_info}"
+
+msgid "threads_failed"
+msgstr "⚠️ {failed} file failed to download"
+
+msgid "threads_no_files"
+msgstr "❌ No downloadable files found."
+
+msgid "threads_error"
+msgstr "❌ An error occurred while processing the Threads link. Please try again."
+
+msgid "threads_video_too_large"
+msgstr "⚠️ Video too large: {name}\n📁 Location: {path}\n📏 Size: {size} MB"
+
+msgid "threads_video_send_error"
+msgstr "❌ An error occurred while sending videos."
+
+msgid "threads_video_ready"
+msgstr "📽 Here is your medias from Threads!"

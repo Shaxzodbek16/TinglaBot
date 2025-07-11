@@ -3,6 +3,7 @@ from aiogram import Router
 from app.bot.routers.admin_router import admin_router
 from app.bot.routers.music_router import music_router
 from app.bot.routers.pinterest_router import pinterest_router
+from app.bot.routers.threads_router import threads_router
 from app.bot.routers.start_router import start_router
 from app.bot.routers.language_router import language_router
 from app.bot.routers.instagram_router import instagram_router
@@ -18,6 +19,7 @@ v1_router.include_routers(
     pinterest_router,
     snapchat_router,
     language_router,
+    threads_router,
     instagram_router,
     tiktok_router,
     likee_router,
