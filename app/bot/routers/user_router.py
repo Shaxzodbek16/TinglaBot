@@ -11,7 +11,7 @@ settings: Settings = get_settings()
 bot = Bot(settings.BOT_TOKEN)
 
 
-@user_router.message(F.text == __("refer_button"))
+@user_router.message(F.text == "📥 Refer Friends and Earn")
 async def handle_refer_friends(message: Message):
     count = await get_referral_count(message.from_user.id)
     token_count = await get_token_per_referral()
