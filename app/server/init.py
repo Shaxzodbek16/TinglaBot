@@ -51,6 +51,7 @@ def init():
     os.makedirs(WORKDIR.parent / "media" / "snapchat", exist_ok=True)  # done
     os.makedirs(WORKDIR.parent / "media" / "threads", exist_ok=True)  # done
     os.makedirs(WORKDIR.parent / "media" / "likee", exist_ok=True)  # done
+    os.makedirs(WORKDIR.parent / "media" / "youtube_shorts", exist_ok=True)  # done
     os.makedirs(WORKDIR.parent / "media" / "xlsx", exist_ok=True)  # done
     os.makedirs(WORKDIR.parent / "static" / "pinterest", exist_ok=True)  # done
     os.makedirs(WORKDIR.parent / "static" / "threads", exist_ok=True)  # done
