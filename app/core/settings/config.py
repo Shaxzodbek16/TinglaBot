@@ -17,6 +17,7 @@ class Settings(BaseSettings):
     SELENIUM_REMOTE_URL: str
 
     LIKEE_API_KEY: str
+    TWITTER_API_KEY: str
 
     model_config = SettingsConfigDict(env_file=".env")
 

@@ -258,3 +258,21 @@ msgstr "❌ No video found."
 msgid "shorts_error"
 msgstr "❌ An error occurred while downloading."
 
+msgid "twitter_loading"
+msgstr "🔄 Twitter video is being downloaded..."
+
+msgid "twitter_video_ready"
+msgstr "✅ Twitter video is ready!"
+
+msgid "twitter_no_files"
+msgstr "❌ No downloadable video found."
+
+msgid "twitter_error"
+msgstr "❌ Error occurred while downloading Twitter video"
+
+msgid "twitter_detected"
+msgstr "🔍 Twitter video detected."
+
+msgid "twitter_invalid_url"
+msgstr "❌ Invalid Twitter link"
+

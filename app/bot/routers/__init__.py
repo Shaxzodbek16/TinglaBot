@@ -6,6 +6,7 @@ from app.bot.routers.pinterest_router import pinterest_router
 from app.bot.routers.threads_router import threads_router
 from app.bot.routers.start_router import start_router
 from app.bot.routers.shorts_router import shorts_router
+from app.bot.routers.twitter_router import twitter_router
 from app.bot.routers.language_router import language_router
 from app.bot.routers.instagram_router import instagram_router
 from app.bot.routers.tiktok_router import tiktok_router
@@ -21,6 +22,7 @@ v1_router.include_routers(
     snapchat_router,
     language_router,
     shorts_router,
+    twitter_router,
     threads_router,
     instagram_router,
     tiktok_router,
