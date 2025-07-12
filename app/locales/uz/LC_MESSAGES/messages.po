@@ -239,3 +239,16 @@ msgstr "⚠️ Video fayl hajmi juda katta: {name}\n📁 Fayl: {path}\n📏 Hajm
 
 msgid "threads_video_send_error"
 msgstr "❌ Videolarni yuborishda xatolik yuz berdi."
+
+
+msgid "shorts_loading"
+msgstr "🔄 YouTube Shorts yuklab olinmoqda..."
+
+msgid "shorts_video_ready"
+msgstr "✅ YouTube Shorts tayyor!"
+
+msgid "shorts_no_files"
+msgstr "❌ Video topilmadi"
+
+msgid "shorts_error"
+msgstr "❌ Yuklab olishda xatolik yuz berdi"

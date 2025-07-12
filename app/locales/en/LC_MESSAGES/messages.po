@@ -245,3 +245,16 @@ msgstr "❌ An error occurred while sending videos."
 
 msgid "threads_video_ready"
 msgstr "📽 Here is your medias from Threads!"
+
+msgid "shorts_loading"
+msgstr "🔄 Downloading YouTube Shorts..."
+
+msgid "shorts_video_ready"
+msgstr "✅ YouTube Shorts is ready!"
+
+msgid "shorts_no_files"
+msgstr "❌ No video found."
+
+msgid "shorts_error"
+msgstr "❌ An error occurred while downloading."
+

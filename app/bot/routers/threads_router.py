@@ -74,7 +74,7 @@ async def handle_threads_link(message: Message):
 
         await message.answer_video(
             FSInputFile(video_path),
-            caption=_("threads_video_ready"),  # e.g., same as tiktok_video_ready
+            caption=_("threads_video_ready"),
             reply_markup=get_music_download_button("threads"),
         )
 
