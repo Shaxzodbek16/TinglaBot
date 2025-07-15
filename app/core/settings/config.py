@@ -14,8 +14,11 @@ class Settings(BaseSettings):
     POSTGRES_HOST: str
     POSTGRES_PORT: int
     DEBUG: bool = False
+
+    # Selenium Credentials
     SELENIUM_REMOTE_URL: str
 
+    # API KEYS
     LIKEE_API_KEY: str
     TWITTER_API_KEY: str
 
