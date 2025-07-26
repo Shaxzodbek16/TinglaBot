@@ -209,9 +209,183 @@ async def cancel_download(callback):
         await callback.answer("❌ Bekor qilindi")
 
 
-# Video yuborish qismini o'zgartiring
+@group_router.callback_query(F.data.startswith("group_music:"))
+async def handle_group_music_callback(callback_query: CallbackQuery):
+    """Guruhda music download callback"""
+    try:
+        user_id = int(callback_query.data.split(":")[1])
+    except (ValueError, IndexError):
+        await callback_query.answer("❌ Noto'g'ri callback data")
+        return
+
+    # Faqat xabar yuborgan user music yuklay oladi
+    if callback_query.from_user.id != user_id:
+        await callback_query.answer("❌ Faqat xabar yuborgan foydalanuvchi music yuklay oladi", show_alert=True)
+        return
+
+    await callback_query.answer("🎵 Musiqa ajratib olinmoqda...")
+
+    session = user_sessions.get(user_id)
+    if not session:
+        await callback_query.message.reply("❌ Session tugadi. Qaytadan link yuboring.")
+        return
+
+    audio_path = None
+    try:
+        # Oxirgi yuklab olingan faylni olish
+        last_download = session[-1]
+        url = last_download["url"]
+        platform = last_download["platform"]
+        files = last_download["files"]
+
+        logger.info(f"Processing music for platform: {platform}, URL: {url}")
+
+        # Platform bo'yicha audio ajratish
+        audio_path = await extract_audio_for_platform(platform, url, files)
+
+        if not audio_path or not Path(audio_path).exists():
+            await callback_query.message.reply("❌ Audio ajratib bo'lmadi")
+            return
+
+        logger.info(f"Audio extracted successfully: {audio_path}")
+
+        # Shazam orqali musiqa tanib olish
+        shazam_hits = await shz.recognise_music_from_audio(audio_path)
+        if not shazam_hits:
+            await callback_query.message.reply("❌ Musiqa tanib olinmadi")
+            return
+
+        track = shazam_hits[0]["track"]
+        title, artist = track["title"], track["subtitle"]
+        search_query = f"{title} {artist}"
+
+        logger.info(f"Music recognized: {title} - {artist}")
+
+        # YouTube'dan qidiruv
+        youtube_hits = await get_controller().search(search_query)
+        if not youtube_hits:
+            youtube_hits = [
+                get_controller().ytdict_to_info({
+                    "title": title,
+                    "artist": artist,
+                    "duration": 0,
+                    "id": track.get("key", ""),
+                })
+            ]
+
+        # Topilgan musiqa haqida xabar
+        await callback_query.message.reply(
+            f"🎵 <b>Topilgan musiqa:</b>\n\n"
+            f"🎤 <b>Nomi:</b> {title}\n"
+            f"👤 <b>Ijrochi:</b> {artist}",
+            parse_mode="HTML",
+        )
+
+        # Cache'ga saqlash
+        _cache[user_id] = {
+            "hits": youtube_hits,
+            "timestamp": time.time(),
+        }
+
+        # Musiqa ro'yxatini ko'rsatish
+        await callback_query.message.reply(
+            format_page_text(youtube_hits, 0),
+            reply_markup=create_keyboard(user_id, 0, add_video=True),
+            parse_mode="HTML",
+        )
+
+    except Exception as e:
+        logger.error(f"Group music recognition error: {e}")
+        await callback_query.message.reply(
+            f"❌ Musiqa tanib olishda xatolik: {str(e)[:200]}"
+        )
+
+    finally:
+        # Audio faylni tozalash
+        if audio_path and Path(audio_path).exists():
+            try:
+                await atomic_clear(audio_path)
+            except Exception as e:
+                logger.error(f"Failed to clear audio file: {e}")
+
+        # Session'ni tozalash
+        user_sessions.pop(user_id, None)
+
+        # Video fayllarni tozalash (music extraction dan keyin)
+        if session:
+            try:
+                last_download = session[-1]
+                for file_info in last_download["files"]:
+                    if file_info["type"] == "video":
+                        file_path = Path(file_info["path"])
+                        if file_path.exists():
+                            file_path.unlink()
+                            logger.info(f"Cleaned up video file: {file_info['path']}")
+            except Exception as e:
+                logger.error(f"Failed to clean video files: {e}")
+
+
+async def extract_audio_for_platform(platform: str, url: str, files: list) -> str:
+    """Platform bo'yicha audio ajratish"""
+
+    try:
+        if platform == "instagram":
+            # Instagram uchun: avval video fayldan audio ajratish
+            video_path = get_video_file_path(files)
+            if video_path and Path(video_path).exists():
+                logger.info(f"Extracting audio from Instagram video file: {video_path}")
+                from app.bot.handlers.instagram_handler import extract_audio_simple
+                return await extract_audio_simple(video_path)
+            else:
+                # Video fayl yo'q bo'lsa URL dan qayta ajratish
+                logger.info(f"Extracting audio from Instagram URL: {url}")
+                from app.bot.handlers.instagram_handler import extract_audio_from_instagram_video_smart
+                return await extract_audio_from_instagram_video_smart(url)
+
+        elif platform == "tiktok":
+            logger.info(f"Extracting audio from TikTok URL: {url}")
+            from app.bot.handlers.tiktok_handler import extract_audio_from_tiktok_video_smart
+            return await extract_audio_from_tiktok_video_smart(url)
+
+        elif platform == "likee":
+            logger.info(f"Extracting audio from Likee URL: {url}")
+            from app.bot.handlers.likee_handler import extract_audio_from_likee_video_smart
+            return await extract_audio_from_likee_video_smart(url)
+
+        elif platform in ["threads", "twitter", "pinterest", "snapchat", "youtube_shorts"]:
+            # Boshqa platformalar uchun video fayldan audio ajratish
+            video_path = get_video_file_path(files)
+            if video_path and Path(video_path).exists():
+                logger.info(f"Extracting audio from {platform} video file: {video_path}")
+                from app.core.utils.audio import extract_audio_from_video
+                return extract_audio_from_video(video_path)
+            else:
+                logger.warning(f"No video file found for {platform}")
+                return None
+
+        else:
+            logger.warning(f"Unsupported platform for music extraction: {platform}")
+            return None
+
+    except ImportError as e:
+        logger.error(f"Import error for {platform}: {e}")
+        return None
+    except Exception as e:
+        logger.error(f"Audio extraction error for {platform}: {e}")
+        return None
+
+
+def get_video_file_path(files: list) -> str:
+    """Files ro'yxatidan birinchi video fayl pathini olish"""
+    for file_info in files:
+        if file_info.get("type") == "video" and file_info.get("path"):
+            return file_info["path"]
+    return None
+
+
+# group_handler.py dagi _send_media_files funksiyasini ham yangilash kerak:
 async def _send_media_files(message: Message, files: list):
-    """Media fayllarni yuborish - video fayllarni saqlab qolish"""
+    """Media fayllarni yuborish - yangilangan versiya"""
     MAX_FILE_SIZE = 50 * 1024 * 1024  # 50MB
 
     for file_info in files:
@@ -246,13 +420,13 @@ async def _send_media_files(message: Message, files: list):
                     caption=f"📄 Media\n🔗 Via @{message.bot.username if hasattr(message.bot, 'username') else ''}"
                 )
 
-            # VIDEO FAYLNI O'CHIRMANG! (Instagram music uchun kerak)
-            # Instagram videolari uchun faylni saqlab qoling
-            if file_info.get("platform") != "instagram":
+            # MUHIM: Video fayllarni hozircha o'chirmang (music extraction uchun kerak)
+            # Faqat image va boshqa fayllarni o'chiring
+            if file_info["type"] != "video":
                 try:
                     file_path.unlink()
-                except:
-                    pass
+                except Exception as e:
+                    logger.error(f"Failed to delete file {file_path}: {e}")
 
         except TelegramAPIError as e:
             logger.error(f"Telegram API error: {e}")
@@ -260,148 +434,6 @@ async def _send_media_files(message: Message, files: list):
         except Exception as e:
             logger.error(f"Send media error: {e}")
             continue
-
-
-@group_router.callback_query(F.data.startswith("group_music:"))
-async def handle_group_music_callback(callback_query: CallbackQuery):
-    """Guruhda music download callback - Instagram uchun tuzatilgan"""
-    user_id = int(callback_query.data.split(":")[1])
-
-    if callback_query.from_user.id != user_id:
-        await callback_query.answer("❌ Faqat xabar yuborgan foydalanuvchi music yuklay oladi", show_alert=True)
-        return
-
-    await callback_query.answer("🎵 Musiqa ajratib olinmoqda...")
-
-    session = user_sessions.get(user_id)
-    if not session:
-        await callback_query.message.reply("❌ Session tugadi. Qaytadan link yuboring.")
-        return
-
-    audio_path = None
-    try:
-        last_download = session[-1]
-        url = last_download["url"]
-        platform = last_download["platform"]
-        files = last_download["files"]
-
-        logger.info(f"Processing music for platform: {platform}")
-
-        audio_path = None
-
-        if platform == "instagram":
-            # Instagram uchun: avval mavjud video fayldan audio ajratish
-            video_path = None
-            for file_info in files:
-                if file_info["type"] == "video":
-                    video_path = file_info["path"]
-                    break
-
-            if video_path and Path(video_path).exists():
-                logger.info(f"Using existing video file: {video_path}")
-                from app.bot.handlers.instagram_handler import extract_audio_simple
-                audio_path = await extract_audio_simple(video_path)
-            else:
-                # Video fayl yo'q bo'lsa URL dan qayta audio ajratish
-                logger.info(f"Video file not found, extracting from URL: {url}")
-                from app.bot.handlers.instagram_handler import extract_audio_from_instagram_video_smart
-                audio_path = await extract_audio_from_instagram_video_smart(url)
-
-        elif platform == "tiktok":
-            from app.bot.handlers.tiktok_handler import extract_audio_from_tiktok_video_smart
-            audio_path = await extract_audio_from_tiktok_video_smart(url)
-
-        else:
-            # Boshqa platformalar uchun video fayldan audio ajratish
-            video_path = None
-            for file_info in files:
-                if file_info["type"] == "video":
-                    video_path = file_info["path"]
-                    break
-
-            if video_path and Path(video_path).exists():
-                from app.bot.handlers.instagram_handler import extract_audio_simple
-                audio_path = await extract_audio_simple(video_path)
-            else:
-                await callback_query.message.reply(
-                    f"❌ {platform.title()} platformasidan musiqa ajratish hozircha ishlamaydi")
-                return
-
-        if not audio_path or not Path(audio_path).exists():
-            await callback_query.message.reply("❌ Audio ajratib bo'lmadi")
-            return
-
-        logger.info(f"Audio extracted successfully: {audio_path}")
-
-        # Shazam orqali musiqa tanib olish
-        shazam_hits = await shz.recognise_music_from_audio(audio_path)
-        if not shazam_hits:
-            await callback_query.message.reply("❌ Musiqa tanib olinmadi")
-            return
-
-        track = shazam_hits[0]["track"]
-        title, artist = track["title"], track["subtitle"]
-        search_query = f"{title} {artist}"
-
-        # YouTube'dan qidiruv
-        youtube_hits = await get_controller().search(search_query)
-        if not youtube_hits:
-            youtube_hits = [
-                get_controller().ytdict_to_info(
-                    {
-                        "title": title,
-                        "artist": artist,
-                        "duration": 0,
-                        "id": track.get("key", ""),
-                    }
-                )
-            ]
-
-        await callback_query.message.reply(
-            f"🎵 <b>Topilgan musiqa:</b>\n\n"
-            f"🎤 <b>Nomi:</b> {title}\n"
-            f"👤 <b>Ijrochi:</b> {artist}",
-            parse_mode="HTML",
-        )
-
-        # Cache'ga saqlash
-        _cache[user_id] = {
-            "hits": youtube_hits,
-            "timestamp": time.time(),
-        }
-
-        # Musiqa ro'yxatini ko'rsatish
-        await callback_query.message.reply(
-            format_page_text(youtube_hits, 0),
-            reply_markup=create_keyboard(user_id, 0, add_video=True),
-            parse_mode="HTML",
-        )
-
-    except Exception as e:
-        logger.error(f"Group music recognition error: {e}")
-        await callback_query.message.reply(
-            f"❌ Musiqa tanib olishda xatolik: {str(e)[:200]}"
-        )
-
-    finally:
-        # Audio faylni tozalash
-        if audio_path and Path(audio_path).exists():
-            await atomic_clear(audio_path)
-
-        # Session'ni tozalash
-        user_sessions.pop(user_id, None)
-
-        # Instagram video fayllarini tozalash (music extraction dan keyin)
-        if session:
-            last_download = session[-1]
-            if last_download["platform"] == "instagram":
-                for file_info in last_download["files"]:
-                    if file_info["type"] == "video":
-                        try:
-                            Path(file_info["path"]).unlink()
-                            logger.info(f"Cleaned up Instagram video: {file_info['path']}")
-                        except:
-                            pass
 
 
 async def _is_bot_mentioned(message: Message) -> bool:
@@ -447,54 +479,4 @@ def _should_respond_automatically(message: Message) -> bool:
             return True
 
     return False
-
-
-async def _send_media_files(message: Message, files: list):
-    """Media fayllarni yuborish"""
-    MAX_FILE_SIZE = 50 * 1024 * 1024  # 50MB
-
-    for file_info in files:
-        try:
-            file_path = Path(file_info["path"])
-
-            if not file_path.exists():
-                logger.warning(f"File not found: {file_path}")
-                continue
-
-            # Fayl hajmini tekshirish
-            if file_path.stat().st_size > MAX_FILE_SIZE:
-                await message.reply(f"❌ Fayl juda katta: {file_path.name}")
-                continue
-
-            file_input = FSInputFile(str(file_path))
-
-            # Media turini aniqlash va yuborish
-            if file_info["type"] == "video":
-                await message.reply_video(
-                    video=file_input,
-                    caption=f"📹 Video\n🔗 Via @{message.bot.username if hasattr(message.bot, 'username') else ''}"
-                )
-            elif file_info["type"] == "image":
-                await message.reply_photo(
-                    photo=file_input,
-                    caption=f"🖼 Rasm\n🔗 Via @{message.bot.username if hasattr(message.bot, 'username') else ''}"
-                )
-            else:
-                await message.reply_document(
-                    document=file_input,
-                    caption=f"📄 Media\n🔗 Via @{message.bot.username if hasattr(message.bot, 'username') else ''}"
-                )
-
-            # Faylni o'chirish (ixtiyoriy)
-            try:
-                file_path.unlink()
-            except:
-                pass
-
-        except TelegramAPIError as e:
-            logger.error(f"Telegram API error: {e}")
-            continue
-        except Exception as e:
-            logger.error(f"Send media error: {e}")
-            continue
 
