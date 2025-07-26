@@ -1,5 +1,6 @@
 import os
 from datetime import datetime
+from gc import get_referrers
 
 from aiogram import Router, F
 from aiogram.types import Message, FSInputFile
@@ -8,7 +9,11 @@ from aiogram.fsm.context import FSMContext
 
 from app.bot.controller.admin_controller import export_users_to_excel
 from app.bot.filters.admin_filter import AdminFilter
-from app.bot.handlers.admin import get_last_7_days_statistics
+from app.bot.handlers.admin import (
+    get_last_7_days_statistics,
+    get_premium_price,
+    get_token_per_referral,
+)
 from app.bot.handlers.channel_handler import get_all_channels
 from app.bot.handlers.statistics_handler import get_all_statistics
 from app.bot.keyboards.admin_keyboards import (
@@ -111,6 +116,10 @@ async def handle_last_users(message: Message):
 
     await message.answer(
         "\n".join(lines), parse_mode="HTML", disable_web_page_preview=True
+    )
+    await message.answer(
+        f"Current  token count: <b>{await get_token_per_referral()}</b>\n\n"
+        f"Current premium price: <b>{await get_premium_price()}</b> tokens",
     )
 
 

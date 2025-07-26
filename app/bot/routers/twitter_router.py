@@ -51,7 +51,9 @@ async def handle_twitter_message(message: Message):
             await message.answer(result["message"])
             return
 
-        video = next((f for f in result["downloaded_files"] if f["type"] == "video"), None)
+        video = next(
+            (f for f in result["downloaded_files"] if f["type"] == "video"), None
+        )
         if not video:
             await message.answer(_("twitter_no_files"))
             return
@@ -105,17 +107,18 @@ async def handle_twitter_callback(callback_query: CallbackQuery):
         youtube_hits = await get_controller().search(search_query)
         if not youtube_hits:
             youtube_hits = [
-                get_controller().ytdict_to_info({
-                    "title": title,
-                    "artist": artist,
-                    "duration": 0,
-                    "id": track.get("key", "")
-                })
+                get_controller().ytdict_to_info(
+                    {
+                        "title": title,
+                        "artist": artist,
+                        "duration": 0,
+                        "id": track.get("key", ""),
+                    }
+                )
             ]
 
         await callback_query.message.answer(
-            _("music_found").format(title=title, artist=artist),
-            parse_mode="HTML"
+            _("music_found").format(title=title, artist=artist), parse_mode="HTML"
         )
 
         _cache[user_id] = {
@@ -126,7 +129,7 @@ async def handle_twitter_callback(callback_query: CallbackQuery):
         await callback_query.message.answer(
             format_page_text(youtube_hits, 0),
             reply_markup=create_keyboard(user_id, 0, add_video=True),
-            parse_mode="HTML"
+            parse_mode="HTML",
         )
 
         await atomic_clear(audio_path)

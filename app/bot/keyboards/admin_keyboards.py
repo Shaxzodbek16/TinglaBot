@@ -5,6 +5,10 @@ def get_admin_panel_keyboard() -> ReplyKeyboardMarkup:
     buttons = [
         [KeyboardButton(text="📁 Users excel"), KeyboardButton(text="📊 Statistics")],
         [KeyboardButton(text="🔧 Settings"), KeyboardButton(text="📈 Channels")],
+        [
+            KeyboardButton(text="💲 Fill Balance"),
+            KeyboardButton(text="Remove from balance"),
+        ],
         [KeyboardButton(text="🔙 Back to Main Menu")],
     ]
 
@@ -40,9 +44,12 @@ def settings_keyboard() -> ReplyKeyboardMarkup:
     buttons = [
         [
             KeyboardButton(text="Update Tokens per Referral"),
-            KeyboardButton(text="Send Message to All Users"),
+            KeyboardButton(text="Update Premium price"),
         ],
-        [KeyboardButton(text="🔙 Back to Admin Panel")],
+        [
+            KeyboardButton(text="Send Message to All Users"),
+            KeyboardButton(text="🔙 Back to Admin Panel"),
+        ],
     ]
 
     return ReplyKeyboardMarkup(

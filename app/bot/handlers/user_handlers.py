@@ -1,6 +1,5 @@
 from aiogram.types import Message
 
-from app.bot.handlers.admin import get_token_per_referral
 from app.bot.models import User
 from app.core.databases.postgres import get_general_session
 from sqlalchemy.future import select
@@ -62,3 +61,50 @@ async def get_referral_count(tg_id: int) -> int:
     async with get_general_session() as session:
         result = await session.execute(select(User).where(User.referred_by == tg_id))
         return len(result.scalars().all())
+
+
+async def add_user_balance(tg_id: int, amount: float) -> User:
+    async with get_general_session() as session:
+        user = await get_user_by_tg_id(tg_id)
+        user.balance += amount
+        session.add(user)
+        await session.commit()
+        return user
+
+
+async def get_user_balance(tg_id: int) -> float:
+    async with get_general_session() as session:
+        user = await get_user_by_tg_id(tg_id)
+        if user:
+            return user.balance
+        return 0.0
+
+
+async def remove_user_balance(tg_id: int, amount: float) -> User:
+    """
+    Removes a specified amount from a user's balance if sufficient funds are available.
+
+    This function deducts the given amount from the balance of a user identified
+    by their Telegram ID. If the user's balance is less than the specified amount,
+    an exception will be raised. The updated user object is returned upon successful
+    completion of the transaction.
+
+    Parameters:
+        tg_id (int): Telegram ID of the user whose balance is to be modified.
+        amount (float): The amount to deduct from the user's balance.
+
+    Raises:
+        ValueError: If the user's balance is insufficient.
+
+    Returns:
+        User: The updated user object reflecting the new balance.
+    """
+    async with get_general_session() as session:
+        user = await get_user_by_tg_id(tg_id)
+        if user.balance >= amount:
+            user.balance -= amount
+            session.add(user)
+            await session.commit()
+            return user
+        else:
+            raise ValueError("Insufficient balance")

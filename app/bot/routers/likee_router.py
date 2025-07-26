@@ -84,17 +84,18 @@ async def handle_likee_callback(callback_query: CallbackQuery):
         youtube_hits = await get_controller().search(search_query)
         if not youtube_hits:
             youtube_hits = [
-                get_controller().ytdict_to_info({
-                    "title": title,
-                    "artist": artist,
-                    "duration": 0,
-                    "id": track.get("key", ""),
-                })
+                get_controller().ytdict_to_info(
+                    {
+                        "title": title,
+                        "artist": artist,
+                        "duration": 0,
+                        "id": track.get("key", ""),
+                    }
+                )
             ]
 
         await callback_query.message.answer(
-            _("music_found").format(title=title, artist=artist),
-            parse_mode="HTML"
+            _("music_found").format(title=title, artist=artist), parse_mode="HTML"
         )
 
         _cache[user_id] = {

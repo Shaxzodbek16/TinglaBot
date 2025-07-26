@@ -15,6 +15,7 @@ from app.bot.handlers.admin import (
     get_token_per_referral,
     update_token_per_referral,
     run_broadcast,
+    get_premium_price,
 )
 from app.bot.keyboards.admin_keyboards import (
     get_admin_panel_keyboard,
@@ -35,9 +36,12 @@ class SettingsForm(StatesGroup):
 async def open_settings(message: Message, state: FSMContext):
     await state.clear()
     current = await get_token_per_referral()
+    price = await get_premium_price()
     await message.answer(
         text=(
-            "⚙️ <b>Settings</b>\n\n" f"🔢 Current tokens per referral: <b>{current}</b>"
+            "⚙️ <b>Settings</b>\n\n"
+            f"🔢 Current tokens per referral: <b>{current}</b>\n\n"
+            f"Current premium {price}: <b>100</b> tokens\n\n"
         ),
         parse_mode="HTML",
         reply_markup=settings_keyboard(),

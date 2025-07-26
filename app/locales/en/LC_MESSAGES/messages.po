@@ -276,3 +276,42 @@ msgstr "🔍 Twitter video detected."
 msgid "twitter_invalid_url"
 msgstr "❌ Invalid Twitter link"
 
+msgid "payment_info"
+msgstr "Connect to admin to add money to your balance 💳 {username}\n\n"
+
+
+msgid "Please send the user's Telegram ID 👤"
+msgstr "Please send the user's Telegram ID 👤"
+
+msgid "Invalid Telegram ID. Please send only numbers."
+msgstr "Invalid Telegram ID. Please send only numbers."
+
+msgid "How much do you want to add to the balance? 💵"
+msgstr "How much do you want to add to the balance? 💵"
+
+msgid "Please send a valid positive number 💸"
+msgstr "Please send a valid positive number 💸"
+
+msgid "User not found ❌"
+msgstr "User not found ❌"
+
+msgid "Successfully added {amount} to user {tg_id} ✅"
+msgstr "Successfully added {amount} to user {tg_id} ✅"
+
+msgid "How much do you want to remove from the balance? 💵"
+msgstr "How much do you want to remove from the balance? 💵"
+
+msgid "Insufficient balance to remove this amount ❌"
+msgstr "Insufficient balance to remove this amount ❌"
+
+msgid "Remove from balance"
+msgstr "Remove from balance"
+
+msgid "You are not registered in the system ❌"
+msgstr "You are not registered in the system ❌"
+
+msgid "Your current balance is: {balance} 💰"
+msgstr "Your current balance is: {balance} 💰"
+
+msgid "Successfully removed {amount} from user {tg_id} ✅"
+msgstr "Successfully removed {amount} from user {tg_id} ✅"

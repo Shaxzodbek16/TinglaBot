@@ -24,6 +24,7 @@ pinterest_router = Router()
 logger = logging.getLogger(__name__)
 user_sessions = {}
 
+
 def extract_audio_from_video(video_path: str) -> str | None:
     try:
         audio_path = str(Path(video_path).with_suffix(".mp3"))
@@ -36,7 +37,9 @@ def extract_audio_from_video(video_path: str) -> str | None:
         return None
 
 
-@pinterest_router.message(F.text.regexp(r"(https?://)?(www\.)?(pin\.it|pinterest\.com)/[^\s]+"))
+@pinterest_router.message(
+    F.text.regexp(r"(https?://)?(www\.)?(pin\.it|pinterest\.com)/[^\s]+")
+)
 async def handle_pinterest_link(message: Message):
     await message.answer(_("pinterest_detected"))
 
@@ -106,12 +109,14 @@ async def handle_pinterest_callback(callback_query: CallbackQuery):
         youtube_hits = await get_controller().search(search_query)
         if not youtube_hits:
             youtube_hits = [
-                get_controller().ytdict_to_info({
-                    "title": title,
-                    "artist": artist,
-                    "duration": 0,
-                    "id": track.get("key", ""),
-                })
+                get_controller().ytdict_to_info(
+                    {
+                        "title": title,
+                        "artist": artist,
+                        "duration": 0,
+                        "id": track.get("key", ""),
+                    }
+                )
             ]
 
         await callback_query.message.answer(

@@ -23,9 +23,8 @@ async def handle_refer_friends(message: Message):
 
     referral_link = f"https://t.me/{bot_info.username}?start={message.from_user.id}"
 
-    text = (
-        _("refer_message")
-        .format(count=count, token_count=token_count, referral_link=referral_link)
+    text = _("refer_message").format(
+        count=count, token_count=token_count, referral_link=referral_link
     )
 
     share_button = InlineKeyboardMarkup(
@@ -33,7 +32,8 @@ async def handle_refer_friends(message: Message):
             [
                 InlineKeyboardButton(
                     text=_("refer_share_btn"),
-                    url=f"https://t.me/share/url?url={referral_link}&text=🎁 " + _("refer_share_text"),
+                    url=f"https://t.me/share/url?url={referral_link}&text=🎁 "
+                    + _("refer_share_text"),
                 )
             ]
         ]

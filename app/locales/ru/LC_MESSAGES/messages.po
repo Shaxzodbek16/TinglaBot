@@ -213,3 +213,43 @@ msgstr "🎶 <b>{title}</b>\n👤 {artist}"
 
 msgid "recognition_error"
 msgstr "❌ Ошибка при распознавании музыки"
+
+msgid "payment_info"
+msgstr "Свяжитесь с админом, чтобы пополнить баланс 💳 {username}\n\n"
+
+
+msgid "Please send the user's Telegram ID 👤"
+msgstr "Пожалуйста, отправьте Telegram ID пользователя 👤"
+
+msgid "Invalid Telegram ID. Please send only numbers."
+msgstr "Недопустимый Telegram ID. Отправьте только цифры."
+
+msgid "How much do you want to add to the balance? 💵"
+msgstr "Сколько вы хотите добавить на баланс? 💵"
+
+msgid "Please send a valid positive number 💸"
+msgstr "Пожалуйста, отправьте корректное положительное число 💸"
+
+msgid "User not found ❌"
+msgstr "Пользователь не найден ❌"
+
+msgid "Successfully added {amount} to user {tg_id} ✅"
+msgstr "Успешно добавлено {amount} пользователю {tg_id} ✅"
+
+msgid "How much do you want to remove from the balance? 💵"
+msgstr "Сколько вы хотите снять с баланса? 💵"
+
+msgid "Insufficient balance to remove this amount ❌"
+msgstr "Недостаточно средств на балансе для снятия этой суммы ❌"
+
+msgid "Remove from balance"
+msgstr "Снять с баланса"
+
+msgid "You are not registered in the system ❌"
+msgstr "Вы не зарегистрированы в системе ❌"
+
+msgid "Your current balance is: {balance} 💰"
+msgstr "Ваш текущий баланс: {balance} 💰"
+
+msgid "Successfully removed {amount} from user {tg_id} ✅"
+msgstr "Успешно снято {amount} с пользователя {tg_id} ✅"

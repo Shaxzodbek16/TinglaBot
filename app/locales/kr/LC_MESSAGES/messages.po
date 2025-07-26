@@ -217,3 +217,43 @@ msgstr "🎶 <b>{title}</b>\n👤 {artist}"
 
 msgid "recognition_error"
 msgstr "❌ Мусиқа аниқлашда хатолик юз берди."
+
+
+msgid "payment_info"
+msgstr "Балансингизни тўлдириш учун администратор билан боғланинг 💳 {username}\n\n"
+
+msgid "Please send the user's Telegram ID 👤"
+msgstr "Илтимос, фойдаланувчининг Telegram ID рақамини юборинг 👤"
+
+msgid "Invalid Telegram ID. Please send only numbers."
+msgstr "Нотўғри Telegram ID. Фақат рақам юборинг."
+
+msgid "How much do you want to add to the balance? 💵"
+msgstr "Балансга қанча қўшмоқчисиз? 💵"
+
+msgid "Please send a valid positive number 💸"
+msgstr "Илтимос, тўғри мусбат сон юборинг 💸"
+
+msgid "User not found ❌"
+msgstr "Фойдаланувчи топилмади ❌"
+
+msgid "Successfully added {amount} to user {tg_id} ✅"
+msgstr "{tg_id} фойдаланувчисига {amount} қўшилди ✅"
+
+msgid "How much do you want to remove from the balance? 💵"
+msgstr "Балансдан қанча маблағ ечмоқчисиз? 💵"
+
+msgid "Insufficient balance to remove this amount ❌"
+msgstr "Бу миқдорни ечиш учун баланс етарли эмас ❌"
+
+msgid "Remove from balance"
+msgstr "Балансдан ечиш"
+
+msgid "You are not registered in the system ❌"
+msgstr "Сиз тизимга рўйхатдан ўтмагансиз ❌"
+
+msgid "Your current balance is: {balance} 💰"
+msgstr "Жорий балансингиз: {balance} 💰"
+
+msgid "Successfully removed {amount} from user {tg_id} ✅"
+msgstr "{tg_id} фойдаланувчисидан {amount} ечилди ✅"

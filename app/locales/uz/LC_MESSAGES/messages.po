@@ -252,3 +252,43 @@ msgstr "❌ Video topilmadi"
 
 msgid "shorts_error"
 msgstr "❌ Yuklab olishda xatolik yuz berdi"
+
+msgid "payment_info"
+msgstr "Balansingizni to‘ldirish uchun administrator bilan bog‘laning 💳 {username}\n\n"
+
+
+msgid "Please send the user's Telegram ID 👤"
+msgstr "Iltimos, foydalanuvchining Telegram ID raqamini yuboring 👤"
+
+msgid "Invalid Telegram ID. Please send only numbers."
+msgstr "Noto‘g‘ri Telegram ID. Faqat raqam yuboring."
+
+msgid "How much do you want to add to the balance? 💵"
+msgstr "Balansga qancha qo‘shmoqchisiz? 💵"
+
+msgid "Please send a valid positive number 💸"
+msgstr "Iltimos, to‘g‘ri musbat son yuboring 💸"
+
+msgid "User not found ❌"
+msgstr "Foydalanuvchi topilmadi ❌"
+
+msgid "Successfully added {amount} to user {tg_id} ✅"
+msgstr "{tg_id} foydalanuvchisiga {amount} qo‘shildi ✅"
+
+msgid "How much do you want to remove from the balance? 💵"
+msgstr "Balansdan qancha mablag‘ yechmoqchisiz? 💵"
+
+msgid "Insufficient balance to remove this amount ❌"
+msgstr "Bu miqdorni yechish uchun balans yetarli emas ❌"
+
+msgid "Remove from balance"
+msgstr "Balansdan yechish"
+
+msgid "You are not registered in the system ❌"
+msgstr "Siz tizimga ro‘yxatdan o‘tmagansiz ❌"
+
+msgid "Your current balance is: {balance} 💰"
+msgstr "Joriy balansingiz: {balance} 💰"
+
+msgid "Successfully removed {amount} from user {tg_id} ✅"
+msgstr "{tg_id} foydalanuvchisidan {amount} yechildi ✅"

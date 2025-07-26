@@ -23,18 +23,20 @@ threads_router = Router()
 logger = logging.getLogger(__name__)
 user_sessions = {}
 
+
 # URL ajratish
 def extract_threads_url(text: str) -> str:
     patterns = [
-        r'https?://(?:www\.)?threads\.com/[@\w\.-]+/post/[\w\.-]+',
-        r'https?://(?:www\.)?threads\.com/t/[\w\.-]+',
-        r'https?://(?:www\.)?threads\.com/[\w\.-]+/[\w\.-]+',
+        r"https?://(?:www\.)?threads\.com/[@\w\.-]+/post/[\w\.-]+",
+        r"https?://(?:www\.)?threads\.com/t/[\w\.-]+",
+        r"https?://(?:www\.)?threads\.com/[\w\.-]+/[\w\.-]+",
     ]
     for pattern in patterns:
         match = re.search(pattern, text)
         if match:
             return match.group(0)
     return ""
+
 
 @threads_router.message(F.text.contains("threads.com"))
 async def handle_threads_link(message: Message):
@@ -85,6 +87,7 @@ async def handle_threads_link(message: Message):
         controller.close()
         await update_statistics(user_id, field="from_threads")
 
+
 @threads_router.callback_query(F.data == "threads:download_music")
 async def handle_threads_callback(callback_query: CallbackQuery):
     await callback_query.answer(_("extracting"))
@@ -97,7 +100,9 @@ async def handle_threads_callback(callback_query: CallbackQuery):
 
     try:
         video_path = session["video_path"]
-        audio_path = extract_audio_from_video(video_path)  # Use same smart extract method
+        audio_path = extract_audio_from_video(
+            video_path
+        )  # Use same smart extract method
 
         if not audio_path:
             await callback_query.message.answer(_("extract_failed"))
@@ -115,17 +120,18 @@ async def handle_threads_callback(callback_query: CallbackQuery):
         youtube_hits = await get_controller().search(search_query)
         if not youtube_hits:
             youtube_hits = [
-                get_controller().ytdict_to_info({
-                    "title": title,
-                    "artist": artist,
-                    "duration": 0,
-                    "id": track.get("key", ""),
-                })
+                get_controller().ytdict_to_info(
+                    {
+                        "title": title,
+                        "artist": artist,
+                        "duration": 0,
+                        "id": track.get("key", ""),
+                    }
+                )
             ]
 
         await callback_query.message.answer(
-            _("music_found").format(title=title, artist=artist),
-            parse_mode="HTML"
+            _("music_found").format(title=title, artist=artist), parse_mode="HTML"
         )
 
         _cache[user_id] = {
@@ -136,7 +142,7 @@ async def handle_threads_callback(callback_query: CallbackQuery):
         await callback_query.message.answer(
             format_page_text(youtube_hits, 0),
             reply_markup=create_keyboard(user_id, 0, add_video=True),
-            parse_mode="HTML"
+            parse_mode="HTML",
         )
 
         await atomic_clear(audio_path)

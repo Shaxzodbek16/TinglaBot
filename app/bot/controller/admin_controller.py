@@ -73,6 +73,7 @@ async def export_users_to_excel(
             "Last Active",
             "Referred By",
             "Active Status",
+            "Balance",
             "Created At",
             "Updated At",
             "Text Downloads",
@@ -141,6 +142,7 @@ async def export_users_to_excel(
                     ),
                     user.referred_by or "N/A",
                     active_status,
+                    user.balance if user.balance is not None else 0.0,
                     (
                         user.created_at.strftime("%Y-%m-%d %H:%M")
                         if hasattr(user, "created_at") and user.created_at

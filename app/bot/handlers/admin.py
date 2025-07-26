@@ -33,6 +33,26 @@ async def update_token_per_referral(new_value: int) -> None:
             raise ValueError("AdminRequirements not found in the database.")
 
 
+async def get_premium_price() -> int:
+    async with get_general_session() as session:
+        query = select(AdminRequirements)
+        result = await session.execute(query)
+        return result.scalars().first().premium_price
+
+
+async def update_premium_price(new_value: float) -> None:
+    async with get_general_session() as session:
+        query = select(AdminRequirements)
+        result = await session.execute(query)
+        admin_req = result.scalars().first()
+        if admin_req:
+            admin_req.premium_price = new_value
+            session.add(admin_req)
+            await session.commit()
+        else:
+            raise ValueError("AdminRequirements not found in the database.")
+
+
 async def get_last_7_days_statistics() -> dict:
     now = datetime.now()
     today_start = now.replace(hour=0, minute=0, second=0, microsecond=0)

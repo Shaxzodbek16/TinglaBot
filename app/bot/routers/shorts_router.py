@@ -29,7 +29,7 @@ def extract_shorts_url(text: str) -> str:
     """YouTube Shorts URL ni ajratib olish"""
     patterns = [
         r"https?://(?:www\.)?youtube\.com/shorts/[^\s]+",
-        r"https?://youtu\.be/[^\s]+"
+        r"https?://youtu\.be/[^\s]+",
     ]
     for pattern in patterns:
         match = re.search(pattern, text)
@@ -38,7 +38,9 @@ def extract_shorts_url(text: str) -> str:
     return ""
 
 
-@shorts_router.message(F.text.contains("youtube.com/shorts") | F.text.contains("youtu.be"))
+@shorts_router.message(
+    F.text.contains("youtube.com/shorts") | F.text.contains("youtu.be")
+)
 async def handle_shorts_link(message: Message):
     url = extract_shorts_url(message.text)
     if not url:
@@ -103,17 +105,18 @@ async def handle_shorts_music(callback_query: CallbackQuery):
         youtube_hits = await get_controller().search(search_query)
         if not youtube_hits:
             youtube_hits = [
-                get_controller().ytdict_to_info({
-                    "title": title,
-                    "artist": artist,
-                    "duration": 0,
-                    "id": track.get("key", ""),
-                })
+                get_controller().ytdict_to_info(
+                    {
+                        "title": title,
+                        "artist": artist,
+                        "duration": 0,
+                        "id": track.get("key", ""),
+                    }
+                )
             ]
 
         await callback_query.message.answer(
-            _("music_found").format(title=title, artist=artist),
-            parse_mode="HTML"
+            _("music_found").format(title=title, artist=artist), parse_mode="HTML"
         )
 
         _cache[user_id] = {
@@ -124,7 +127,7 @@ async def handle_shorts_music(callback_query: CallbackQuery):
         await callback_query.message.answer(
             format_page_text(youtube_hits, 0),
             reply_markup=create_keyboard(user_id, 0, add_video=True),
-            parse_mode="HTML"
+            parse_mode="HTML",
         )
 
         await atomic_clear(audio_path)

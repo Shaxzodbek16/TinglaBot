@@ -15,19 +15,23 @@ class YouTubeShortsController:
             yt = YouTube(url)
 
             # Eng yaxshi sifatli stream ni olish
-            stream = (yt.streams
-                      .filter(progressive=True, file_extension='mp4')
-                      .order_by('resolution')
-                      .desc()
-                      .first())
+            stream = (
+                yt.streams.filter(progressive=True, file_extension="mp4")
+                .order_by("resolution")
+                .desc()
+                .first()
+            )
 
             if not stream:
                 # Agar progressive topilmasa, adaptive stream dan foydalanish
-                stream = (yt.streams
-                          .filter(adaptive=True, file_extension='mp4', only_video=True)
-                          .order_by('resolution')
-                          .desc()
-                          .first())
+                stream = (
+                    yt.streams.filter(
+                        adaptive=True, file_extension="mp4", only_video=True
+                    )
+                    .order_by("resolution")
+                    .desc()
+                    .first()
+                )
 
             if not stream:
                 raise ValueError("Yuklab olinadigan video topilmadi")

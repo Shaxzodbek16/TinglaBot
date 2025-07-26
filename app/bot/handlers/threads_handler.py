@@ -29,9 +29,9 @@ class ThreadHandler:
 
     def _is_valid_threads_url(self, url: str) -> bool:
         patterns = [
-            r'https?://(?:www\.)?threads\.com/[@\w\.-]+/post/[\w\.-]+',
-            r'https?://(?:www\.)?threads\.com/t/[\w\.-]+',
-            r'https?://(?:www\.)?threads\.com/[\w\.-]+/[\w\.-]+',
+            r"https?://(?:www\.)?threads\.com/[@\w\.-]+/post/[\w\.-]+",
+            r"https?://(?:www\.)?threads\.com/t/[\w\.-]+",
+            r"https?://(?:www\.)?threads\.com/[\w\.-]+/[\w\.-]+",
         ]
         return any(re.match(pattern, url) for pattern in patterns)
 
@@ -39,13 +39,15 @@ class ThreadHandler:
         try:
             if not self._is_valid_threads_url(url):
                 await message.reply(
-                    _("threads_invalid_url") or
-                    "❌ Noto'g'ri Threads URL!\n"
+                    _("threads_invalid_url")
+                    or "❌ Noto'g'ri Threads URL!\n"
                     "Masalan: https://threads.com/@username/post/abc123"
                 )
                 return
 
-            loading_msg = await message.reply(_("threads_loading") or "🔄 Threads post tahlil qilinmoqda...")
+            loading_msg = await message.reply(
+                _("threads_loading") or "🔄 Threads post tahlil qilinmoqda..."
+            )
 
             self._init_controller()
             result = await self.controller.download_media(url)
@@ -58,17 +60,14 @@ class ThreadHandler:
             failed_files = result.get("failed_files", [])
 
             await loading_msg.edit_text(
-                _("threads_sending_files").format(count=len(downloaded_files)) or
-                f"✅ {len(downloaded_files)} ta fayl yuklandi!\n📤 Yuborilmoqda..."
+                _("threads_sending_files").format(count=len(downloaded_files))
+                or f"✅ {len(downloaded_files)} ta fayl yuklandi!\n📤 Yuborilmoqda..."
             )
 
             await self._send_media_files(message, downloaded_files)
 
-            success_text = _(
-                "threads_success"
-            ).format(
-                total=len(downloaded_files),
-                failed=len(failed_files)
+            success_text = _("threads_success").format(
+                total=len(downloaded_files), failed=len(failed_files)
             )
 
             await loading_msg.edit_text(success_text)
@@ -79,7 +78,9 @@ class ThreadHandler:
         finally:
             self._cleanup_controller()
 
-    async def _send_media_files(self, message: types.Message, files: List[dict]) -> None:
+    async def _send_media_files(
+        self, message: types.Message, files: List[dict]
+    ) -> None:
         if not files:
             await message.reply(_("threads_no_files") or "❌ Fayllar topilmadi.")
             return
@@ -92,7 +93,9 @@ class ThreadHandler:
         if videos:
             await self._send_videos(message, videos)
 
-    async def _send_image_group(self, message: types.Message, images: List[dict]) -> None:
+    async def _send_image_group(
+        self, message: types.Message, images: List[dict]
+    ) -> None:
         try:
             if len(images) == 1:
                 path = Path(images[0]["path"])
@@ -131,9 +134,9 @@ class ThreadHandler:
                 if size > 50 * 1024 * 1024:
                     await message.reply(
                         _("threads_video_too_large").format(
-                            name=video['filename'],
+                            name=video["filename"],
                             size=round(size / (1024 * 1024), 1),
-                            path=path
+                            path=path,
                         )
                     )
                     continue
@@ -146,14 +149,10 @@ class ThreadHandler:
                     if "video format not supported" in str(e).lower():
                         await message.reply_document(video_file)
                     else:
-                        await message.reply(
-                            f"❌ Telegram xatolik: {str(e)}"
-                        )
+                        await message.reply(f"❌ Telegram xatolik: {str(e)}")
                 except Exception as e:
                     logger.error(f"Unexpected error sending video: {e}")
-                    await message.reply(
-                        _("threads_video_send_error") + f"\n{str(e)}"
-                    )
+                    await message.reply(_("threads_video_send_error") + f"\n{str(e)}")
         except Exception as e:
             logger.error(f"Video loop outer error: {e}")
             await message.reply(_("threads_video_send_error"))

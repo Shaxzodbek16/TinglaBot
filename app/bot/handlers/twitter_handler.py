@@ -10,6 +10,7 @@ from app.bot.keyboards.general_buttons import get_music_download_button
 logger = logging.getLogger(__name__)
 user_sessions = {}  # ⚠️ Lokal sessiya saqlovchi
 
+
 class TwitterHandler:
     def __init__(self):
         self.controller = TwitterController(Path.cwd().parent / "media" / "twitter")
@@ -27,7 +28,9 @@ class TwitterHandler:
                 await message.answer(result["message"])
                 return
 
-            video = next((f for f in result["downloaded_files"] if f["type"] == "video"), None)
+            video = next(
+                (f for f in result["downloaded_files"] if f["type"] == "video"), None
+            )
             if not video:
                 await message.answer(_("twitter_no_files"))
                 return

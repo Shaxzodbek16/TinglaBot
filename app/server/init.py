@@ -18,6 +18,7 @@ async def admin_init():
     async with get_general_session() as session:
         admin_requirements = AdminRequirements(
             referral_count_for_free_month=10,
+            premium_price=5000.0,
         )
         session.add(admin_requirements)
         try:
@@ -60,8 +61,6 @@ def init():
     os.makedirs(WORKDIR.parent / "static" / "cookie" / "youtube", exist_ok=True)
     os.makedirs(WORKDIR.parent / "static" / "cookie" / "tiktok", exist_ok=True)
 
-    # todo: add folder for all
-
 
 from aiogram import Bot
 from aiogram.types import BotCommand
@@ -72,6 +71,8 @@ async def set_default_commands(bot: Bot):
         [
             BotCommand(command="start", description="Start bot"),
             BotCommand(command="lang", description="Change language"),
+            BotCommand(command="payment", description="Fill balance"),
+            BotCommand(command="balance", description="Check balance"),
             BotCommand(command="top", description="Top 10 music in the world"),
             BotCommand(command="new", description="Top 10 new music in the world"),
             BotCommand(command="help", description="Get help"),

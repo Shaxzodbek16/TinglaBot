@@ -11,7 +11,9 @@ logger = logging.getLogger(__name__)
 
 class YouTubeShortsHandler:
     def __init__(self):
-        self.controller = YouTubeShortsController(Path.cwd() / "media" / "youtube_shorts")
+        self.controller = YouTubeShortsController(
+            Path.cwd() / "media" / "youtube_shorts"
+        )
 
     async def handle(self, message: Message, url: str):
         try:
@@ -27,7 +29,7 @@ class YouTubeShortsHandler:
             await message.answer_video(
                 FSInputFile(video_path),
                 caption="✅ YouTube Shorts tayyor!",
-                reply_markup = get_music_download_button("Shorts"),
+                reply_markup=get_music_download_button("Shorts"),
             )
             await atomic_clear(video_path)
 

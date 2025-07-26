@@ -8,7 +8,7 @@ if TYPE_CHECKING:
     from app.bot.models.referral import Referral
 
 from app.core.models.base import BaseModelWithData
-from sqlalchemy import BigInteger, Boolean, String, DateTime
+from sqlalchemy import BigInteger, Boolean, String, DateTime, Float
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.ext.hybrid import hybrid_property
 
@@ -55,6 +55,10 @@ class User(BaseModelWithData):
     # one-to-one relationship to Referral
     referral: Mapped["Referral"] = relationship(
         "Referral", back_populates="user", uselist=False, cascade="all, delete-orphan"
+    )
+    balance: Mapped[float] = mapped_column(Float, default=0.0, nullable=False)
+    tokens: Mapped[int] = mapped_column(
+        BigInteger, default=0, nullable=False, index=True
     )
 
     @hybrid_property
