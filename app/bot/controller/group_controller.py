@@ -12,6 +12,7 @@ from app.bot.controller.like_controller import LikeeController
 from app.bot.controller.shazam_controller import ShazamController
 from app.bot.controller.snapchat_controller import SnapchatController
 from app.bot.controller.shorts_controller import YouTubeShortsController
+from app.bot.handlers.instagram_handler import download_instagram_video_only_mp4
 from app.core.extensions.utils import WORKDIR
 from app.core.settings.config import get_settings
 
@@ -28,6 +29,7 @@ class PlatformType(Enum):
     SNAPCHAT = "snapchat"
     YOUTUBE_SHORTS = "youtube_shorts"
     INSTAGRAM = "instagram"
+
 
 
 class GroupController:
@@ -57,7 +59,7 @@ class GroupController:
                 r'(?:https?://)?l\.likee\.video'
             ],
             PlatformType.SNAPCHAT: [
-                r'(?:https?://)?(?:www\.)?snapchat\.com/t/'
+                r'(?:https?://)?(?:www\.)?snapchat\.com'
             ],
             PlatformType.YOUTUBE_SHORTS: [
                 r'(?:https?://)?(?:www\.)?youtube\.com/shorts/',
@@ -119,6 +121,8 @@ class GroupController:
                 return await self._download_likee(url)
             elif platform == PlatformType.SNAPCHAT:
                 return await self._download_snapchat(url)
+            elif platform == PlatformType.INSTAGRAM:
+                return await self._download_instagram(url)
             elif platform == PlatformType.YOUTUBE_SHORTS:
                 return await self._download_youtube_shorts(url)
             else:
@@ -155,6 +159,19 @@ class GroupController:
             "message": "❌ TikTok video yuklanmadi",
             "files": []
         }
+
+    async def _download_instagram(self, url: str) -> Dict[str, Any]:
+        """Instagram video yuklab olish - Guruh uchun optimallashtirilgan"""
+        try:
+            from app.bot.handlers.instagram_handler import download_instagram_for_group
+            return await download_instagram_for_group(url)
+        except Exception as e:
+            logger.error(f"Instagram download error: {e}")
+            return {
+                "success": False,
+                "message": f"❌ Instagram xatolik: {str(e)[:100]}",
+                "files": []
+            }
 
     async def _download_pinterest(self, url: str) -> Dict[str, Any]:
         """Pinterest media yuklab olish"""
@@ -286,5 +303,5 @@ class GroupController:
         """Qo'llab-quvvatlanadigan platformalar ro'yxati"""
         return [
             "TikTok", "Pinterest", "Threads", "Twitter/X",
-            "Likee", "Snapchat", "YouTube Shorts"
+            "Likee", "Snapchat", "YouTube Shorts", "Instagram"
         ]
