@@ -3,7 +3,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    restart: on-failure
+    restart: always
     env_file:
       - .env
     environment:
@@ -30,7 +30,7 @@ services:
 
   postgres:
     image: postgres:17-alpine
-    restart: on-failure
+    restart: always
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -51,8 +51,8 @@ services:
 
   # 🆕 --- Selenium + Chrome container qo‘shildi ---
   selenium:
-    image: selenium/standalone-chrome:latest
-    platform: linux/amd64
+    image: seleniarm/standalone-chromium:latest
+    platform: linux/arm64
     restart: always
     ports:
       - "4444:4444"
