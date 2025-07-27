@@ -15,9 +15,7 @@ services:
       - ./static/cookie:/app/static/cookie
       - /dev/shm:/dev/shm     # Chromium uchun zarur
     ports:
-      - "8443:8443"
       - "443:443"
-      - "80:80"
     command: [ "sh", "-c", "./entrypoint.sh" ]
     networks:
       - bot_network
@@ -41,8 +39,6 @@ services:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - bot_network
-    ports:
-      - "5432:5432"
     healthcheck:
       test: [ "CMD", "pg_isready", "-U", "${POSTGRES_USER}" ]
       interval: 10s
