@@ -14,8 +14,6 @@ services:
       - ./service:/service
       - ./static/cookie:/app/static/cookie
       - /dev/shm:/dev/shm     # Chromium uchun zarur
-    ports:
-      - "443:443"
     command: [ "sh", "-c", "./entrypoint.sh" ]
     networks:
       - bot_network
