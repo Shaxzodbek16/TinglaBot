@@ -29,7 +29,9 @@ main_menu_router = Router()
 @main_menu_router.message(AdminFilter(), F.text == "⚙️ Admin Panel")
 async def handle_admin_panel(message: Message):
     await message.answer(
-        _("admin_panel_welcome"), reply_markup=get_admin_panel_keyboard(), parse_mode="HTML"
+        _("admin_panel_welcome"),
+        reply_markup=get_admin_panel_keyboard(),
+        parse_mode="HTML",
     )
 
 
@@ -43,7 +45,7 @@ async def handle_statistics(message: Message):
         doc = FSInputFile(path=file_path, filename=file_name)
         caption = _("user_export_caption").format(
             file_name=file_name,
-            generated_time=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            generated_time=datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         )
 
         await message.answer_document(document=doc, caption=caption, parse_mode="HTML")
@@ -66,12 +68,12 @@ async def handle_last_users(message: Message):
 
     lines = [
         _("user_growth_header"),
-        _("stats_today").format(count=stats['today']),
-        _("stats_yesterday").format(count=stats['yesterday']),
-        _("stats_last_week").format(count=stats['last_week']),
-        _("stats_last_month").format(count=stats['last_month']),
-        _("stats_last_year").format(count=stats['last_year']),
-        _("stats_all_time").format(count=stats['all_time']),
+        _("stats_today").format(count=stats["today"]),
+        _("stats_yesterday").format(count=stats["yesterday"]),
+        _("stats_last_week").format(count=stats["last_week"]),
+        _("stats_last_month").format(count=stats["last_month"]),
+        _("stats_last_year").format(count=stats["last_year"]),
+        _("stats_all_time").format(count=stats["all_time"]),
         "",
     ]
 
@@ -80,10 +82,7 @@ async def handle_last_users(message: Message):
         for idx, ref in enumerate(stats["top_referrers"], start=1):
             lines.append(
                 _("referrer_item").format(
-                    idx=idx,
-                    name=ref['name'],
-                    tg_id=ref['tg_id'],
-                    count=ref['count']
+                    idx=idx, name=ref["name"], tg_id=ref["tg_id"], count=ref["count"]
                 )
             )
 
@@ -91,29 +90,32 @@ async def handle_last_users(message: Message):
         lines.append(_("connected_channels_header"))
         for idx, ch in enumerate(channels, start=1):
             status = _("channel_active") if ch.is_active else _("channel_inactive")
-            lines.append(_("channel_item").format(idx=idx, link=ch.link, name=ch.name, status=status))
+            lines.append(
+                _("channel_item").format(
+                    idx=idx, link=ch.link, name=ch.name, status=status
+                )
+            )
     else:
         lines.append(_("no_channels_connected"))
 
     lines.append(_("usage_statistics_header"))
-    lines.append(_("usage_from_text").format(count=statistics['from_text']))
-    lines.append(_("usage_from_voice").format(count=statistics['from_voice']))
-    lines.append(_("usage_from_youtube").format(count=statistics['from_youtube']))
-    lines.append(_("usage_from_tiktok").format(count=statistics['from_tiktok']))
-    lines.append(_("usage_from_like").format(count=statistics['from_like']))
-    lines.append(_("usage_from_snapchat").format(count=statistics['from_snapchat']))
-    lines.append(_("usage_from_instagram").format(count=statistics['from_instagram']))
-    lines.append(_("usage_from_twitter").format(count=statistics['from_twitter']))
+    lines.append(_("usage_from_text").format(count=statistics["from_text"]))
+    lines.append(_("usage_from_voice").format(count=statistics["from_voice"]))
+    lines.append(_("usage_from_youtube").format(count=statistics["from_youtube"]))
+    lines.append(_("usage_from_tiktok").format(count=statistics["from_tiktok"]))
+    lines.append(_("usage_from_like").format(count=statistics["from_like"]))
+    lines.append(_("usage_from_snapchat").format(count=statistics["from_snapchat"]))
+    lines.append(_("usage_from_instagram").format(count=statistics["from_instagram"]))
+    lines.append(_("usage_from_twitter").format(count=statistics["from_twitter"]))
 
     await message.answer(
         "\n".join(lines), parse_mode="HTML", disable_web_page_preview=True
     )
     await message.answer(
         _("current_token_and_price").format(
-            tokens=await get_token_per_referral(),
-            price=await get_premium_price()
+            tokens=await get_token_per_referral(), price=await get_premium_price()
         ),
-        parse_mode="HTML"
+        parse_mode="HTML",
     )
 
 
@@ -144,5 +146,5 @@ async def handle_back_to_admin_panel(message: Message):
     await message.answer(
         text=_("back_to_admin_panel_welcome"),
         parse_mode="HTML",
-        reply_markup=main_menu_keyboard(message)
+        reply_markup=main_menu_keyboard(message),
     )

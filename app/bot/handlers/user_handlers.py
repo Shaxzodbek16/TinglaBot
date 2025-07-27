@@ -143,7 +143,11 @@ async def update_user_premium_time(tg_id):
     async with get_general_session() as session:
         user = await get_user_by_tg_id(tg_id)
         if user:
-            user.subscription_expiry = datetime.now() + timedelta(days=31) + timedelta(hours=23, minutes=59, seconds=59)
+            user.subscription_expiry = (
+                datetime.now()
+                + timedelta(days=31)
+                + timedelta(hours=23, minutes=59, seconds=59)
+            )
             session.add(user)
             await session.commit()
             return user

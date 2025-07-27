@@ -6,6 +6,7 @@ import time
 from pathlib import Path
 from typing import Dict, List, Optional
 from uuid import uuid4
+from aiogram.utils.i18n import gettext as _
 
 from aiogram import F, Router
 from aiogram.types import (
@@ -105,7 +106,7 @@ def create_keyboard(
     # Video button for media recognition
     if add_video and hits:
         rows.append(
-            [InlineKeyboardButton(text="🎬 Video (top)", callback_data="music:video:0")]
+            [InlineKeyboardButton(text="🎬", callback_data="music:video:0")]
         )
 
     return InlineKeyboardMarkup(inline_keyboard=rows)
@@ -229,7 +230,9 @@ async def handle_text_query(message: Message):
     # Ensure cleanup task is running
     res = await remove_token(message)
     if not res:
-        await message.answer(_("You have no any requests left. 😢"), reply_markup=get_payment_keyboard())
+        await message.answer(
+            _("You have no any requests left. 😢"), reply_markup=get_payment_keyboard()
+        )
         return
 
     _start_cleanup_task()
@@ -244,7 +247,7 @@ async def handle_text_query(message: Message):
     if len(query) > 100:
         query = query[:100]
 
-    status_message = await message.answer("🔍 Searching...")
+    status_message = await message.answer('🔍')
 
     try:
         hits = await get_controller().search(query)
@@ -374,7 +377,7 @@ async def handle_callbacks(callback: CallbackQuery):
                 return
 
             hit = _cache[user_id]["hits"][index]
-            status_message = await callback.message.answer("⏳ Downloading video...")
+            status_message = await callback.message.answer("⏳")
 
             await download_and_send_video(callback.message, status_message, hit)
 
@@ -398,7 +401,7 @@ async def handle_callbacks(callback: CallbackQuery):
             _download_queue[user_id] = time.time()
             hit = _cache[user_id]["hits"][index]
             status_message = await callback.message.answer(
-                f"⏳ Downloading {hit['title']}..."
+                f"⏳"
             )
 
             await download_and_send_audio(callback.message, status_message, hit)

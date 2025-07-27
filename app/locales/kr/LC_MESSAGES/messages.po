@@ -466,7 +466,7 @@ msgid "back_to_admin_panel_welcome"
 msgstr "🔙 <b>Админ панел</b>\n\nХуш келибсиз! Бажармоқчи бўлган амални танланг:"
 
 msgid "settings_overview"
-msgstr "⚙️ <b>Созламалар</b>\n\n🔢 Жорий реферал учун токенлар: <b>{current_tokens}</b>\n\nЖорий премиум нархи {premium_price}: <b>100</b> токен\n\n"
+msgstr "⚙️ <b>Созламалар</b>\n\n🔢 Жорий реферал учун токенлар: <b>{current_tokens}</b>\n\nЖорий премиум нархи {premium_price} sum\n\n"
 
 msgid "ask_new_token_value"
 msgstr "✍️ Илтимос, янги бутун сон қийматини юборинг (0 дан катта бўлиши керак), ёки бекор қилиш учун 🔙 ни босинг:"
@@ -581,3 +581,57 @@ msgstr "🚫 Сиз ҳали ҳам бу каналларга обуна бўл�
 
 msgid "You have no any requests left. 😢"
 msgstr "Сизда сўровлар қолмади. 😢"
+
+msgid "📁 Users excel"
+msgstr "📁 Фойдаланувчилар (Excel)"
+
+msgid "📊 Statistics"
+msgstr "📊 Статистика"
+
+msgid "🔧 Settings"
+msgstr "🔧 Созламалар"
+
+msgid "📈 Channels"
+msgstr "📈 Каналлар"
+
+msgid "💲 Fill Balance"
+msgstr "💲 Балансни тўлдириш"
+
+msgid "Remove from balance"
+msgstr "Балансдан олиб ташлаш"
+
+msgid "🔙 Back to Main Menu"
+msgstr "🔙 Асосий менюга"
+
+msgid "Choose an admin action 🔧"
+msgstr "Админ амалини танланг 🔧"
+
+msgid "➕ Add Channel"
+msgstr "➕ Канал қўшиш"
+
+msgid "📋 View Channels"
+msgstr "📋 Каналлар рўйхати"
+
+msgid "🔙 Back to Admin Panel"
+msgstr "🔙 Админ панелига"
+
+msgid "Select channel action 📡"
+msgstr "Канал амалини танланг 📡"
+
+msgid "Update Tokens per Referral"
+msgstr "Реферал учун токенларни янгилаш"
+
+msgid "Update Premium price"
+msgstr "Premium нархини янгилаш"
+
+msgid "Send Message to All Users"
+msgstr "Барчага хабар юбориш"
+
+msgid "Settings options ⚙️"
+msgstr "Созлаш параметрлари ⚙️"
+
+msgid "✅ Add Media"
+msgstr "✅ Медиа қўшиш"
+
+msgid "⏭ Skip Media"
+msgstr "⏭ Медиа ўтказиш"

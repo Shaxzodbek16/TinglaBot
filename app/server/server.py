@@ -9,7 +9,6 @@ from app.bot.routers import v1_router
 from app.core.middlewares.language_middleware import UserI18nMiddleware
 from app.core.settings.config import get_settings, Settings
 from app.core.extensions.utils import WORKDIR
-from aiogram.utils.i18n.middleware import FSMI18nMiddleware
 from app.core.middlewares.channel_join import CheckSubscriptionMiddleware
 from app.core.middlewares.group_chat_middle import GroupChatMiddleware
 from app.server.init import init, admin_init, set_default_commands

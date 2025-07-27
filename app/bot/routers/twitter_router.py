@@ -38,7 +38,9 @@ def extract_twitter_url(text: str) -> str:
 async def handle_twitter_message(message: Message):
     res = await remove_token(message)
     if not res:
-        await message.answer(_("You have no any requests left. 😢"), reply_markup=get_payment_keyboard())
+        await message.answer(
+            _("You have no any requests left. 😢"), reply_markup=get_payment_keyboard()
+        )
         return
 
     await message.answer(_("twitter_detected"))

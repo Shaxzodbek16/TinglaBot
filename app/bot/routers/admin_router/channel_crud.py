@@ -32,8 +32,10 @@ channel_router = Router()
 @channel_router.message(F.text == "📋 View Channels")
 async def handle_channel_list(message: Message):
     text = (
-        _("📋 <b>Channel List</b>") + "\n\n"
-        + _("Here you can view the list of channels that have been added.") + "\n"
+        _("📋 <b>Channel List</b>")
+        + "\n\n"
+        + _("Here you can view the list of channels that have been added.")
+        + "\n"
         + _("Use the buttons below to manage your channels.")
     )
     await message.answer(
@@ -48,7 +50,10 @@ async def handle_delete_channel(callback_query: CallbackQuery):
     await callback_query.message.edit_reply_markup(
         reply_markup=await channels_list_keyboard()
     )
-    await callback_query.answer(_("🗑️ Channel %(channel_id)d deleted.") % {"channel_id": channel_id}, show_alert=False)
+    await callback_query.answer(
+        _("🗑️ Channel %(channel_id)d deleted.") % {"channel_id": channel_id},
+        show_alert=False,
+    )
 
 
 @channel_router.callback_query(F.data.startswith("channel:info:"))
@@ -62,10 +67,14 @@ async def handle_channel_info(callback_query: CallbackQuery):
 
     status_text = _("Active") if channel.is_active else _("Inactive")
     text = (
-        _("📺 <b>Channel Info</b>") + "\n\n"
-        + _("<b>Name:</b> %(name)s") % {"name": channel.name} + "\n"
-        + _("<b>Link:</b> %(link)s") % {"link": channel.link} + "\n"
-        + _("<b>Status:</b> %(status)s") % {"status": status_text} + "\n"
+        _("📺 <b>Channel Info</b>")
+        + "\n\n"
+        + _("<b>Name:</b> %(name)s") % {"name": channel.name}
+        + "\n"
+        + _("<b>Link:</b> %(link)s") % {"link": channel.link}
+        + "\n"
+        + _("<b>Status:</b> %(status)s") % {"status": status_text}
+        + "\n"
     )
 
     await callback_query.message.edit_text(
@@ -115,7 +124,8 @@ async def process_name(message: Message, state: FSMContext):
 async def process_link(message: Message, state: FSMContext):
     await state.update_data(link=message.text.strip())
     await message.answer(
-        _("🆔 Please send the <b>numeric channel ID</b> (only digits):"), parse_mode="HTML"
+        _("🆔 Please send the <b>numeric channel ID</b> (only digits):"),
+        parse_mode="HTML",
     )
     await state.set_state(ChannelForm.waiting_for_id)
 
@@ -139,7 +149,9 @@ async def process_id(message: Message, state: FSMContext):
 
     except ValueError:
         await message.answer(
-            _("❗️ Please send a valid numeric channel ID (example: <code>-1001234567890</code>)."),
+            _(
+                "❗️ Please send a valid numeric channel ID (example: <code>-1001234567890</code>)."
+            ),
             parse_mode="HTML",
         )
 
@@ -167,13 +179,17 @@ async def process_active(message: Message, state: FSMContext):
     except IntegrityError as e:
         if "channels_link_key" in str(e.orig):
             await message.answer(
-                _("⚠️ That link is already in use. Please start over with a unique channel link."),
+                _(
+                    "⚠️ That link is already in use. Please start over with a unique channel link."
+                ),
                 parse_mode="HTML",
                 reply_markup=get_channel_crud_keyboard(),
             )
         elif "channels_channel_id_key" in str(e.orig):
             await message.answer(
-                _("⚠️ That channel ID is already in use. Please start over with a unique ID."),
+                _(
+                    "⚠️ That channel ID is already in use. Please start over with a unique ID."
+                ),
                 parse_mode="HTML",
                 reply_markup=get_channel_crud_keyboard(),
             )
@@ -187,7 +203,10 @@ async def process_active(message: Message, state: FSMContext):
         return
 
     await message.answer(
-        _("🎉 Channel <b>%(name)s</b> has been added successfully!\nMake sure to set the channel's privacy settings to allow the bot to access it.") % {"name": channel.name},
+        _(
+            "🎉 Channel <b>%(name)s</b> has been added successfully!\nMake sure to set the channel's privacy settings to allow the bot to access it."
+        )
+        % {"name": channel.name},
         parse_mode="HTML",
         reply_markup=get_channel_crud_keyboard(),
     )
@@ -202,7 +221,9 @@ async def start_update_channel(callback: CallbackQuery, state: FSMContext):
 
     await callback.answer()
     await callback.message.answer(
-        text=_("✏️ <b>Update Channel Name</b>\n\nSend the new name or tap ⏭ Skip to keep the old one:"),
+        text=_(
+            "✏️ <b>Update Channel Name</b>\n\nSend the new name or tap ⏭ Skip to keep the old one:"
+        ),
         parse_mode="HTML",
         reply_markup=skip_kb("⏭ Skip"),
     )
@@ -222,7 +243,9 @@ async def process_update_name(message: Message, state: FSMContext):
         await state.update_data(name=text)
 
     await message.answer(
-        text=_("🔗 <b>Update Channel Link</b>\n\nSend the new link or tap ⏭ Skip to keep the old one:"),
+        text=_(
+            "🔗 <b>Update Channel Link</b>\n\nSend the new link or tap ⏭ Skip to keep the old one:"
+        ),
         parse_mode="HTML",
         reply_markup=skip_kb("⏭ Skip"),
     )
@@ -254,13 +277,15 @@ async def process_update_link(message: Message, state: FSMContext):
             )
             return
         await message.answer(
-            text=_("❌ DB error:\n<code>%(error)s</code>") % {"error": err.orig}, parse_mode="HTML"
+            text=_("❌ DB error:\n<code>%(error)s</code>") % {"error": err.orig},
+            parse_mode="HTML",
         )
         await state.clear()
         return
 
     await message.answer(
-        text=_("✅ Channel <b>%(name)s</b> updated!\n🔗 Link: <code>%(link)s</code>") % {"name": updated.name, "link": updated.link},
+        text=_("✅ Channel <b>%(name)s</b> updated!\n🔗 Link: <code>%(link)s</code>")
+        % {"name": updated.name, "link": updated.link},
         parse_mode="HTML",
         reply_markup=get_channel_crud_keyboard(),
     )

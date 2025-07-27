@@ -525,7 +525,7 @@ msgid "back_to_admin_panel_welcome"
 msgstr "🔙 <b>Admin Panel</b>\n\nWelcome back! Please choose the action you'd like to perform:"
 
 msgid "settings_overview"
-msgstr "⚙️ <b>Settings</b>\n\n🔢 Current tokens per referral: <b>{current_tokens}</b>\n\nCurrent premium {premium_price}: <b>100</b> tokens\n\n"
+msgstr "⚙️ <b>Settings</b>\n\n🔢 Current tokens per referral: <b>{current_tokens}</b>\n\nCurrent premium {premium_price} so'm\n\n"
 
 msgid "ask_new_token_value"
 msgstr "✍️ Please send the new integer value (must be > 0), or tap 🔙 to cancel:"
@@ -641,3 +641,57 @@ msgstr "🚫 You still need to join these channels."
 
 msgid "You have no any requests left. 😢"
 msgstr "You have no any requests left. 😢"
+
+msgid "📁 Users excel"
+msgstr "📁 Users excel"
+
+msgid "📊 Statistics"
+msgstr "📊 Statistics"
+
+msgid "🔧 Settings"
+msgstr "🔧 Settings"
+
+msgid "📈 Channels"
+msgstr "📈 Channels"
+
+msgid "💲 Fill Balance"
+msgstr "💲 Fill Balance"
+
+msgid "Remove from balance"
+msgstr "Remove from balance"
+
+msgid "🔙 Back to Main Menu"
+msgstr "🔙 Back to Main Menu"
+
+msgid "Choose an admin action 🔧"
+msgstr "Choose an admin action 🔧"
+
+msgid "➕ Add Channel"
+msgstr "➕ Add Channel"
+
+msgid "📋 View Channels"
+msgstr "📋 View Channels"
+
+msgid "🔙 Back to Admin Panel"
+msgstr "🔙 Back to Admin Panel"
+
+msgid "Select channel action 📡"
+msgstr "Select channel action 📡"
+
+msgid "Update Tokens per Referral"
+msgstr "Update Tokens per Referral"
+
+msgid "Update Premium price"
+msgstr "Update Premium price"
+
+msgid "Send Message to All Users"
+msgstr "Send Message to All Users"
+
+msgid "Settings options ⚙️"
+msgstr "Settings options ⚙️"
+
+msgid "✅ Add Media"
+msgstr "✅ Add Media"
+
+msgid "⏭ Skip Media"
+msgstr "⏭ Skip Media"

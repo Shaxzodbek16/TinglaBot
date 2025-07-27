@@ -5,11 +5,7 @@ from aiogram.utils.i18n import gettext as _
 
 from app.bot.filters.admin_filter import AdminFilter
 from aiogram.fsm.state import StatesGroup, State
-from aiogram.types import (
-    Message,
-    ReplyKeyboardMarkup,
-    KeyboardButton, CallbackQuery
-)
+from aiogram.types import Message, ReplyKeyboardMarkup, KeyboardButton, CallbackQuery
 from app.bot.handlers.admin import update_premium_price, get_premium_price
 from app.bot.keyboards.admin_keyboards import get_admin_panel_keyboard
 from app.bot.keyboards.payment_keyboard import get_confirmation_keyboard
@@ -18,7 +14,8 @@ from aiogram.fsm.context import FSMContext
 from app.bot.handlers.user_handlers import (
     get_user_by_tg_id,
     add_user_balance,
-    remove_user_balance, update_user_premium_time,
+    remove_user_balance,
+    update_user_premium_time,
 )
 
 router = Router()
@@ -27,7 +24,7 @@ router = Router()
 @router.message(Command("payment"))
 async def payment_handler(message: Message):
     await message.answer(
-        _("payment_info").format(username="@tmshaxzodbek"),
+        _("payment_info").format(username="@Superdeveloper_1"),
     )
 
     premium_price = await get_premium_price()
@@ -216,7 +213,7 @@ async def ask_confirmation(callback: CallbackQuery, state: FSMContext):
     price = await get_premium_price()
     await callback.message.answer(
         _("subscription_confirmation").format(price=price),
-        reply_markup=get_confirmation_keyboard()
+        reply_markup=get_confirmation_keyboard(),
     )
     await callback.answer()
 

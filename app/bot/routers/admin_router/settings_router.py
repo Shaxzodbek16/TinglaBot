@@ -39,10 +39,7 @@ async def open_settings(message: Message, state: FSMContext):
     current = await get_token_per_referral()
     price = await get_premium_price()
     await message.answer(
-        text=_("settings_overview").format(
-            current_tokens=current,
-            premium_price=price
-        ),
+        text=_("settings_overview").format(current_tokens=current, premium_price=price),
         parse_mode="HTML",
         reply_markup=settings_keyboard(),
     )
@@ -114,12 +111,12 @@ async def start_broadcast(message: Message, state: FSMContext):
     await message.answer(
         _("broadcast_start_message"),
         parse_mode="HTML",
-        reply_markup=back_to_admin_kb,
+        reply_markup=back_to_admin_kb(),
     )
     await message.answer(
         _("broadcast_html_instructions"),
         parse_mode="HTML",
-        reply_markup=back_to_admin_kb,
+        reply_markup=back_to_admin_kb(),
     )
     await state.set_state(BroadcastForm.waiting_for_text)
 
@@ -129,7 +126,7 @@ async def process_broadcast_text(message: Message, state: FSMContext):
     await state.update_data(text=message.text)
     await message.answer(
         _("ask_for_media"),
-        reply_markup=ask_media_kb,
+        reply_markup=ask_media_kb(),
     )
     await state.set_state(BroadcastForm.waiting_for_media)
 

@@ -577,3 +577,57 @@ msgstr "🚫 Вам все еще нужно подписаться на эти 
 
 msgid "You have no any requests left. 😢"
 msgstr "У вас не осталось запросов. 😢"
+
+msgid "📁 Users excel"
+msgstr "📁 Пользователи (Excel)"
+
+msgid "📊 Statistics"
+msgstr "📊 Статистика"
+
+msgid "🔧 Settings"
+msgstr "🔧 Настройки"
+
+msgid "📈 Channels"
+msgstr "📈 Каналы"
+
+msgid "💲 Fill Balance"
+msgstr "💲 Пополнить баланс"
+
+msgid "Remove from balance"
+msgstr "Снять с баланса"
+
+msgid "🔙 Back to Main Menu"
+msgstr "🔙 На главную"
+
+msgid "Choose an admin action 🔧"
+msgstr "Выберите действие 🔧"
+
+msgid "➕ Add Channel"
+msgstr "➕ Добавить канал"
+
+msgid "📋 View Channels"
+msgstr "📋 Список каналов"
+
+msgid "🔙 Back to Admin Panel"
+msgstr "🔙 В админ-панель"
+
+msgid "Select channel action 📡"
+msgstr "Выберите действие с каналом 📡"
+
+msgid "Update Tokens per Referral"
+msgstr "Обновить токены за реферала"
+
+msgid "Update Premium price"
+msgstr "Обновить цену Premium"
+
+msgid "Send Message to All Users"
+msgstr "Отправить сообщение всем"
+
+msgid "Settings options ⚙️"
+msgstr "Настройки ⚙️"
+
+msgid "✅ Add Media"
+msgstr "✅ Добавить медиа"
+
+msgid "⏭ Skip Media"
+msgstr "⏭ Пропустить медиа"
