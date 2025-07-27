@@ -79,10 +79,10 @@ msgid "likee_music_not_implemented"
 msgstr "❌ Мусиқа юклаш функцияси ҳали ишлаб чиқилмаган."
 
 msgid "searching"
-msgstr "🔍 Поиск..."
+msgstr "🔍"
 
 msgid "analyzing_audio"
-msgstr "🔍 Анализ аудио..."
+msgstr "🔍"
 
 msgid "no_results"
 msgstr "😕 Результаты не найдены."
@@ -639,7 +639,7 @@ msgid "⚠️ Please enter at least 2 characters to search."
 msgstr "✨ Введите минимум 2 буквы для поиска! 🔤"
 
 msgid "🔍 Searching..."
-msgstr "🎵 Ищем вашу музыку... ✨"
+msgstr "🔍"
 
 msgid "😕 No results found. Try different keywords."
 msgstr "🤔 Ничего не найдено! Попробуйте другие слова 🔄"
@@ -648,7 +648,7 @@ msgid "❌ Search failed. Please try again."
 msgstr "⚠️ Упс! Что-то пошло не так. Попробуйте через момент 🔄"
 
 msgid "🔍 Analyzing audio..."
-msgstr "🎧 Слушаем ваше аудио... 🎶"
+msgstr "🔍"
 
 msgid "❌ Could not download media file."
 msgstr "📱 Не могу получить ваш файл. Отправьте снова 🔄"
@@ -666,13 +666,13 @@ msgid "⏰ Results expired or invalid selection."
 msgstr "⚠️ Сессия истекла или неверный выбор. Ищите снова! 🔍"
 
 msgid "⏳ Downloading video..."
-msgstr "🎬 Готовим ваше видео... Почти готово! ⬇️"
+msgstr "⏳"
 
 msgid "⏳ Please wait a moment before next download."
 msgstr "⏱️ Подождите 2 секунды перед следующей загрузкой 🤝"
 
 msgid "⏳ Downloading audio..."
-msgstr "🎵 Скачиваем ваш трек... Почти готово! ⬇️"
+msgstr "⏳"
 
 msgid "❌ Invalid request."
 msgstr "⚠️ Неверный запрос. Попробуйте еще раз 🔄"

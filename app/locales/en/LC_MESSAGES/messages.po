@@ -82,10 +82,10 @@ msgid "please_retry"
 msgstr "❌ Please resend the link or try again later."
 
 msgid "searching"
-msgstr "🔍 Searching..."
+msgstr "🔍"
 
 msgid "analyzing_audio"
-msgstr "🔍 Analyzing audio..."
+msgstr "🔍"
 
 msgid "no_results"
 msgstr "😕 No results found."
@@ -703,7 +703,7 @@ msgid "⚠️ Please enter at least 2 characters to search."
 msgstr "✨ Type at least 2 letters to start searching! 🔤"
 
 msgid "🔍 Searching..."
-msgstr "🎵 Finding your music... ✨"
+msgstr "🔍"
 
 msgid "😕 No results found. Try different keywords."
 msgstr "🤔 No matches found! Try different words 🔄"
@@ -730,13 +730,13 @@ msgid "⏰ Results expired or invalid selection."
 msgstr "⚠️ Session expired or invalid choice. Search again! 🔍"
 
 msgid "⏳ Downloading video..."
-msgstr "🎬 Preparing your video... Almost ready! ⬇️"
+msgstr "⏳"
 
 msgid "⏳ Please wait a moment before next download."
 msgstr "⏱️ Please wait 2 seconds before next download 🤝"
 
 msgid "⏳ Downloading audio..."
-msgstr "🎵 Downloading your track... Almost there! ⬇️"
+msgstr "⏳"
 
 msgid "❌ Invalid request."
 msgstr "⚠️ Invalid request. Please try again 🔄"
