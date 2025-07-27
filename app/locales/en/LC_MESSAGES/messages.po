@@ -695,3 +695,84 @@ msgstr "✅ Add Media"
 
 msgid "⏭ Skip Media"
 msgstr "⏭ Skip Media"
+
+msgid "You have no any requests left. 😢"
+msgstr "🚫 Out of requests! Get more to continue 💫"
+
+msgid "⚠️ Please enter at least 2 characters to search."
+msgstr "✨ Type at least 2 letters to start searching! 🔤"
+
+msgid "🔍 Searching..."
+msgstr "🎵 Finding your music... ✨"
+
+msgid "😕 No results found. Try different keywords."
+msgstr "🤔 No matches found! Try different words 🔄"
+
+msgid "❌ Search failed. Please try again."
+msgstr "⚠️ Oops! Something went wrong. Try again in a moment 🔄"
+
+msgid "🔍 Analyzing audio..."
+msgstr "🎧 Listening to your audio... 🎶"
+
+msgid "❌ Could not download media file."
+msgstr "📱 Can't access your file. Try sending it again 🔄"
+
+msgid "😕 Could not recognize any music in this file."
+msgstr "🤷‍♂️ No music detected! Try a clearer audio 🎵"
+
+msgid "❌ Recognition failed. Please try again."
+msgstr "🔄 Recognition failed. Please try again shortly ⏱️"
+
+msgid "⏰ Search results expired. Please search again."
+msgstr "⏰ Results expired! Search again to see fresh results 🔍"
+
+msgid "⏰ Results expired or invalid selection."
+msgstr "⚠️ Session expired or invalid choice. Search again! 🔍"
+
+msgid "⏳ Downloading video..."
+msgstr "🎬 Preparing your video... Almost ready! ⬇️"
+
+msgid "⏳ Please wait a moment before next download."
+msgstr "⏱️ Please wait 2 seconds before next download 🤝"
+
+msgid "⏳ Downloading audio..."
+msgstr "🎵 Downloading your track... Almost there! ⬇️"
+
+msgid "❌ Invalid request."
+msgstr "⚠️ Invalid request. Please try again 🔄"
+
+msgid "❌ Something went wrong."
+msgstr "😅 Oops! Something unexpected happened. Try again 🔄"
+
+msgid "❌ Downloaded file is empty."
+msgstr "📁 File appears to be empty. Try another track 🔄"
+
+msgid "❌ Download failed. The track might not be available."
+msgstr "😔 Download failed! This track might be unavailable 🚫"
+
+msgid "❌ Download error: {error}"
+msgstr "⚠️ Download issue occurred. Try again later 🔄"
+
+msgid "❌ Video ID not available."
+msgstr "🎬 Video not accessible right now. Try another one 🔄"
+
+msgid "❌ Downloaded video is empty."
+msgstr "📹 Video file is empty. Try selecting another video 🔄"
+
+msgid "❌ Video download failed (might be >50MB or unavailable)."
+msgstr "📱 Video too large or unavailable. Try audio instead! 🎵"
+
+msgid "❌ Video download error: {error}"
+msgstr "🎬 Video download issue. Please try again later ⏱️"
+
+msgid "No results found."
+msgstr "🔍 No matches found"
+
+msgid "<b>🎵 Results — Page {page}</b>\n"
+msgstr "<b>🎶 Music Results — Page {page}</b>\n"
+
+msgid "Unknown"
+msgstr "Unknown Artist"
+
+msgid "Error formatting result"
+msgstr "Display error"

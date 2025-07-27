@@ -27,7 +27,7 @@ from app.bot.keyboards.payment_keyboard import get_payment_keyboard
 logger = logging.getLogger(__name__)
 
 music_router = Router()
-PAGE, COOLDOWN = 10, 2
+PAGE, COOLDOWN = 10, 1
 
 # Global state with better management
 _controller: Optional[ShazamController] = None
@@ -37,7 +37,6 @@ _cleanup_task: Optional[asyncio.Task] = None
 
 # Cache cleanup settings - UPDATED FOR PERSISTENT CACHE
 CACHE_CLEANUP_INTERVAL = 86400 * 3  # 3 days (only cleanup download queue)
-
 CACHE_MAX_AGE = 86400 * 14  # 14 days if you want some expiration
 
 
@@ -116,15 +115,15 @@ def create_keyboard(
 def format_page_text(hits: List[Dict], page: int) -> str:
     """Format page text with better error handling."""
     if not hits:
-        return "No results found."
+        return _("No results found.")
 
     start_idx, end_idx = page * PAGE, (page + 1) * PAGE
-    lines = [f"<b>🎵 Results — Page {page + 1}</b>\n"]
+    lines = [_("<b>🎵 Results — Page {page}</b>\n").format(page=page + 1)]
 
     for number, hit in enumerate(hits[start_idx:end_idx], start=start_idx + 1):
         try:
-            title = hit.get("title", "Unknown")[:50]
-            artist = hit.get("artist", "Unknown")[:30]
+            title = hit.get("title", _("Unknown"))[:50]
+            artist = hit.get("artist", _("Unknown"))[:30]
             duration = hit.get("duration", 0)
 
             # Format duration
@@ -138,12 +137,13 @@ def format_page_text(hits: List[Dict], page: int) -> str:
 
         except Exception as e:
             logger.error(f"Error formatting hit {number}: {e}")
-            lines.append(f"{number}. Error formatting result")
+            lines.append(f"{number}. {_('Error formatting result')}")
 
     return "\n".join(lines)
 
 
 def is_cache_valid(user_id: int) -> bool:
+    """Check if user cache is valid."""
     if user_id not in _cache:
         return False
 
@@ -155,11 +155,13 @@ def is_cache_valid(user_id: int) -> bool:
 
 
 def can_download(user_id: int) -> bool:
+    """Check if user can download (rate limiting)."""
     last_download = _download_queue.get(user_id, 0)
     return time.time() - last_download >= COOLDOWN
 
 
 async def download_telegram_file(message: Message) -> Optional[str]:
+    """Download telegram media file with error handling."""
     try:
         media = message.voice or message.audio or message.video or message.video_note
         if not media:
@@ -242,21 +244,21 @@ async def handle_text_query(message: Message):
     query = message.text.strip() if message.text else ""
 
     if len(query) < 2:
-        await message.answer("⚠️ Please enter at least 2 characters to search.")
+        await message.answer(_("⚠️ Please enter at least 2 characters to search."))
         return
 
     # Limit query length
     if len(query) > 100:
         query = query[:100]
 
-    status_message = await message.answer('🔍')
+    status_message = await message.answer(_('🔍 Searching...'))
 
     try:
         hits = await get_controller().search(query)
 
         if not hits:
             await status_message.edit_text(
-                "😕 No results found. Try different keywords."
+                _("😕 No results found. Try different keywords.")
             )
             return
 
@@ -271,7 +273,7 @@ async def handle_text_query(message: Message):
 
     except Exception as e:
         logger.error(f"Text search error: {e}")
-        await status_message.edit_text("❌ Search failed. Please try again.")
+        await status_message.edit_text(_("❌ Search failed. Please try again."))
     await update_statistics(message.from_user.id, field="from_text")
 
 
@@ -281,13 +283,13 @@ async def handle_media_query(message: Message):
     # Ensure cleanup task is running
     _start_cleanup_task()
 
-    status_message = await message.answer("🔍 Analyzing audio...")
+    status_message = await message.answer(_("🔍 Analyzing audio..."))
 
     try:
         # Download telegram file
         temp_path = await download_telegram_file(message)
         if not temp_path:
-            await status_message.edit_text("❌ Could not download media file.")
+            await status_message.edit_text(_("❌ Could not download media file."))
             return
 
         try:
@@ -296,7 +298,7 @@ async def handle_media_query(message: Message):
 
             if not shazam_hits:
                 await status_message.edit_text(
-                    "😕 Could not recognize any music in this file."
+                    _("😕 Could not recognize any music in this file.")
                 )
                 return
 
@@ -319,7 +321,6 @@ async def handle_media_query(message: Message):
                     )
                 ]
 
-            # Cache results with current timestamp
             _cache[message.from_user.id] = {
                 "hits": youtube_hits,
                 "timestamp": time.time(),
@@ -338,7 +339,7 @@ async def handle_media_query(message: Message):
 
     except Exception as e:
         logger.error(f"Media recognition error: {e}")
-        await status_message.edit_text("❌ Recognition failed. Please try again.")
+        await status_message.edit_text(_("❌ Recognition failed. Please try again."))
     if message.video:
         await update_statistics(message.from_user.id, field="from_video")
     if message.voice or message.audio:
@@ -360,7 +361,7 @@ async def handle_callbacks(callback: CallbackQuery):
             page = int(parts[1])
             if not is_cache_valid(user_id):
                 await callback.message.answer(
-                    "⏰ Search results expired. Please search again."
+                    _("⏰ Search results expired. Please search again.")
                 )
                 return
 
@@ -374,15 +375,14 @@ async def handle_callbacks(callback: CallbackQuery):
             index = int(parts[1])
             if not is_cache_valid(user_id) or index >= len(_cache[user_id]["hits"]):
                 await callback.message.answer(
-                    "⏰ Results expired or invalid selection."
+                    _("⏰ Results expired or invalid selection.")
                 )
                 return
 
             hit = _cache[user_id]["hits"][index]
-            status_message = await callback.message.answer("⏳")
+            status_message = await callback.message.answer(_("⏳ Downloading video..."))
 
             await download_and_send_video(callback.message, status_message, hit)
-
             await update_statistics(callback.from_user.id, field="from_youtube")
 
         elif action == "sel":
@@ -390,30 +390,30 @@ async def handle_callbacks(callback: CallbackQuery):
 
             if not is_cache_valid(user_id) or index >= len(_cache[user_id]["hits"]):
                 await callback.message.answer(
-                    "⏰ Results expired or invalid selection."
+                    _("⏰ Results expired or invalid selection.")
                 )
                 return
 
             if not can_download(user_id):
                 await callback.message.answer(
-                    "⏳ Please wait a moment before next download."
+                    _("⏳ Please wait a moment before next download.")
                 )
                 return
 
             _download_queue[user_id] = time.time()
             hit = _cache[user_id]["hits"][index]
             status_message = await callback.message.answer(
-                f"⏳"
+                _("⏳ Downloading audio...")
             )
 
             await download_and_send_audio(callback.message, status_message, hit)
 
     except (ValueError, IndexError) as e:
         logger.error(f"Callback parsing error: {e}")
-        await callback.message.answer("❌ Invalid request.")
+        await callback.message.answer(_("❌ Invalid request."))
     except Exception as e:
         logger.error(f"Callback handling error: {e}")
-        await callback.message.answer("❌ Something went wrong.")
+        await callback.message.answer(_("❌ Something went wrong."))
 
 
 # ── download workers ──────────────────────────────────────────────────────────
@@ -428,7 +428,7 @@ async def download_and_send_audio(destination: Message, status: Message, info: D
             # Verify file size and content
             file_size = Path(file_path).stat().st_size
             if file_size == 0:
-                await status.edit_text("❌ Downloaded file is empty.")
+                await status.edit_text(_("❌ Downloaded file is empty."))
                 return
 
             await destination.answer_audio(
@@ -444,19 +444,20 @@ async def download_and_send_audio(destination: Message, status: Message, info: D
 
         else:
             await status.edit_text(
-                "❌ Download failed. The track might not be available."
+                _("❌ Download failed. The track might not be available.")
             )
 
     except Exception as e:
         logger.error(f"Audio download error: {e}")
-        await status.edit_text(f"❌ Download error: {str(e)[:100]}")
+        await status.edit_text(_("❌ Download error: {error}").format(error=str(e)[:100]))
 
 
 async def download_and_send_video(destination: Message, status: Message, info: Dict):
+    """Download and send video with comprehensive error handling."""
     try:
         video_id = info.get("id")
         if not video_id:
-            await status.edit_text("❌ Video ID not available.")
+            await status.edit_text(_("❌ Video ID not available."))
             return
 
         file_path = await get_controller().download_video(video_id, info["title"])
@@ -465,7 +466,7 @@ async def download_and_send_video(destination: Message, status: Message, info: D
             # Verify file
             file_size = Path(file_path).stat().st_size
             if file_size == 0:
-                await status.edit_text("❌ Downloaded video is empty.")
+                await status.edit_text(_("❌ Downloaded video is empty."))
                 return
 
             await destination.answer_video(
@@ -480,12 +481,12 @@ async def download_and_send_video(destination: Message, status: Message, info: D
 
         else:
             await status.edit_text(
-                "❌ Video download failed (might be >50MB or unavailable)."
+                _("❌ Video download failed (might be >50MB or unavailable).")
             )
 
     except Exception as e:
         logger.error(f"Video download error: {e}")
-        await status.edit_text(f"❌ Video download error: {str(e)[:100]}")
+        await status.edit_text(_("❌ Video download error: {error}").format(error=str(e)[:100]))
 
 
 # ── Additional utility functions for cache management ────────────────────────

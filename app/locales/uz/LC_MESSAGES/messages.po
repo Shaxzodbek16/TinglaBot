@@ -671,3 +671,84 @@ msgstr "✅ Media qo'shish"
 
 msgid "⏭ Skip Media"
 msgstr "⏭ Media o'tkazish"
+
+msgid "You have no any requests left. 😢"
+msgstr "🚫 So'rovlar tugadi! Davom etish uchun ko'proq oling 💫"
+
+msgid "⚠️ Please enter at least 2 characters to search."
+msgstr "✨ Qidirish uchun kamida 2 ta harf yozing! 🔤"
+
+msgid "🔍 Searching..."
+msgstr "🎵 Musiqangizni qidiryapmiz... ✨"
+
+msgid "😕 No results found. Try different keywords."
+msgstr "🤔 Hech narsa topilmadi! Boshqa so'zlarni sinab ko'ring 🔄"
+
+msgid "❌ Search failed. Please try again."
+msgstr "⚠️ Xato! Nimadir noto'g'ri ketdi. Biroz kutib qayta urinib ko'ring 🔄"
+
+msgid "🔍 Analyzing audio..."
+msgstr "🎧 Audioni tinglab ko'ryapmiz... 🎶"
+
+msgid "❌ Could not download media file."
+msgstr "📱 Faylingizga kirish imkoni yo'q. Qayta yuboring 🔄"
+
+msgid "😕 Could not recognize any music in this file."
+msgstr "🤷‍♂️ Musiqa aniqlanmadi! Aniqroq audio yuborib ko'ring 🎵"
+
+msgid "❌ Recognition failed. Please try again."
+msgstr "🔄 Tanish muvaffaqiyatsiz. Biroz kutib qayta urinib ko'ring ⏱️"
+
+msgid "⏰ Search results expired. Please search again."
+msgstr "⏰ Natijalar eskirdi! Yangi natijalar uchun qayta qidiring 🔍"
+
+msgid "⏰ Results expired or invalid selection."
+msgstr "⚠️ Sessiya tugadi yoki noto'g'ri tanlov. Qayta qidiring! 🔍"
+
+msgid "⏳ Downloading video..."
+msgstr "🎬 Videongizni tayyorlamoqdamiz... Deyarli tayyor! ⬇️"
+
+msgid "⏳ Please wait a moment before next download."
+msgstr "⏱️ Keyingi yuklashdan oldin 2 soniya kuting 🤝"
+
+msgid "⏳ Downloading audio..."
+msgstr "🎵 Trekingizni yuklamoqdamiz... Deyarli tayyor! ⬇️"
+
+msgid "❌ Invalid request."
+msgstr "⚠️ Noto'g'ri so'rov. Qayta urinib ko'ring 🔄"
+
+msgid "❌ Something went wrong."
+msgstr "😅 Voy! Kutilmagan xatolik yuz berdi. Qayta urinib ko'ring 🔄"
+
+msgid "❌ Downloaded file is empty."
+msgstr "📁 Fayl bo'sh ekan. Boshqa trekni sinab ko'ring 🔄"
+
+msgid "❌ Download failed. The track might not be available."
+msgstr "😔 Yuklash muvaffaqiyatsiz! Bu trek mavjud bo'lmasligi mumkin 🚫"
+
+msgid "❌ Download error: {error}"
+msgstr "⚠️ Yuklashda muammo. Keyinroq qayta urinib ko'ring 🔄"
+
+msgid "❌ Video ID not available."
+msgstr "🎬 Video hozir mavjud emas. Boshqasini sinab ko'ring 🔄"
+
+msgid "❌ Downloaded video is empty."
+msgstr "📹 Video fayl bo'sh. Boshqa video tanlashni sinab ko'ring 🔄"
+
+msgid "❌ Video download failed (might be >50MB or unavailable)."
+msgstr "📱 Video juda katta yoki mavjud emas. Audio sinab ko'ring! 🎵"
+
+msgid "❌ Video download error: {error}"
+msgstr "🎬 Video bilan muammo. Keyinroq qayta urinib ko'ring ⏱️"
+
+msgid "No results found."
+msgstr "🔍 Moslik topilmadi"
+
+msgid "<b>🎵 Results — Page {page}</b>\n"
+msgstr "<b>🎶 Musiqa natijalari — {page}-sahifa</b>\n"
+
+msgid "Unknown"
+msgstr "Noma'lum ijrochi"
+
+msgid "Error formatting result"
+msgstr "Ko'rsatish xatosi"
