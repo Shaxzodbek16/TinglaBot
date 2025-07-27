@@ -27,7 +27,7 @@ from app.bot.keyboards.payment_keyboard import get_payment_keyboard
 logger = logging.getLogger(__name__)
 
 music_router = Router()
-PAGE, COOLDOWN = 10, 5
+PAGE, COOLDOWN = 10, 2
 
 # Global state with better management
 _controller: Optional[ShazamController] = None
@@ -35,9 +35,10 @@ _cache: Dict[int, Dict] = {}
 _download_queue: Dict[int, float] = {}
 _cleanup_task: Optional[asyncio.Task] = None
 
-# Cache cleanup settings
-CACHE_CLEANUP_INTERVAL = 1800  # 30 minutes
-CACHE_MAX_AGE = 600  # 10 minutes
+# Cache cleanup settings - UPDATED FOR PERSISTENT CACHE
+CACHE_CLEANUP_INTERVAL = 86400 * 3  # 3 days (only cleanup download queue)
+
+CACHE_MAX_AGE = 86400 * 14  # 14 days if you want some expiration
 
 
 def get_controller() -> ShazamController:
@@ -63,7 +64,7 @@ def _start_cleanup_task():
 
 # ── helpers with improvements ─────────────────────────────────────────────────
 def create_keyboard(
-    user_id: int, page: int, add_video: bool = False
+        user_id: int, page: int, add_video: bool = False
 ) -> InlineKeyboardMarkup:
     """Create paginated keyboard with video option."""
     if user_id not in _cache:
@@ -143,23 +144,22 @@ def format_page_text(hits: List[Dict], page: int) -> str:
 
 
 def is_cache_valid(user_id: int) -> bool:
-    """Check if user cache is valid."""
     if user_id not in _cache:
         return False
+
+    if CACHE_MAX_AGE == float('inf'):
+        return True
 
     cache_age = time.time() - _cache[user_id]["timestamp"]
     return cache_age < CACHE_MAX_AGE
 
 
 def can_download(user_id: int) -> bool:
-    """Check if user can download (rate limiting)."""
     last_download = _download_queue.get(user_id, 0)
     return time.time() - last_download >= COOLDOWN
 
 
-# ── telegram file download helper ─────────────────────────────────────────────
 async def download_telegram_file(message: Message) -> Optional[str]:
-    """Download telegram media file with error handling."""
     try:
         media = message.voice or message.audio or message.video or message.video_note
         if not media:
@@ -183,25 +183,29 @@ async def download_telegram_file(message: Message) -> Optional[str]:
     return None
 
 
-# ── cache cleanup task ────────────────────────────────────────────────────────
+# ── cache cleanup task - UPDATED FOR PERSISTENT CACHE ────────────────────────
 async def cleanup_cache_loop():
-    """Periodic cache cleanup."""
+    """Periodic cleanup - only cleans download queue, keeps search cache forever."""
     while True:
         try:
             await asyncio.sleep(CACHE_CLEANUP_INTERVAL)
             current_time = time.time()
 
-            # Clean expired cache entries
-            expired_users = [
-                user_id
-                for user_id, data in _cache.items()
-                if current_time - data["timestamp"] > CACHE_MAX_AGE
-            ]
+            # Only clean expired cache entries if CACHE_MAX_AGE is not infinite
+            if CACHE_MAX_AGE != float('inf'):
+                expired_users = [
+                    user_id
+                    for user_id, data in _cache.items()
+                    if current_time - data["timestamp"] > CACHE_MAX_AGE
+                ]
 
-            for user_id in expired_users:
-                del _cache[user_id]
+                for user_id in expired_users:
+                    del _cache[user_id]
 
-            # Clean old download queue entries
+                if expired_users:
+                    logger.info(f"Cleaned expired cache: {len(expired_users)} users")
+
+            # Clean old download queue entries (keep rate limiting working)
             expired_downloads = [
                 user_id
                 for user_id, timestamp in _download_queue.items()
@@ -211,10 +215,8 @@ async def cleanup_cache_loop():
             for user_id in expired_downloads:
                 del _download_queue[user_id]
 
-            if expired_users or expired_downloads:
-                logger.info(
-                    f"Cleaned cache: {len(expired_users)} users, {len(expired_downloads)} downloads"
-                )
+            if expired_downloads:
+                logger.info(f"Cleaned download queue: {len(expired_downloads)} entries")
 
         except asyncio.CancelledError:
             logger.info("Cache cleanup task cancelled")
@@ -258,7 +260,7 @@ async def handle_text_query(message: Message):
             )
             return
 
-        # Cache results
+        # Cache results with current timestamp
         _cache[message.from_user.id] = {"hits": hits, "timestamp": time.time()}
 
         await status_message.edit_text(
@@ -317,7 +319,7 @@ async def handle_media_query(message: Message):
                     )
                 ]
 
-            # Cache results
+            # Cache results with current timestamp
             _cache[message.from_user.id] = {
                 "hits": youtube_hits,
                 "timestamp": time.time(),
@@ -484,3 +486,33 @@ async def download_and_send_video(destination: Message, status: Message, info: D
     except Exception as e:
         logger.error(f"Video download error: {e}")
         await status.edit_text(f"❌ Video download error: {str(e)[:100]}")
+
+
+# ── Additional utility functions for cache management ────────────────────────
+def clear_user_cache(user_id: int) -> bool:
+    """Manually clear cache for a specific user."""
+    if user_id in _cache:
+        del _cache[user_id]
+        logger.info(f"Cleared cache for user {user_id}")
+        return True
+    return False
+
+
+def get_cache_stats() -> Dict:
+    """Get cache statistics for monitoring."""
+    current_time = time.time()
+    cache_stats = {
+        "total_users": len(_cache),
+        "total_download_queue": len(_download_queue),
+        "cache_ages": []
+    }
+
+    for user_id, data in _cache.items():
+        age_seconds = current_time - data["timestamp"]
+        cache_stats["cache_ages"].append({
+            "user_id": user_id,
+            "age_hours": age_seconds / 3600,
+            "hits_count": len(data.get("hits", []))
+        })
+
+    return cache_stats
