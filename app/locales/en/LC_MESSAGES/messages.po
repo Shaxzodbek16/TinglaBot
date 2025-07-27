@@ -315,3 +315,329 @@ msgstr "Your current balance is: {balance} 💰"
 
 msgid "Successfully removed {amount} from user {tg_id} ✅"
 msgstr "Successfully removed {amount} from user {tg_id} ✅"
+
+msgid "payment_info"
+msgstr "Connect to admin to add money to your balance 💳 {username}\n\n"
+
+msgid "payment_card_info"
+msgstr "Cart number: <code>9860350101441425</code>\nCardholder: <code>Yo'ldoshev Adhamjon</code>\nSend {premium_price} sum to this card and then send a screenshot of the payment to the given username.\n"
+
+msgid "Please send the user's Telegram ID 👤"
+msgstr "Please send the user's Telegram ID 👤"
+
+msgid "Invalid Telegram ID. Please send only numbers."
+msgstr "Invalid Telegram ID. Please send only numbers."
+
+msgid "How much do you want to add to the balance? 💵"
+msgstr "How much do you want to add to the balance? 💵"
+
+msgid "Please send a valid positive number 💸"
+msgstr "Please send a valid positive number 💸"
+
+msgid "User not found ❌"
+msgstr "User not found ❌"
+
+msgid "Successfully added {amount} to user {tg_id} ✅"
+msgstr "Successfully added {amount} to user {tg_id} ✅"
+
+msgid "How much do you want to remove from the balance? 💵"
+msgstr "How much do you want to remove from the balance? 💵"
+
+msgid "Insufficient balance to remove this amount ❌"
+msgstr "Insufficient balance to remove this amount ❌"
+
+msgid "Remove from balance"
+msgstr "Remove from balance"
+
+msgid "You are not registered in the system ❌"
+msgstr "You are not registered in the system ❌"
+
+msgid "Your current balance is: {balance} 💰"
+msgstr "Your current balance is: {balance} 💰"
+
+msgid "Successfully removed {amount} from user {tg_id} ✅"
+msgstr "Successfully removed {amount} from user {tg_id} ✅"
+
+msgid "current_requests_info"
+msgstr "Your current requests: {tokens} 💰"
+
+msgid "💲 Fill Balance"
+msgstr "💲 Fill Balance"
+
+msgid "Update Premium price"
+msgstr "Update Premium price"
+
+msgid "price_update_prompt"
+msgstr "✍️ Please send the new integer value (must be > 0), or tap 🔙 to cancel:"
+
+msgid "🔙 Back to Admin Panel"
+msgstr "🔙 Back to Admin Panel"
+
+msgid "back_to_admin_panel"
+msgstr "🔙 Returning to Admin Panel."
+
+msgid "update_cancelled"
+msgstr "🔙 Update cancelled. Here's the Admin Panel:"
+
+msgid "invalid_price_input"
+msgstr "⚠️ Invalid input. Send a positive integer or tap 🔙 Back to Admin Panel."
+
+msgid "price_updated_success"
+msgstr "✅ Tokens per referral updated to <b>{price}</b>."
+
+msgid "subscription_confirmation"
+msgstr "Do you want to activate subscription for {price} sum?"
+
+msgid "subscription_activated"
+msgstr "✅ Subscription activated!"
+
+msgid "insufficient_balance"
+msgstr "❌ Not enough balance. Please top up."
+
+msgid "payment_cancelled"
+msgstr "❌ Payment cancelled."
+
+msgid "activate_subscription_btn"
+msgstr "Activate Subscription"
+
+msgid "invite_friends_btn"
+msgstr "Invite Friends"
+
+msgid "confirm_btn"
+msgstr "✅ Confirm"
+
+msgid "cancel_btn"
+msgstr "❌ Cancel"
+
+
+msgid "view_link_btn"
+msgstr "🔗 View Link"
+
+msgid "update_btn"
+msgstr "✏️ Update"
+
+msgid "delete_btn"
+msgstr "🗑️ Delete"
+
+msgid "yes_btn"
+msgstr "✅ Yes"
+
+msgid "no_btn"
+msgstr "❌ No"
+
+msgid "check_subscription_btn"
+msgstr "✅ Check"
+msgid "download_music_btn"
+msgstr "Download music"
+
+
+msgid "admin_panel_welcome"
+msgstr "🛠 <b>Admin Panel</b>\n\n👋 Welcome, admin!\nPlease choose an action from the menu below to manage the bot and users effectively."
+
+msgid "user_export_caption"
+msgstr "📊 <b>User Export</b>\n\n✅ <b>File:</b> <code>{file_name}</code>\n🕒 <b>Generated:</b> <code>{generated_time}</code>"
+
+msgid "export_failed_error"
+msgstr "❌ Failed to generate export:\n<code>{error}</code>"
+
+msgid "user_growth_header"
+msgstr "👥 <b>User Growth & Referral Leaders</b>\n"
+
+msgid "stats_today"
+msgstr "📅 Today: <b>{count}</b> new"
+
+msgid "stats_yesterday"
+msgstr "📅 Yesterday: <b>{count}</b>"
+
+msgid "stats_last_week"
+msgstr "📅 Last 7 days: <b>{count}</b>"
+
+msgid "stats_last_month"
+msgstr "📅 Last month: <b>{count}</b>"
+
+msgid "stats_last_year"
+msgstr "📅 Last year: <b>{count}</b>"
+
+msgid "stats_all_time"
+msgstr "📅 All time: <b>{count}</b>\n"
+
+msgid "top_referrers_header"
+msgstr "🔥 <b>Top 10 Referrers</b>:"
+
+msgid "referrer_item"
+msgstr "{idx}. {name} (<code>{tg_id}</code>) — {count} refs"
+
+msgid "connected_channels_header"
+msgstr "\n📡 <b>Connected Telegram Channels</b>:"
+
+msgid "channel_active"
+msgstr "🟢 Active"
+
+msgid "channel_inactive"
+msgstr "🔴 Inactive"
+
+msgid "channel_item"
+msgstr "{idx}. <a href='{link}'>{name}</a> — {status}"
+
+msgid "no_channels_connected"
+msgstr "\nNo channels connected."
+
+msgid "usage_statistics_header"
+msgstr "\n📊 <b>Usage Statistics</b>:"
+
+msgid "usage_from_text"
+msgstr "• Text usage count: <b>{count}</b>"
+
+msgid "usage_from_voice"
+msgstr "• Voice usage count: <b>{count}</b>"
+
+msgid "usage_from_youtube"
+msgstr "• YouTube usage count: <b>{count}</b>"
+
+msgid "usage_from_tiktok"
+msgstr "• TikTok usage count: <b>{count}</b>"
+
+msgid "usage_from_like"
+msgstr "• Likee usage count: <b>{count}</b>"
+
+msgid "usage_from_snapchat"
+msgstr "• Snapchat usage count: <b>{count}</b>"
+
+msgid "usage_from_instagram"
+msgstr "• Instagram usage count: <b>{count}</b>"
+
+msgid "usage_from_twitter"
+msgstr "• Twitter usage count: <b>{count}</b>"
+
+msgid "current_token_and_price"
+msgstr "Current token count: <b>{tokens}</b>\n\nCurrent premium price: <b>{price}</b> tokens"
+
+msgid "settings_page"
+msgstr "🔧 <b>Settings</b>\n\nHere you can adjust the bot's settings, including notification preferences, language options, and more."
+
+msgid "channels_page"
+msgstr "📈 <b>Channels</b>\n\nHere you can manage the channels associated with the bot, including adding, editing, and deleting channels."
+
+msgid "broadcast_cancelled"
+msgstr "🔙 Broadcast cancelled."
+
+msgid "back_to_admin_panel_welcome"
+msgstr "🔙 <b>Admin Panel</b>\n\nWelcome back! Please choose the action you'd like to perform:"
+
+msgid "settings_overview"
+msgstr "⚙️ <b>Settings</b>\n\n🔢 Current tokens per referral: <b>{current_tokens}</b>\n\nCurrent premium {premium_price}: <b>100</b> tokens\n\n"
+
+msgid "ask_new_token_value"
+msgstr "✍️ Please send the new integer value (must be > 0), or tap 🔙 to cancel:"
+
+msgid "returning_to_admin_panel"
+msgstr "🔙 Returning to Admin Panel."
+
+msgid "token_update_cancelled"
+msgstr "🔙 Update cancelled. Here's the Admin Panel:"
+
+msgid "invalid_token_input"
+msgstr "⚠️ Invalid input. Send a positive integer or tap 🔙 Back to Admin Panel."
+
+msgid "token_updated_success"
+msgstr "✅ Tokens per referral updated to <b>{tokens}</b>."
+
+msgid "broadcast_start_message"
+msgstr "📢 <b>Broadcast to All Users</b>\n\nSend me the message text in <i>HTML</i> format:"
+
+msgid "broadcast_html_instructions"
+msgstr "📢 <b>Broadcast to All Users</b>\n\nSend me your message using these HTML tags:\n\n<b>bold</b> — <code>&lt;b&gt;bold&lt;/b&gt;</code>\n<i>italic</i> — <code>&lt;i&gt;italic&lt;/i&gt;</code>\n<u>underline</u> — <code>&lt;u&gt;underline&lt;/u&gt;</code>\n<a href=\"URL\">link</a> — <code>&lt;a href=\"URL\"&gt;link&lt;/a&gt;</code>\n<code>inline code</code> — <code>&lt;code&gt;…&lt;/code&gt;</code>\n<pre>preformatted</pre> — <code>&lt;pre&gt;…&lt;/pre&gt;</code>\n\nThen hit Send. I'll parse it as HTML and broadcast it."
+
+msgid "ask_for_media"
+msgstr "🎞 Would you like to include a photo, video, or document?"
+
+msgid "broadcast_started"
+msgstr "✅ Broadcast started in background. I'll ping you when it's done."
+
+msgid "broadcast_with_media_started"
+msgstr "✅ Broadcast with media started in background."
+
+
+msgid "📋 <b>Channel List</b>"
+msgstr "📋 <b>Channel List</b>"
+
+msgid "Here you can view the list of channels that have been added."
+msgstr "Here you can view the list of channels that have been added."
+
+msgid "Use the buttons below to manage your channels."
+msgstr "Use the buttons below to manage your channels."
+
+msgid "🗑️ Channel %(channel_id)d deleted."
+msgstr "🗑️ Channel %(channel_id)d deleted."
+
+msgid "❌ Channel not found."
+msgstr "❌ Channel not found."
+
+msgid "Active"
+msgstr "Active"
+
+msgid "Inactive"
+msgstr "Inactive"
+
+msgid "📺 <b>Channel Info</b>"
+msgstr "📺 <b>Channel Info</b>"
+
+msgid "<b>Name:</b> %(name)s"
+msgstr "<b>Name:</b> %(name)s"
+
+msgid "<b>Link:</b> %(link)s"
+msgstr "<b>Link:</b> %(link)s"
+
+msgid "<b>Status:</b> %(status)s"
+msgstr "<b>Status:</b> %(status)s"
+
+msgid "📣 Please send the <b>channel name</b>:"
+msgstr "📣 Please send the <b>channel name</b>:"
+
+msgid "🔗 Now send the <b>channel link</b> (e.g. https://t.me/yourchannel):"
+msgstr "🔗 Now send the <b>channel link</b> (e.g. https://t.me/yourchannel):"
+
+msgid "🆔 Please send the <b>numeric channel ID</b> (only digits):"
+msgstr "🆔 Please send the <b>numeric channel ID</b> (only digits):"
+
+msgid "✅ Should this channel be active?"
+msgstr "✅ Should this channel be active?"
+
+msgid "❗️ Please send a valid numeric channel ID (example: <code>-1001234567890</code>)."
+msgstr "❗️ Please send a valid numeric channel ID (example: <code>-1001234567890</code>)."
+
+msgid "❓ Please tap ✅ Yes or ❌ No."
+msgstr "❓ Please tap ✅ Yes or ❌ No."
+
+msgid "⚠️ That link is already in use. Please start over with a unique channel link."
+msgstr "⚠️ That link is already in use. Please start over with a unique channel link."
+
+msgid "⚠️ That channel ID is already in use. Please start over with a unique ID."
+msgstr "⚠️ That channel ID is already in use. Please start over with a unique ID."
+
+msgid "❌ Database error:\n<code>%(error)s</code>"
+msgstr "❌ Database error:\n<code>%(error)s</code>"
+
+msgid "🎉 Channel <b>%(name)s</b> has been added successfully!\nMake sure to set the channel's privacy settings to allow the bot to access it."
+msgstr "🎉 Channel <b>%(name)s</b> has been added successfully!\nMake sure to set the channel's privacy settings to allow the bot to access it."
+
+msgid "✏️ <b>Update Channel Name</b>\n\nSend the new name or tap ⏭ Skip to keep the old one:"
+msgstr "✏️ <b>Update Channel Name</b>\n\nSend the new name or tap ⏭ Skip to keep the old one:"
+
+msgid "🔗 <b>Update Channel Link</b>\n\nSend the new link or tap ⏭ Skip to keep the old one:"
+msgstr "🔗 <b>Update Channel Link</b>\n\nSend the new link or tap ⏭ Skip to keep the old one:"
+
+msgid "⚠️ That link exists. Send a unique link or tap ⏭ Skip:"
+msgstr "⚠️ That link exists. Send a unique link or tap ⏭ Skip:"
+
+msgid "❌ DB error:\n<code>%(error)s</code>"
+msgstr "❌ DB error:\n<code>%(error)s</code>"
+
+msgid "✅ Channel <b>%(name)s</b> updated!\n🔗 Link: <code>%(link)s</code>"
+msgstr "✅ Channel <b>%(name)s</b> updated!\n🔗 Link: <code>%(link)s</code>"
+
+msgid "🚫 You still need to join these channels."
+msgstr "🚫 You still need to join these channels."
+
+msgid "You have no any requests left. 😢"
+msgstr "You have no any requests left. 😢"

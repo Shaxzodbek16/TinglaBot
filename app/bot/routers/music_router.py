@@ -229,7 +229,7 @@ async def handle_text_query(message: Message):
     # Ensure cleanup task is running
     res = await remove_token(message)
     if not res:
-        await message.answer("You have no any requests left.", reply_markup=get_payment_keyboard())
+        await message.answer(_("You have no any requests left. 😢"), reply_markup=get_payment_keyboard())
         return
 
     _start_cleanup_task()

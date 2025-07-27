@@ -5,6 +5,7 @@ from aiogram.types import (
     KeyboardButton,
     ReplyKeyboardMarkup,
 )
+from aiogram.utils.i18n import gettext as _
 from app.core.settings.config import get_settings, Settings
 
 settings: Settings = get_settings()
@@ -13,7 +14,7 @@ settings: Settings = get_settings()
 def get_music_download_button(media_name: str):
     buttons = [
         InlineKeyboardButton(
-            text="Download music", callback_data=f"{media_name}:download_music"
+            text=_("download_music_btn"), callback_data=f"{media_name}:download_music"
         ),
     ]
 

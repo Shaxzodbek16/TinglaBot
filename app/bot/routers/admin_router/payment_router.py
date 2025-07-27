@@ -18,7 +18,7 @@ from aiogram.fsm.context import FSMContext
 from app.bot.handlers.user_handlers import (
     get_user_by_tg_id,
     add_user_balance,
-    remove_user_balance,
+    remove_user_balance, update_user_premium_time,
 )
 
 router = Router()
@@ -32,10 +32,7 @@ async def payment_handler(message: Message):
 
     premium_price = await get_premium_price()
     await message.answer(
-        "Cart number: <code>9860350101441425</code>\n"
-        "Cardholder: <code>Yo'ldoshev Adhamjon</code>\n"
-        f"Send {premium_price} sum to this card and then send a screenshot of the payment to the given username.\n"
-        ,
+        _("payment_card_info").format(premium_price=premium_price),
         parse_mode="HTML",
     )
 
@@ -53,7 +50,7 @@ async def balance_handler(message: Message):
     await message.answer(
         _("Your current balance is: {balance} 💰").format(balance=balance)
     )
-    await message.answer(f"Your current requests is: {user.tokens} 💰")
+    await message.answer(_("current_requests_info").format(tokens=user.tokens))
     return None
 
 
@@ -160,7 +157,7 @@ class PriceForm(StatesGroup):
 async def ask_new_price_value(message: Message, state: FSMContext):
     await state.set_state(PriceForm.waiting_for_price)
     await message.answer(
-        text="✍️ Please send the new integer value (must be > 0), or tap 🔙 to cancel:",
+        text=_("price_update_prompt"),
         reply_markup=ReplyKeyboardMarkup(
             keyboard=[[KeyboardButton(text="🔙 Back to Admin Panel")]],
             resize_keyboard=True,
@@ -172,7 +169,7 @@ async def ask_new_price_value(message: Message, state: FSMContext):
 @router.message(AdminFilter(), F.text == "🔙 Back to Admin Panel", ~F.state)
 async def back_from_menu(message: Message, state: FSMContext):
     await message.answer(
-        "🔙 Returning to Admin Panel.", reply_markup=get_admin_panel_keyboard()
+        _("back_to_admin_panel"), reply_markup=get_admin_panel_keyboard()
     )
 
 
@@ -182,7 +179,7 @@ async def back_from_menu(message: Message, state: FSMContext):
 async def cancel_update(message: Message, state: FSMContext):
     await state.clear()
     await message.answer(
-        "🔙 Update cancelled. Here’s the Admin Panel:",
+        _("update_cancelled"),
         reply_markup=get_admin_panel_keyboard(),
     )
 
@@ -196,7 +193,7 @@ async def process_new_price_value(message: Message, state: FSMContext):
             raise ValueError()
     except ValueError:
         await message.answer(
-            "⚠️ Invalid input. Send a positive integer or tap 🔙 Back to Admin Panel.",
+            _("invalid_price_input"),
             reply_markup=ReplyKeyboardMarkup(
                 keyboard=[[KeyboardButton(text="🔙 Back to Admin Panel")]],
                 resize_keyboard=True,
@@ -208,7 +205,7 @@ async def process_new_price_value(message: Message, state: FSMContext):
     await update_premium_price(val)
     await state.clear()
     await message.answer(
-        text=f"✅ Tokens per referral updated to <b>{val}</b>.",
+        text=_("price_updated_success").format(price=val),
         parse_mode="HTML",
         reply_markup=get_admin_panel_keyboard(),
     )
@@ -216,8 +213,9 @@ async def process_new_price_value(message: Message, state: FSMContext):
 
 @router.callback_query(F.data == "activate_subscription")
 async def ask_confirmation(callback: CallbackQuery, state: FSMContext):
+    price = await get_premium_price()
     await callback.message.answer(
-        f"Do you want to activate subscription for {await get_premium_price()} sum?",
+        _("subscription_confirmation").format(price=price),
         reply_markup=get_confirmation_keyboard()
     )
     await callback.answer()
@@ -232,11 +230,12 @@ async def confirm_payment(callback: CallbackQuery):
     if user.balance >= sub_price:
         try:
             await remove_user_balance(user_id, sub_price)
-            return await callback.message.answer("✅ Subscription activated!")
+            await update_user_premium_time(user_id)
+            return await callback.message.answer(_("subscription_activated"))
         except ValueError:
-            return await callback.message.answer("❌ Not enough balance. Please top up.")
+            return await callback.message.answer(_("insufficient_balance"))
     else:
-        await callback.message.answer("❌ Not enough balance. Please top up.")
+        await callback.message.answer(_("insufficient_balance"))
 
     await callback.answer()
     return None
@@ -244,5 +243,5 @@ async def confirm_payment(callback: CallbackQuery):
 
 @router.callback_query(F.data == "cancel_payment")
 async def cancel_payment(callback: CallbackQuery):
-    await callback.message.answer("❌ Payment cancelled.")
+    await callback.message.answer(_("payment_cancelled"))
     await callback.answer()

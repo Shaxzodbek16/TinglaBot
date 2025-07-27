@@ -45,7 +45,7 @@ def extract_audio_from_video(video_path: str) -> str | None:
 async def handle_pinterest_link(message: Message):
     res = await remove_token(message)
     if not res:
-        await message.answer("You have no any requests left.", reply_markup=get_payment_keyboard())
+        await message.answer(_("You have no any requests left. 😢"), reply_markup=get_payment_keyboard())
         return
     await message.answer(_("pinterest_detected"))
 

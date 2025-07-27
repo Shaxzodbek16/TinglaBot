@@ -9,6 +9,7 @@ from aiogram.types import (
 )
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import StatesGroup, State
+from aiogram.utils.i18n import gettext as _
 
 from app.bot.filters.admin_filter import AdminFilter
 from app.bot.handlers.admin import (
@@ -38,22 +39,21 @@ async def open_settings(message: Message, state: FSMContext):
     current = await get_token_per_referral()
     price = await get_premium_price()
     await message.answer(
-        text=(
-            "⚙️ <b>Settings</b>\n\n"
-            f"🔢 Current tokens per referral: <b>{current}</b>\n\n"
-            f"Current premium {price}: <b>100</b> tokens\n\n"
+        text=_("settings_overview").format(
+            current_tokens=current,
+            premium_price=price
         ),
         parse_mode="HTML",
         reply_markup=settings_keyboard(),
     )
 
 
-# 2️⃣ Admin taps “Update Tokens per Referral”
+# 2️⃣ Admin taps "Update Tokens per Referral"
 @settings_router.message(AdminFilter(), F.text == "Update Tokens per Referral")
 async def ask_new_token_value(message: Message, state: FSMContext):
     await state.set_state(SettingsForm.waiting_for_token)
     await message.answer(
-        text="✍️ Please send the new integer value (must be > 0), or tap 🔙 to cancel:",
+        text=_("ask_new_token_value"),
         reply_markup=ReplyKeyboardMarkup(
             keyboard=[[KeyboardButton(text="🔙 Back to Admin Panel")]],
             resize_keyboard=True,
@@ -65,7 +65,7 @@ async def ask_new_token_value(message: Message, state: FSMContext):
 @settings_router.message(AdminFilter(), F.text == "🔙 Back to Admin Panel", ~F.state)
 async def back_from_menu(message: Message, state: FSMContext):
     await message.answer(
-        "🔙 Returning to Admin Panel.", reply_markup=get_admin_panel_keyboard()
+        _("returning_to_admin_panel"), reply_markup=get_admin_panel_keyboard()
     )
 
 
@@ -75,7 +75,7 @@ async def back_from_menu(message: Message, state: FSMContext):
 async def cancel_update(message: Message, state: FSMContext):
     await state.clear()
     await message.answer(
-        "🔙 Update cancelled. Here’s the Admin Panel:",
+        _("token_update_cancelled"),
         reply_markup=get_admin_panel_keyboard(),
     )
 
@@ -89,7 +89,7 @@ async def process_new_token_value(message: Message, state: FSMContext):
             raise ValueError()
     except ValueError:
         await message.answer(
-            "⚠️ Invalid input. Send a positive integer or tap 🔙 Back to Admin Panel.",
+            _("invalid_token_input"),
             reply_markup=ReplyKeyboardMarkup(
                 keyboard=[[KeyboardButton(text="🔙 Back to Admin Panel")]],
                 resize_keyboard=True,
@@ -101,7 +101,7 @@ async def process_new_token_value(message: Message, state: FSMContext):
     await update_token_per_referral(val)
     await state.clear()
     await message.answer(
-        text=f"✅ Tokens per referral updated to <b>{val}</b>.",
+        text=_("token_updated_success").format(tokens=val),
         parse_mode="HTML",
         reply_markup=get_admin_panel_keyboard(),
     )
@@ -112,21 +112,12 @@ async def process_new_token_value(message: Message, state: FSMContext):
 async def start_broadcast(message: Message, state: FSMContext):
     await state.clear()
     await message.answer(
-        "📢 <b>Broadcast to All Users</b>\n\n"
-        "Send me the message text in <i>HTML</i> format:",
+        _("broadcast_start_message"),
         parse_mode="HTML",
         reply_markup=back_to_admin_kb,
     )
     await message.answer(
-        "📢 <b>Broadcast to All Users</b>\n\n"
-        "Send me your message using these HTML tags:\n\n"
-        "<b>bold</b> — <code>&lt;b&gt;bold&lt;/b&gt;</code>\n"
-        "<i>italic</i> — <code>&lt;i&gt;italic&lt;/i&gt;</code>\n"
-        "<u>underline</u> — <code>&lt;u&gt;underline&lt;/u&gt;</code>\n"
-        '<a href="URL">link</a> — <code>&lt;a href="URL"&gt;link&lt;/a&gt;</code>\n'
-        "<code>inline code</code> — <code>&lt;code&gt;…&lt;/code&gt;</code>\n"
-        "<pre>preformatted</pre> — <code>&lt;pre&gt;…&lt;/pre&gt;</code>\n\n"
-        "Then hit Send. I’ll parse it as HTML and broadcast it.",
+        _("broadcast_html_instructions"),
         parse_mode="HTML",
         reply_markup=back_to_admin_kb,
     )
@@ -137,7 +128,7 @@ async def start_broadcast(message: Message, state: FSMContext):
 async def process_broadcast_text(message: Message, state: FSMContext):
     await state.update_data(text=message.text)
     await message.answer(
-        "🎞 Would you like to include a photo, video, or document?",
+        _("ask_for_media"),
         reply_markup=ask_media_kb,
     )
     await state.set_state(BroadcastForm.waiting_for_media)
@@ -152,7 +143,7 @@ async def skip_broadcast_media(message: Message, state: FSMContext):
         run_broadcast(text=data["text"], media=None, admin_id=message.chat.id)
     )
     await message.answer(
-        "✅ Broadcast started in background. I’ll ping you when it’s done.",
+        _("broadcast_started"),
         parse_mode="HTML",
         reply_markup=get_admin_panel_keyboard(),
     )
@@ -177,7 +168,7 @@ async def process_broadcast_media(message: Message, state: FSMContext):
         run_broadcast(text=data["text"], media=media, admin_id=message.chat.id)
     )
     await message.answer(
-        "✅ Broadcast with media started in background.",
+        _("broadcast_with_media_started"),
         parse_mode="HTML",
         reply_markup=get_admin_panel_keyboard(),
     )

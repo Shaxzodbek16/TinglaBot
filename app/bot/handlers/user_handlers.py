@@ -1,4 +1,5 @@
 from aiogram.types import Message
+from datetime import datetime, timedelta
 
 from app.bot.models import User, AdminRequirements
 from app.core.databases.postgres import get_general_session
@@ -113,6 +114,8 @@ async def remove_user_balance(tg_id: int, amount: float) -> User:
 async def remove_token(message: Message) -> bool:
     async with get_general_session() as session:
         user = await get_user_by_tg_id(message.from_user.id)
+        if user.subscription_expiry and user.subscription_expiry > datetime.now():
+            return True
         if user.tokens > 0:
             user.tokens -= 1
             session.add(user)
@@ -130,6 +133,17 @@ async def add_tokens(user_id: int):
         token = token_obj.referral_count_for_free_month if token_obj else 10
         if user:
             user.tokens += token
+            session.add(user)
+            await session.commit()
+            return user
+        return None
+
+
+async def update_user_premium_time(tg_id):
+    async with get_general_session() as session:
+        user = await get_user_by_tg_id(tg_id)
+        if user:
+            user.subscription_expiry = datetime.now() + timedelta(days=31) + timedelta(hours=23, minutes=59, seconds=59)
             session.add(user)
             await session.commit()
             return user

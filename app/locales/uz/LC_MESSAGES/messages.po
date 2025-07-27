@@ -292,3 +292,327 @@ msgstr "Joriy balansingiz: {balance} 💰"
 
 msgid "Successfully removed {amount} from user {tg_id} ✅"
 msgstr "{tg_id} foydalanuvchisidan {amount} yechildi ✅"
+
+msgid "payment_info"
+msgstr "Balansni to'ldirish uchun adminga murojaat qiling 💳 {username}\n\n"
+
+msgid "payment_card_info"
+msgstr "Karta raqami: <code>9860350101441425</code>\nEgasi: <code>Yo'ldoshev Adhamjon</code>\n{premium_price} so'mni ushbu kartaga o'tkazing va to'lov skrinshotini berilgan usernamega yuboring.\n"
+
+msgid "Please send the user's Telegram ID 👤"
+msgstr "Iltimos, foydalanuvchining Telegram ID sini yuboring 👤"
+
+msgid "Invalid Telegram ID. Please send only numbers."
+msgstr "Noto'g'ri Telegram ID. Faqat raqamlarni yuboring."
+
+msgid "How much do you want to add to the balance? 💵"
+msgstr "Balansga qancha qo'shmoqchisiz? 💵"
+
+msgid "Please send a valid positive number 💸"
+msgstr "Iltimos, to'g'ri musbat sonni yuboring 💸"
+
+msgid "User not found ❌"
+msgstr "Foydalanuvchi topilmadi ❌"
+
+msgid "Successfully added {amount} to user {tg_id} ✅"
+msgstr "{tg_id} foydalanuvchiga {amount} muvaffaqiyatli qo'shildi ✅"
+
+msgid "How much do you want to remove from the balance? 💵"
+msgstr "Balansdan qancha olib tashlamoqchisiz? 💵"
+
+msgid "Insufficient balance to remove this amount ❌"
+msgstr "Bu miqdorni olib tashlash uchun mablag' yetarli emas ❌"
+
+msgid "Remove from balance"
+msgstr "Balansdan olib tashlash"
+
+msgid "You are not registered in the system ❌"
+msgstr "Sizning hisobingiz tizimda ro'yxatdan o'tmagan ❌"
+
+msgid "Your current balance is: {balance} 💰"
+msgstr "Sizning joriy balansingiz: {balance} 💰"
+
+msgid "Successfully removed {amount} from user {tg_id} ✅"
+msgstr "{tg_id} foydalanuvchidan {amount} muvaffaqiyatli olib tashlandi ✅"
+
+msgid "current_requests_info"
+msgstr "Sizning joriy so'rovlaringiz: {tokens} 💰"
+
+msgid "💲 Fill Balance"
+msgstr "💲 Balansni to'ldirish"
+
+msgid "Update Premium price"
+msgstr "Premium narxini yangilash"
+
+msgid "price_update_prompt"
+msgstr "✍️ Iltimos, yangi butun son qiymatini yuboring (0 dan katta bo'lishi kerak), yoki bekor qilish uchun 🔙 ni bosing:"
+
+msgid "🔙 Back to Admin Panel"
+msgstr "🔙 Admin panelga qaytish"
+
+msgid "back_to_admin_panel"
+msgstr "🔙 Admin panelga qaytilmoqda."
+
+msgid "update_cancelled"
+msgstr "🔙 Yangilash bekor qilindi. Mana Admin panel:"
+
+msgid "invalid_price_input"
+msgstr "⚠️ Noto'g'ri ma'lumot. Musbat son yuboring yoki 🔙 Admin panelga qaytish tugmasini bosing."
+
+msgid "price_updated_success"
+msgstr "✅ Referal uchun tokenlar <b>{price}</b> ga yangilandi."
+
+msgid "subscription_confirmation"
+msgstr "{price} so'm evaziga obunani faollashtirmoqchimisiz?"
+
+msgid "subscription_activated"
+msgstr "✅ Obuna faollashtirildi!"
+
+msgid "insufficient_balance"
+msgstr "❌ Mablag' yetarli emas. Iltimos, balansni to'ldiring."
+
+msgid "payment_cancelled"
+msgstr "❌ To'lov bekor qilindi."
+
+msgid "activate_subscription_btn"
+msgstr "Obunani faollashtirish"
+
+msgid "invite_friends_btn"
+msgstr "Do'stlarni taklif qilish"
+
+msgid "confirm_btn"
+msgstr "✅ Tasdiqlash"
+
+msgid "cancel_btn"
+msgstr "❌ Bekor qilish"
+
+msgid "view_link_btn"
+msgstr "🔗 Havolani ko'rish"
+
+msgid "update_btn"
+msgstr "✏️ Yangilash"
+
+msgid "delete_btn"
+msgstr "🗑️ O'chirish"
+
+msgid "yes_btn"
+msgstr "✅ Ha"
+
+msgid "no_btn"
+msgstr "❌ Yo'q"
+
+msgid "check_subscription_btn"
+msgstr "✅ Tekshirish"
+
+msgid "download_music_btn"
+msgstr "Musikani yuklab olish"
+
+msgid "admin_panel_welcome"
+msgstr "🛠 <b>Admin panel</b>\n\n👋 Xush kelibsiz, admin!\nBot va foydalanuvchilarni samarali boshqarish uchun quyidagi menyudan amalni tanlang."
+
+msgid "user_export_caption"
+msgstr "📊 <b>Foydalanuvchilar eksporti</b>\n\n✅ <b>Fayl:</b> <code>{file_name}</code>\n🕒 <b>Yaratilgan:</b> <code>{generated_time}</code>"
+
+msgid "export_failed_error"
+msgstr "❌ Eksport yaratishda xatolik:\n<code>{error}</code>"
+
+msgid "user_growth_header"
+msgstr "👥 <b>Foydalanuvchilar o'sishi va referal liderlari</b>\n"
+
+msgid "stats_today"
+msgstr "📅 Bugun: <b>{count}</b> yangi"
+
+msgid "stats_yesterday"
+msgstr "📅 Kecha: <b>{count}</b>"
+
+msgid "stats_last_week"
+msgstr "📅 So'nggi 7 kun: <b>{count}</b>"
+
+msgid "stats_last_month"
+msgstr "📅 So'nggi oy: <b>{count}</b>"
+
+msgid "stats_last_year"
+msgstr "📅 So'nggi yil: <b>{count}</b>"
+
+msgid "stats_all_time"
+msgstr "📅 Barcha vaqt: <b>{count}</b>\n"
+
+msgid "top_referrers_header"
+msgstr "🔥 <b>Top 10 referalchilar</b>:"
+
+msgid "referrer_item"
+msgstr "{idx}. {name} (<code>{tg_id}</code>) — {count} referal"
+
+msgid "connected_channels_header"
+msgstr "\n📡 <b>Ulangan Telegram kanallari</b>:"
+
+msgid "channel_active"
+msgstr "🟢 Faol"
+
+msgid "channel_inactive"
+msgstr "🔴 Nofaol"
+
+msgid "channel_item"
+msgstr "{idx}. <a href='{link}'>{name}</a> — {status}"
+
+msgid "no_channels_connected"
+msgstr "\nKanallar ulanmagan."
+
+msgid "usage_statistics_header"
+msgstr "\n📊 <b>Foydalanish statistikasi</b>:"
+
+msgid "usage_from_text"
+msgstr "• Matndan foydalanishlar soni: <b>{count}</b>"
+
+msgid "usage_from_voice"
+msgstr "• Ovozdan foydalanishlar soni: <b>{count}</b>"
+
+msgid "usage_from_youtube"
+msgstr "• YouTube'dan foydalanishlar soni: <b>{count}</b>"
+
+msgid "usage_from_tiktok"
+msgstr "• TikTok'dan foydalanishlar soni: <b>{count}</b>"
+
+msgid "usage_from_like"
+msgstr "• Likee'dan foydalanishlar soni: <b>{count}</b>"
+
+msgid "usage_from_snapchat"
+msgstr "• Snapchat'dan foydalanishlar soni: <b>{count}</b>"
+
+msgid "usage_from_instagram"
+msgstr "• Instagram'dan foydalanishlar soni: <b>{count}</b>"
+
+msgid "usage_from_twitter"
+msgstr "• Twitter'dan foydalanishlar soni: <b>{count}</b>"
+
+msgid "current_token_and_price"
+msgstr "Joriy token soni: <b>{tokens}</b>\n\nJoriy premium narxi: <b>{price}</b> token"
+
+msgid "settings_page"
+msgstr "🔧 <b>Sozlamalar</b>\n\nBu yerda siz bot sozlamalarini o'zgartirishingiz mumkin, jumladan bildirishnoma sozlamalari, til tanlovlari va boshqalar."
+
+msgid "channels_page"
+msgstr "📈 <b>Kanallar</b>\n\nBu yerda siz bot bilan bog'langan kanallarni boshqarishingiz mumkin, jumladan kanallar qo'shish, tahrirlash va o'chirish."
+
+msgid "broadcast_cancelled"
+msgstr "🔙 Ommaviy xabar bekor qilindi."
+
+msgid "back_to_admin_panel_welcome"
+msgstr "🔙 <b>Admin panel</b>\n\nXush kelibsiz! Bajarmoqchi bo'lgan amalni tanlang:"
+
+msgid "settings_overview"
+msgstr "⚙️ <b>Sozlamalar</b>\n\n🔢 Joriy referal uchun tokenlar: <b>{current_tokens}</b>\n\nJoriy premium narxi {premium_price}: <b>100</b> token\n\n"
+
+msgid "ask_new_token_value"
+msgstr "✍️ Iltimos, yangi butun son qiymatini yuboring (0 dan katta bo'lishi kerak), yoki bekor qilish uchun 🔙 ni bosing:"
+
+msgid "returning_to_admin_panel"
+msgstr "🔙 Admin panelga qaytilmoqda."
+
+msgid "token_update_cancelled"
+msgstr "🔙 Yangilash bekor qilindi. Mana Admin panel:"
+
+msgid "invalid_token_input"
+msgstr "⚠️ Noto'g'ri ma'lumot. Musbat son yuboring yoki 🔙 Admin panelga qaytish tugmasini bosing."
+
+msgid "token_updated_success"
+msgstr "✅ Referal uchun tokenlar <b>{tokens}</b> ga yangilandi."
+
+msgid "broadcast_start_message"
+msgstr "📢 <b>Barcha foydalanuvchilarga xabar</b>\n\nMenga xabar matnini <i>HTML</i> formatida yuboring:"
+
+msgid "broadcast_html_instructions"
+msgstr "📢 <b>Barcha foydalanuvchilarga xabar</b>\n\nXabaringizni ushbu HTML teglar yordamida yuboring:\n\n<b>qalin</b> — <code>&lt;b&gt;qalin&lt;/b&gt;</code>\n<i>qiyshiq</i> — <code>&lt;i&gt;qiyshiq&lt;/i&gt;</code>\n<u>chizilgan</u> — <code>&lt;u&gt;chizilgan&lt;/u&gt;</code>\n<a href=\"URL\">havola</a> — <code>&lt;a href=\"URL\"&gt;havola&lt;/a&gt;</code>\n<code>kod</code> — <code>&lt;code&gt;…&lt;/code&gt;</code>\n<pre>formatlangan</pre> — <code>&lt;pre&gt;…&lt;/pre&gt;</code>\n\nKeyin Yuborish tugmasini bosing. Men buni HTML sifatida qayta ishlayman va hammaga yuboraman."
+
+msgid "ask_for_media"
+msgstr "🎞 Foto, video yoki hujjat qo'shishni xohlaysizmi?"
+
+msgid "broadcast_started"
+msgstr "✅ Xabar yuborish fonda boshlandi. Tugagach sizga xabar beraman."
+
+msgid "broadcast_with_media_started"
+msgstr "✅ Media bilan xabar yuborish fonda boshlandi."
+
+msgid "📋 <b>Channel List</b>"
+msgstr "📋 <b>Kanallar ro'yxati</b>"
+
+msgid "Here you can view the list of channels that have been added."
+msgstr "Bu yerda qo'shilgan kanallar ro'yxatini ko'rishingiz mumkin."
+
+msgid "Use the buttons below to manage your channels."
+msgstr "Kanallaringizni boshqarish uchun quyidagi tugmalardan foydalaning."
+
+msgid "🗑️ Channel %(channel_id)d deleted."
+msgstr "🗑️ %(channel_id)d kanal o'chirildi."
+
+msgid "❌ Channel not found."
+msgstr "❌ Kanal topilmadi."
+
+msgid "Active"
+msgstr "Faol"
+
+msgid "Inactive"
+msgstr "Nofaol"
+
+msgid "📺 <b>Channel Info</b>"
+msgstr "📺 <b>Kanal ma'lumotlari</b>"
+
+msgid "<b>Name:</b> %(name)s"
+msgstr "<b>Nomi:</b> %(name)s"
+
+msgid "<b>Link:</b> %(link)s"
+msgstr "<b>Havola:</b> %(link)s"
+
+msgid "<b>Status:</b> %(status)s"
+msgstr "<b>Holati:</b> %(status)s"
+
+msgid "📣 Please send the <b>channel name</b>:"
+msgstr "📣 Iltimos, <b>kanal nomini</b> yuboring:"
+
+msgid "🔗 Now send the <b>channel link</b> (e.g. https://t.me/yourchannel):"
+msgstr "🔗 Endi <b>kanal havolasini</b> yuboring (masalan: https://t.me/yourchannel):"
+
+msgid "🆔 Please send the <b>numeric channel ID</b> (only digits):"
+msgstr "🆔 Iltimos, <b>kanal raqamli ID sini</b> yuboring (faqat raqamlar):"
+
+msgid "✅ Should this channel be active?"
+msgstr "✅ Bu kanal faol bo'lishi kerakmi?"
+
+msgid "❗️ Please send a valid numeric channel ID (example: <code>-1001234567890</code>)."
+msgstr "❗️ Iltimos, to'g'ri raqamli kanal ID sini yuboring (masalan: <code>-1001234567890</code>)."
+
+msgid "❓ Please tap ✅ Yes or ❌ No."
+msgstr "❓ Iltimos, ✅ Ha yoki ❌ Yo'q tugmasini bosing."
+
+msgid "⚠️ That link is already in use. Please start over with a unique channel link."
+msgstr "⚠️ Bu havola allaqachon ishlatilmoqda. Iltimos, noyob kanal havolasi bilan qaytadan boshlang."
+
+msgid "⚠️ That channel ID is already in use. Please start over with a unique ID."
+msgstr "⚠️ Bu kanal ID si allaqachon ishlatilmoqda. Iltimos, noyob ID bilan qaytadan boshlang."
+
+msgid "❌ Database error:\n<code>%(error)s</code>"
+msgstr "❌ Ma'lumotlar bazasi xatosi:\n<code>%(error)s</code>"
+
+msgid "🎉 Channel <b>%(name)s</b> has been added successfully!\nMake sure to set the channel's privacy settings to allow the bot to access it."
+msgstr "🎉 <b>%(name)s</b> kanal muvaffaqiyatli qo'shildi!\nBotning kanalga kirish imkoniga ega bo'lishi uchun kanal maxfiylik sozlamalarini o'rnatganingizga ishonch hosil qiling."
+
+msgid "✏️ <b>Update Channel Name</b>\n\nSend the new name or tap ⏭ Skip to keep the old one:"
+msgstr "✏️ <b>Kanal nomini yangilash</b>\n\nYangi nomni yuboring yoki eskisini saqlash uchun ⏭ O'tkazib yuborish tugmasini bosing:"
+
+msgid "🔗 <b>Update Channel Link</b>\n\nSend the new link or tap ⏭ Skip to keep the old one:"
+msgstr "🔗 <b>Kanal havolasini yangilash</b>\n\nYangi havolani yuboring yoki eskisini saqlash uchun ⏭ O'tkazib yuborish tugmasini bosing:"
+
+msgid "⚠️ That link exists. Send a unique link or tap ⏭ Skip:"
+msgstr "⚠️ Bu havola mavjud. Noyob havolani yuboring yoki ⏭ O'tkazib yuborish tugmasini bosing:"
+
+msgid "❌ DB error:\n<code>%(error)s</code>"
+msgstr "❌ MB xatosi:\n<code>%(error)s</code>"
+
+msgid "✅ Channel <b>%(name)s</b> updated!\n🔗 Link: <code>%(link)s</code>"
+msgstr "✅ <b>%(name)s</b> kanal yangilandi!\n🔗 Havola: <code>%(link)s</code>"
+
+msgid "🚫 You still need to join these channels."
+msgstr "🚫 Siz hali ham bu kanallarga obuna bo'lishingiz kerak."
+
+msgid "You have no any requests left. 😢"
+msgstr "Sizda so'rovlar qolmadi. 😢"

@@ -4,6 +4,7 @@ from aiogram.types import (
     ReplyKeyboardMarkup,
     KeyboardButton,
 )
+from aiogram.utils.i18n import gettext as _
 from app.bot.handlers.channel_handler import get_all_channels
 from app.bot.models import Channel
 
@@ -19,7 +20,7 @@ async def channels_list_keyboard() -> InlineKeyboardMarkup:
                 InlineKeyboardButton(
                     text=f"📺 {ch.name}", callback_data=f"channel:info:{ch.id}"
                 ),
-                InlineKeyboardButton(text="🔗 View Link", url=ch.link),
+                InlineKeyboardButton(text=_("view_link_btn"), url=ch.link),
             ],
             [
                 InlineKeyboardButton(
@@ -27,10 +28,10 @@ async def channels_list_keyboard() -> InlineKeyboardMarkup:
                     callback_data=f"channel:toggle:{ch.id}",
                 ),
                 InlineKeyboardButton(
-                    text="✏️ Update", callback_data=f"channel:update:{ch.id}"
+                    text=_("update_btn"), callback_data=f"channel:update:{ch.id}"
                 ),
                 InlineKeyboardButton(
-                    text="🗑️ Delete", callback_data=f"channel:delete:{ch.id}"
+                    text=_("delete_btn"), callback_data=f"channel:delete:{ch.id}"
                 ),
             ],
         )
@@ -40,7 +41,7 @@ async def channels_list_keyboard() -> InlineKeyboardMarkup:
 
 
 active_kb = ReplyKeyboardMarkup(
-    keyboard=[[KeyboardButton(text="✅ Yes"), KeyboardButton(text="❌ No")]],
+    keyboard=[[KeyboardButton(text=_("yes_btn")), KeyboardButton(text=_("no_btn"))]],
     resize_keyboard=True,
     one_time_keyboard=True,
 )
@@ -60,5 +61,5 @@ async def get_channel_keyboard(not_joined: list[Channel]):
             [InlineKeyboardButton(text=f"📢 {ch.name}", url=ch.link)]
             for ch in not_joined
         ]
-        + [[InlineKeyboardButton(text="✅ Check", callback_data="check_subscription")]]
+        + [[InlineKeyboardButton(text=_("check_subscription_btn"), callback_data="check_subscription")]]
     )

@@ -46,7 +46,7 @@ def extract_shorts_url(text: str) -> str:
 async def handle_shorts_link(message: Message):
     res = await remove_token(message)
     if not res:
-        await message.answer("You have no any requests left.", reply_markup=get_payment_keyboard())
+        await message.answer(_("You have no any requests left. 😢"), reply_markup=get_payment_keyboard())
         return
     url = extract_shorts_url(message.text)
     if not url:

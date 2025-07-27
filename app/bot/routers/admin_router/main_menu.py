@@ -1,11 +1,11 @@
 import os
 from datetime import datetime
-from gc import get_referrers
 
 from aiogram import Router, F
 from aiogram.types import Message, FSInputFile
 from aiogram.enums.chat_action import ChatAction
 from aiogram.fsm.context import FSMContext
+from aiogram.utils.i18n import gettext as _
 
 from app.bot.controller.admin_controller import export_users_to_excel
 from app.bot.filters.admin_filter import AdminFilter
@@ -28,14 +28,8 @@ main_menu_router = Router()
 
 @main_menu_router.message(AdminFilter(), F.text == "⚙️ Admin Panel")
 async def handle_admin_panel(message: Message):
-    text = (
-        "🛠 <b>Admin Panel</b>\n\n"
-        "👋 Welcome, admin!\n"
-        "Please choose an action from the menu below to manage the bot and users effectively."
-    )
-
     await message.answer(
-        text, reply_markup=get_admin_panel_keyboard(), parse_mode="HTML"
+        _("admin_panel_welcome"), reply_markup=get_admin_panel_keyboard(), parse_mode="HTML"
     )
 
 
@@ -47,17 +41,16 @@ async def handle_statistics(message: Message):
         file_name = "Users_report.xlsx"
 
         doc = FSInputFile(path=file_path, filename=file_name)
-        caption = (
-            "📊 <b>User Export</b>\n\n"
-            f"✅ <b>File:</b> <code>{file_name}</code>\n"
-            f"🕒 <b>Generated:</b> <code>{datetime.now():%Y-%m-%d %H:%M:%S}</code>"
+        caption = _("user_export_caption").format(
+            file_name=file_name,
+            generated_time=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         )
 
         await message.answer_document(document=doc, caption=caption, parse_mode="HTML")
 
     except Exception as err:
         await message.answer(
-            f"❌ Failed to generate export:\n<code>{err}</code>", parse_mode="HTML"
+            _("export_failed_error").format(error=err), parse_mode="HTML"
         )
     finally:
         if os.path.exists(file_path):
@@ -70,78 +63,69 @@ async def handle_last_users(message: Message):
     stats = await get_last_7_days_statistics()
     channels: list[Channel] = await get_all_channels()
     statistics = await get_all_statistics()
+
     lines = [
-        "👥 <b>User Growth & Referral Leaders</b>\n",
-        f"📅 Today: <b>{stats['today']}</b> new",
-        f"📅 Yesterday: <b>{stats['yesterday']}</b>",
-        f"📅 Last 7 days: <b>{stats['last_week']}</b>",
-        f"📅 Last month: <b>{stats['last_month']}</b>",
-        f"📅 Last year: <b>{stats['last_year']}</b>",
-        f"📅 All time: <b>{stats['all_time']}</b>\n",
+        _("user_growth_header"),
+        _("stats_today").format(count=stats['today']),
+        _("stats_yesterday").format(count=stats['yesterday']),
+        _("stats_last_week").format(count=stats['last_week']),
+        _("stats_last_month").format(count=stats['last_month']),
+        _("stats_last_year").format(count=stats['last_year']),
+        _("stats_all_time").format(count=stats['all_time']),
+        "",
     ]
 
     if stats["top_referrers"]:
-        lines.append("🔥 <b>Top 10 Referrers</b>:")
+        lines.append(_("top_referrers_header"))
         for idx, ref in enumerate(stats["top_referrers"], start=1):
             lines.append(
-                f"{idx}. {ref['name']} (<code>{ref['tg_id']}</code>) — {ref['count']} refs"
+                _("referrer_item").format(
+                    idx=idx,
+                    name=ref['name'],
+                    tg_id=ref['tg_id'],
+                    count=ref['count']
+                )
             )
-    if channels:
-        lines.append("\n📡 <b>Connected Telegram Channels</b>:")
-        for idx, ch in enumerate(channels, start=1):
-            status = "🟢 Active" if ch.is_active else "🔴 Inactive"
-            lines.append(f"{idx}. <a href='{ch.link}'>{ch.name}</a> — {status}")
-    else:
-        lines.append("\nNo channels connected.")
 
-    lines.append("\n📊 <b>Usage Statistics</b>:")
-    lines.append(f"• Matndan foydalanishlar soni: <b>{statistics['from_text']}</b>")
-    lines.append(f"• Ovoizdan foydalanishlar soni: <b>{statistics['from_voice']}</b>")
-    lines.append(
-        f"• YouTube'dan foydalanishlar soni: <b>{statistics['from_youtube']}</b>"
-    )
-    lines.append(
-        f"• TikTok'dan foydalanishlar soni: <b>{statistics['from_tiktok']}</b>"
-    )
-    lines.append(f"• Likee'dan foydalanishlar soni: <b>{statistics['from_like']}</b>")
-    lines.append(
-        f"• Snapchat'dan foydalanishlar soni: <b>{statistics['from_snapchat']}</b>"
-    )
-    lines.append(
-        f"• Instagram'dan foydalanishlar soni: <b>{statistics['from_instagram']}</b>"
-    )
-    lines.append(
-        f"• Twitter'dan foydalanishlar soni: <b>{statistics['from_twitter']}</b>"
-    )
+    if channels:
+        lines.append(_("connected_channels_header"))
+        for idx, ch in enumerate(channels, start=1):
+            status = _("channel_active") if ch.is_active else _("channel_inactive")
+            lines.append(_("channel_item").format(idx=idx, link=ch.link, name=ch.name, status=status))
+    else:
+        lines.append(_("no_channels_connected"))
+
+    lines.append(_("usage_statistics_header"))
+    lines.append(_("usage_from_text").format(count=statistics['from_text']))
+    lines.append(_("usage_from_voice").format(count=statistics['from_voice']))
+    lines.append(_("usage_from_youtube").format(count=statistics['from_youtube']))
+    lines.append(_("usage_from_tiktok").format(count=statistics['from_tiktok']))
+    lines.append(_("usage_from_like").format(count=statistics['from_like']))
+    lines.append(_("usage_from_snapchat").format(count=statistics['from_snapchat']))
+    lines.append(_("usage_from_instagram").format(count=statistics['from_instagram']))
+    lines.append(_("usage_from_twitter").format(count=statistics['from_twitter']))
 
     await message.answer(
         "\n".join(lines), parse_mode="HTML", disable_web_page_preview=True
     )
     await message.answer(
-        f"Current  token count: <b>{await get_token_per_referral()}</b>\n\n"
-        f"Current premium price: <b>{await get_premium_price()}</b> tokens",
+        _("current_token_and_price").format(
+            tokens=await get_token_per_referral(),
+            price=await get_premium_price()
+        ),
+        parse_mode="HTML"
     )
 
 
 @main_menu_router.message(AdminFilter(), F.text == "🔧 Settings")
 async def handle_settings(message: Message):
-    text = (
-        "🔧 <b>Settings</b>\n\n"
-        "Here you can adjust the bot's settings, including notification preferences, language options, and more."
-    )
-
-    await message.answer(text, parse_mode="HTML")
+    await message.answer(_("settings_page"), parse_mode="HTML")
 
 
 @main_menu_router.message(AdminFilter(), F.text == "📈 Channels")
 async def handle_channels(message: Message):
-    text = (
-        "📈 <b>Channels</b>\n\n"
-        "Here you can manage the channels associated with the bot, including adding, editing, and deleting channels."
-    )
-
     await message.answer(
-        text, parse_mode="HTML", reply_markup=get_channel_crud_keyboard()
+        _("channels_page"), parse_mode="HTML", reply_markup=get_channel_crud_keyboard()
     )
 
 
@@ -149,7 +133,7 @@ async def handle_channels(message: Message):
 async def cancel_broadcast(message: Message, state: FSMContext):
     await state.clear()
     await message.answer(
-        "🔙 Broadcast cancelled.", reply_markup=get_admin_panel_keyboard()
+        _("broadcast_cancelled"), reply_markup=get_admin_panel_keyboard()
     )
 
 
@@ -157,11 +141,8 @@ async def cancel_broadcast(message: Message, state: FSMContext):
 async def handle_back_to_admin_panel(message: Message):
     await message.bot.send_chat_action(message.chat.id, ChatAction.TYPING)
 
-    text = (
-        "🔙 <b>Admin Panel</b>\n\n"
-        "Welcome back! Please choose the action you’d like to perform:"
-    )
-
     await message.answer(
-        text=text, parse_mode="HTML", reply_markup=main_menu_keyboard(message)
+        text=_("back_to_admin_panel_welcome"),
+        parse_mode="HTML",
+        reply_markup=main_menu_keyboard(message)
     )
