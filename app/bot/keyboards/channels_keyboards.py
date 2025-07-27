@@ -40,11 +40,14 @@ async def channels_list_keyboard() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(inline_keyboard=inline_keyboard)
 
 
-active_kb = ReplyKeyboardMarkup(
-    keyboard=[[KeyboardButton(text=_("yes_btn")), KeyboardButton(text=_("no_btn"))]],
-    resize_keyboard=True,
-    one_time_keyboard=True,
-)
+def confirm_keyboard() -> ReplyKeyboardMarkup:
+    return ReplyKeyboardMarkup(
+        keyboard=[
+            [KeyboardButton(text=_("yes_btn")), KeyboardButton(text=_("no_btn"))]
+        ],
+        resize_keyboard=True,
+    )
+
 
 
 def skip_kb(label: str) -> ReplyKeyboardMarkup:

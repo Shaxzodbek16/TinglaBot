@@ -8,7 +8,7 @@ from aiogram.enums.chat_action import ChatAction
 from aiogram import Router, F
 from aiogram.types import CallbackQuery
 from aiogram.exceptions import TelegramBadRequest
-from gettext import lazy as _
+from aiogram.utils.i18n import gettext as _
 
 from app.bot.keyboards.admin_keyboards import get_channel_crud_keyboard
 from app.bot.state.channel_state import ChannelForm, ChannelUpdateForm
@@ -22,7 +22,7 @@ from app.bot.handlers.channel_handler import (
 )
 from app.bot.keyboards.channels_keyboards import (
     channels_list_keyboard,
-    active_kb,
+    confirm_keyboard,
     skip_kb,
 )
 
@@ -133,7 +133,7 @@ async def process_id(message: Message, state: FSMContext):
         await message.answer(
             _("✅ Should this channel be active?"),
             parse_mode="HTML",
-            reply_markup=active_kb,
+            reply_markup=confirm_keyboard(),
         )
         await state.set_state(ChannelForm.waiting_for_active)
 

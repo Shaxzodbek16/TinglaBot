@@ -17,6 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.13.1\n"
+
 msgid "start_welcome"
 msgstr "👋 Xush kelibsiz! Iltimos, tilni tanlang:"
 
@@ -226,7 +227,7 @@ msgid "threads_success"
 msgstr "🎉 Threads posti muvaffaqiyatli yuklandi!\n📁 Jami: {total} ta fayl{failed_info}"
 
 msgid "threads_failed"
-msgstr"⚠️ {failed} ta fayl yuklanmadi"
+msgstr "⚠️ {failed} ta fayl yuklanmadi"
 
 msgid "threads_no_files"
 msgstr "❌ Yuborish uchun fayl topilmadi."

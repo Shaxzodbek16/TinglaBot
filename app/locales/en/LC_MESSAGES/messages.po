@@ -427,9 +427,9 @@ msgstr "❌ No"
 
 msgid "check_subscription_btn"
 msgstr "✅ Check"
+
 msgid "download_music_btn"
 msgstr "Download music"
-
 
 msgid "admin_panel_welcome"
 msgstr "🛠 <b>Admin Panel</b>\n\n👋 Welcome, admin!\nPlease choose an action from the menu below to manage the bot and users effectively."
