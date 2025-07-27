@@ -4,6 +4,8 @@ black .
 
 pybabel compile -d app/locales
 
+alembic upgrade head
+
 # shellcheck disable=SC2155
 export PYTHONPATH="$(pwd)"
 
