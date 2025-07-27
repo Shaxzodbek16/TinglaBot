@@ -7,6 +7,7 @@ from app.bot.handlers.statistics_handler import create_statistics
 from app.bot.handlers.user_handlers import (
     get_user_by_tg_id,
     create_user,
+    add_tokens,
 )
 from app.bot.keyboards.general_buttons import main_menu_keyboard
 from app.bot.keyboards.language_keyboard import language_keyboard
@@ -28,15 +29,21 @@ async def start_function(message: Message, ref_id=None):
 @start_router.message(CommandStart(deep_link=True))
 async def handle_start_deep_link(message: Message, command: CommandStart):
     user = await get_user_by_tg_id(message.from_user.id)
-    await create_statistics(message.from_user.id)
     referrer_id = command.args if command.args and command.args.isdigit() else None
     if user is None:
         if referrer_id:
+            inviter = await get_user_by_tg_id(int(referrer_id))
+            if inviter is None:
+                referrer_id = None
+            else:
+                referrer_id = inviter.tg_id
             await start_function(message, int(referrer_id))
+            await add_tokens(referrer_id)
         else:
             await start_function(message)
     else:
         await start_function(message)
+    await create_statistics(message.from_user.id)
 
 
 @start_router.message(CommandStart())

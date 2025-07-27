@@ -51,7 +51,6 @@ AUDIO_OPTS_SMART = {
 
 # Improved video format selection
 VIDEO_OPTS = {
-    # Better video format selection with size limits and fallbacks
     "format": (
         "bestvideo[height<=720][filesize<45M]+bestaudio[ext=m4a]/best[height<=720][filesize<45M]/"
         "bestvideo[height<=720]+bestaudio/best[height<=720]/best[filesize<45M]/best"

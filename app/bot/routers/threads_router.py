@@ -6,6 +6,9 @@ from pathlib import Path
 from aiogram import Router, F
 from aiogram.types import Message, FSInputFile, CallbackQuery
 from aiogram.utils.i18n import gettext as _
+
+from app.bot.handlers.user_handlers import remove_token
+from app.bot.keyboards.payment_keyboard import get_payment_keyboard
 from app.core.utils.audio import extract_audio_from_video
 from app.bot.controller.threads_controller import ThreadsController
 from app.bot.handlers import shazam_handler as shz
@@ -40,6 +43,10 @@ def extract_threads_url(text: str) -> str:
 
 @threads_router.message(F.text.contains("threads.com"))
 async def handle_threads_link(message: Message):
+    res = await remove_token(message)
+    if not res:
+        await message.answer("You have no any requests left.", reply_markup=get_payment_keyboard())
+        return
     url = extract_threads_url(message.text)
     if not url:
         await message.answer(_("threads_invalid_url"))

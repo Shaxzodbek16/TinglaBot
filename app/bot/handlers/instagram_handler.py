@@ -32,8 +32,8 @@ async def download_instagram_video_only_mp4(url: str, target_folder=None) -> str
         "no_warnings": True,
         "cookiefile": get_random_cookie_for_instagram(CookieType.INSTAGRAM.value),
         "http_headers": {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-        }
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+        },
     }
 
     try:
@@ -42,7 +42,7 @@ async def download_instagram_video_only_mp4(url: str, target_folder=None) -> str
 
         # Find the downloaded file
         for file in target_folder.glob(f"{filename}.*"):
-            if file.suffix in ['.mp4', '.webm', '.mkv', '.mov']:
+            if file.suffix in [".mp4", ".webm", ".mkv", ".mov"]:
                 logger.info(f"Instagram video downloaded: {file}")
                 return str(file)
 
@@ -76,13 +76,13 @@ async def download_instagram_for_group(url: str) -> dict:
             return {
                 "success": True,
                 "message": "✅ Instagram video yuklandi",
-                "files": [{"type": "video", "path": file_path}]
+                "files": [{"type": "video", "path": file_path}],
             }
         else:
             return {
                 "success": False,
                 "message": "❌ Instagram video yuklanmadi",
-                "files": []
+                "files": [],
             }
 
     except Exception as e:
@@ -90,7 +90,7 @@ async def download_instagram_for_group(url: str) -> dict:
         return {
             "success": False,
             "message": f"❌ Instagram xatolik: {str(e)[:100]}",
-            "files": []
+            "files": [],
         }
 
 
@@ -139,16 +139,22 @@ async def extract_with_ffmpeg(video_path: str, audio_path: str) -> bool:
     """Extract audio using FFmpeg"""
     try:
         command = [
-            "ffmpeg", "-i", video_path,
-            "-vn", "-acodec", "mp3",
-            "-ab", "192k", "-ar", "44100",
-            "-y", audio_path
+            "ffmpeg",
+            "-i",
+            video_path,
+            "-vn",
+            "-acodec",
+            "mp3",
+            "-ab",
+            "192k",
+            "-ar",
+            "44100",
+            "-y",
+            audio_path,
         ]
 
         process = await asyncio.create_subprocess_exec(
-            *command,
-            stdout=asyncio.subprocess.PIPE,
-            stderr=asyncio.subprocess.PIPE
+            *command, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
         )
 
         stdout, stderr = await process.communicate()
@@ -156,7 +162,9 @@ async def extract_with_ffmpeg(video_path: str, audio_path: str) -> bool:
         if process.returncode == 0 and Path(audio_path).exists():
             return True
 
-        logger.warning(f"FFmpeg failed: {stderr.decode() if stderr else 'Unknown error'}")
+        logger.warning(
+            f"FFmpeg failed: {stderr.decode() if stderr else 'Unknown error'}"
+        )
         return False
 
     except Exception as e:
@@ -174,11 +182,13 @@ async def extract_with_ytdlp(video_path: str, audio_path: str) -> str:
         ydl_opts = {
             "outtmpl": str(audio_dir / f"{filename_base}.%(ext)s"),
             "format": "bestaudio/best",
-            "postprocessors": [{
-                'key': 'FFmpegExtractAudio',
-                'preferredcodec': 'mp3',
-                'preferredquality': '192',
-            }],
+            "postprocessors": [
+                {
+                    "key": "FFmpegExtractAudio",
+                    "preferredcodec": "mp3",
+                    "preferredquality": "192",
+                }
+            ],
             "quiet": True,
             "no_warnings": True,
         }
@@ -190,7 +200,7 @@ async def extract_with_ytdlp(video_path: str, audio_path: str) -> str:
 
         # Find the extracted audio file
         for audio_file in audio_dir.glob(f"{filename_base}.*"):
-            if audio_file.suffix == '.mp3':
+            if audio_file.suffix == ".mp3":
                 logger.info(f"Audio extracted with yt-dlp: {audio_file}")
                 return str(audio_file)
 

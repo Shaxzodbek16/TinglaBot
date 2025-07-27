@@ -12,6 +12,8 @@ from app.bot.handlers.tiktok_handler import (
     extract_audio_from_tiktok_video_smart,
 )
 from app.bot.handlers import shazam_handler as shz
+from app.bot.handlers.user_handlers import remove_token
+from app.bot.keyboards.payment_keyboard import get_payment_keyboard
 from app.bot.routers.music_router import (
     get_controller,
     format_page_text,
@@ -28,6 +30,11 @@ user_sessions = {}
 
 @tiktok_router.message(F.text.contains("tiktok.com"))
 async def handle_tiktok_link(message: Message):
+    res = await remove_token(message)
+    if not res:
+        await message.answer("You have no any requests left.", reply_markup=get_payment_keyboard())
+        return
+
     await message.answer(_("tiktok_detected"))
 
     user_id = message.from_user.id

@@ -7,6 +7,8 @@ from aiogram import Router, F
 from aiogram.types import Message, FSInputFile, CallbackQuery
 from aiogram.utils.i18n import gettext as _
 
+from app.bot.handlers.user_handlers import remove_token
+from app.bot.keyboards.payment_keyboard import get_payment_keyboard
 from app.core.utils.audio import extract_audio_from_video
 from app.bot.controller.shorts_controller import YouTubeShortsController
 from app.bot.handlers import shazam_handler as shz
@@ -42,6 +44,10 @@ def extract_shorts_url(text: str) -> str:
     F.text.contains("youtube.com/shorts") | F.text.contains("youtu.be")
 )
 async def handle_shorts_link(message: Message):
+    res = await remove_token(message)
+    if not res:
+        await message.answer("You have no any requests left.", reply_markup=get_payment_keyboard())
+        return
     url = extract_shorts_url(message.text)
     if not url:
         await message.answer(_("invalid_url"))

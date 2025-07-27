@@ -9,7 +9,9 @@ from app.bot.handlers.instagram_handler import (
     extract_audio_from_instagram_video,
 )
 from app.bot.handlers.statistics_handler import update_statistics
+from app.bot.handlers.user_handlers import remove_token
 from app.bot.keyboards.general_buttons import get_music_download_button
+from app.bot.keyboards.payment_keyboard import get_payment_keyboard
 from app.bot.routers.music_router import (
     format_page_text,
     create_keyboard,
@@ -29,6 +31,10 @@ import time
 
 @instagram_router.message(F.text.contains("instagram.com"))
 async def handle_instagram_link(message: Message):
+    res = await remove_token(message)
+    if not res:
+        await message.answer("You have no any requests left.", reply_markup=get_payment_keyboard())
+        return
     await message.answer(_("ig_detected"))
 
     user_id = message.from_user.id

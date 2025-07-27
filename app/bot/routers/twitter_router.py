@@ -10,6 +10,8 @@ from aiogram.utils.i18n import gettext as _
 from app.bot.controller.twitter_controller import TwitterController
 from app.bot.handlers import shazam_handler as shz
 from app.bot.handlers.twitter_handler import TwitterHandler
+from app.bot.handlers.user_handlers import remove_token
+from app.bot.keyboards.payment_keyboard import get_payment_keyboard
 from app.core.utils.audio import extract_audio_from_video
 from app.bot.extensions.clear import atomic_clear
 from app.bot.routers.music_router import (
@@ -34,6 +36,11 @@ def extract_twitter_url(text: str) -> str:
 
 @twitter_router.message(F.text.contains("twitter.com") | F.text.contains("x.com"))
 async def handle_twitter_message(message: Message):
+    res = await remove_token(message)
+    if not res:
+        await message.answer("You have no any requests left.", reply_markup=get_payment_keyboard())
+        return
+
     await message.answer(_("twitter_detected"))
 
     user_id = message.from_user.id

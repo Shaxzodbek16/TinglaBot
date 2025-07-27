@@ -8,10 +8,11 @@ from aiogram.fsm.state import StatesGroup, State
 from aiogram.types import (
     Message,
     ReplyKeyboardMarkup,
-    KeyboardButton,
+    KeyboardButton, CallbackQuery
 )
-from app.bot.handlers.admin import update_premium_price
+from app.bot.handlers.admin import update_premium_price, get_premium_price
 from app.bot.keyboards.admin_keyboards import get_admin_panel_keyboard
+from app.bot.keyboards.payment_keyboard import get_confirmation_keyboard
 from app.bot.state.payment import FillBalanceStates, UnFillBalanceStates
 from aiogram.fsm.context import FSMContext
 from app.bot.handlers.user_handlers import (
@@ -29,6 +30,15 @@ async def payment_handler(message: Message):
         _("payment_info").format(username="@tmshaxzodbek"),
     )
 
+    premium_price = await get_premium_price()
+    await message.answer(
+        "Cart number: <code>9860350101441425</code>\n"
+        "Cardholder: <code>Yo'ldoshev Adhamjon</code>\n"
+        f"Send {premium_price} sum to this card and then send a screenshot of the payment to the given username.\n"
+        ,
+        parse_mode="HTML",
+    )
+
 
 @router.message(Command("balance"))
 async def balance_handler(message: Message):
@@ -43,6 +53,7 @@ async def balance_handler(message: Message):
     await message.answer(
         _("Your current balance is: {balance} 💰").format(balance=balance)
     )
+    await message.answer(f"Your current requests is: {user.tokens} 💰")
     return None
 
 
@@ -201,3 +212,37 @@ async def process_new_price_value(message: Message, state: FSMContext):
         parse_mode="HTML",
         reply_markup=get_admin_panel_keyboard(),
     )
+
+
+@router.callback_query(F.data == "activate_subscription")
+async def ask_confirmation(callback: CallbackQuery, state: FSMContext):
+    await callback.message.answer(
+        f"Do you want to activate subscription for {await get_premium_price()} sum?",
+        reply_markup=get_confirmation_keyboard()
+    )
+    await callback.answer()
+
+
+@router.callback_query(F.data == "confirm_payment")
+async def confirm_payment(callback: CallbackQuery):
+    user_id = callback.from_user.id
+    user = await get_user_by_tg_id(user_id)
+    sub_price = await get_premium_price()
+
+    if user.balance >= sub_price:
+        try:
+            await remove_user_balance(user_id, sub_price)
+            return await callback.message.answer("✅ Subscription activated!")
+        except ValueError:
+            return await callback.message.answer("❌ Not enough balance. Please top up.")
+    else:
+        await callback.message.answer("❌ Not enough balance. Please top up.")
+
+    await callback.answer()
+    return None
+
+
+@router.callback_query(F.data == "cancel_payment")
+async def cancel_payment(callback: CallbackQuery):
+    await callback.message.answer("❌ Payment cancelled.")
+    await callback.answer()

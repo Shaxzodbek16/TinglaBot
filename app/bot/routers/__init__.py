@@ -20,10 +20,10 @@ v1_router = Router()
 # MUHIM: Group router birinchi bo'lishi kerak
 # Chunki u specific filterlar bilan ishlaydi
 v1_router.include_routers(
-    group_router,        # 1. Group commands (yuqori prioritet)
-    admin_router,        # 2. Admin commands
-    start_router,        # 3. Start va umumiy commands
-    pinterest_router,    # 4. Platform-specific routers
+    group_router,  # 1. Group commands (yuqori prioritet)
+    admin_router,  # 2. Admin commands
+    start_router,  # 3. Start va umumiy commands
+    pinterest_router,  # 4. Platform-specific routers
     snapchat_router,
     language_router,
     shorts_router,
@@ -33,7 +33,7 @@ v1_router.include_routers(
     tiktok_router,
     likee_router,
     user_router,
-    music_router,        # Oxirgi
+    music_router,  # Oxirgi
 )
 
 __all__ = ("v1_router",)

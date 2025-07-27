@@ -1,6 +1,6 @@
 from aiogram.types import Message
 
-from app.bot.models import User
+from app.bot.models import User, AdminRequirements
 from app.core.databases.postgres import get_general_session
 from sqlalchemy.future import select
 
@@ -108,3 +108,29 @@ async def remove_user_balance(tg_id: int, amount: float) -> User:
             return user
         else:
             raise ValueError("Insufficient balance")
+
+
+async def remove_token(message: Message) -> bool:
+    async with get_general_session() as session:
+        user = await get_user_by_tg_id(message.from_user.id)
+        if user.tokens > 0:
+            user.tokens -= 1
+            session.add(user)
+            await session.commit()
+            return True
+        return False
+
+
+async def add_tokens(user_id: int):
+    user = await get_user_by_tg_id(user_id)
+
+    async with get_general_session() as session:
+        res = await session.execute(select(AdminRequirements))
+        token_obj = res.scalar_one_or_none()
+        token = token_obj.referral_count_for_free_month if token_obj else 10
+        if user:
+            user.tokens += token
+            session.add(user)
+            await session.commit()
+            return user
+        return None

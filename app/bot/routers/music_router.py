@@ -20,6 +20,8 @@ from app.bot.controller.shazam_controller import ShazamController
 from app.bot.extensions.clear import atomic_clear
 from app.bot.handlers import shazam_handler as shz
 from app.bot.handlers.statistics_handler import update_statistics
+from app.bot.handlers.user_handlers import remove_token
+from app.bot.keyboards.payment_keyboard import get_payment_keyboard
 
 logger = logging.getLogger(__name__)
 
@@ -225,6 +227,11 @@ async def cleanup_cache_loop():
 async def handle_text_query(message: Message):
     """Handle text search queries."""
     # Ensure cleanup task is running
+    res = await remove_token(message)
+    if not res:
+        await message.answer("You have no any requests left.", reply_markup=get_payment_keyboard())
+        return
+
     _start_cleanup_task()
 
     query = message.text.strip() if message.text else ""

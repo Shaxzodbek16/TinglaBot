@@ -8,10 +8,10 @@ logger = logging.getLogger(__name__)
 
 class GroupChatMiddleware(BaseMiddleware):
     async def __call__(
-            self,
-            handler: Callable[[TelegramObject, Dict[str, Any]], Awaitable[Any]],
-            event: TelegramObject,
-            data: Dict[str, Any]
+        self,
+        handler: Callable[[TelegramObject, Dict[str, Any]], Awaitable[Any]],
+        event: TelegramObject,
+        data: Dict[str, Any],
     ) -> Any:
         """Universal middleware for all event types"""
 
@@ -35,8 +35,8 @@ class GroupChatMiddleware(BaseMiddleware):
                 data["group_id"] = chat.id
 
                 # Guruh haqida qo'shimcha ma'lumot
-                data["group_title"] = getattr(chat, 'title', 'Unknown')
-                data["member_count"] = getattr(chat, 'member_count', 0)
+                data["group_title"] = getattr(chat, "title", "Unknown")
+                data["member_count"] = getattr(chat, "member_count", 0)
 
                 logger.debug(f"Group message detected: {chat.title} ({chat.id})")
             else:

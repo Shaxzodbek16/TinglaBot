@@ -10,6 +10,8 @@ from app.bot.handlers.snapchat_handler import download_snapchat_media
 from app.bot.extensions.clear import atomic_clear
 from app.bot.handlers.statistics_handler import update_statistics
 from app.bot.handlers import shazam_handler as shz
+from app.bot.handlers.user_handlers import remove_token
+from app.bot.keyboards.payment_keyboard import get_payment_keyboard
 from app.bot.routers.music_router import (
     get_controller,
     format_page_text,
@@ -28,6 +30,11 @@ user_sessions = {}
 
 @snapchat_router.message(F.text.contains("snapchat.com"))
 async def handle_snapchat_link(message: Message):
+    res = await remove_token(message)
+    if not res:
+        await message.answer("You have no any requests left.", reply_markup=get_payment_keyboard())
+        return
+
     await message.answer(_("snapchat_detected"))
 
     user_id = message.from_user.id

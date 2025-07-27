@@ -2,7 +2,13 @@ import logging
 import time
 from pathlib import Path
 from aiogram import Router, F
-from aiogram.types import Message, FSInputFile, InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
+from aiogram.types import (
+    Message,
+    FSInputFile,
+    InlineKeyboardMarkup,
+    InlineKeyboardButton,
+    CallbackQuery,
+)
 from aiogram.exceptions import TelegramAPIError
 from aiogram.filters import Command, CommandStart
 from aiogram.utils.i18n import gettext as _
@@ -91,7 +97,7 @@ async def handle_group_message(message: Message):
     """Guruh xabarlarini qayta ishlash"""
 
     # Agar command bo'lsa, skip qilish
-    if message.text and message.text.startswith('/'):
+    if message.text and message.text.startswith("/"):
         return
 
     # Faqat social media linklar mavjud bo'lganda javob berish
@@ -113,9 +119,15 @@ async def handle_group_message(message: Message):
     # Processing xabar yuborish
     processing_msg = await message.reply(
         "🔄 Media yuklab olinmoqda...",
-        reply_markup=InlineKeyboardMarkup(inline_keyboard=[[
-            InlineKeyboardButton(text="❌ Bekor qilish", callback_data="cancel_download")
-        ]])
+        reply_markup=InlineKeyboardMarkup(
+            inline_keyboard=[
+                [
+                    InlineKeyboardButton(
+                        text="❌ Bekor qilish", callback_data="cancel_download"
+                    )
+                ]
+            ]
+        ),
     )
 
     try:
@@ -134,11 +146,13 @@ async def handle_group_message(message: Message):
                         user_sessions[user_id] = []
 
                     platform = group_controller.detect_platform(url)
-                    user_sessions[user_id].append({
-                        "url": url,
-                        "platform": platform.value if platform else "unknown",
-                        "files": result["files"]
-                    })
+                    user_sessions[user_id].append(
+                        {
+                            "url": url,
+                            "platform": platform.value if platform else "unknown",
+                            "files": result["files"],
+                        }
+                    )
                 else:
                     failed_urls.append((url, result.get("message", "Noma'lum xatolik")))
 
@@ -163,12 +177,16 @@ async def handle_group_message(message: Message):
                 success_text += f"\n❌ {len(failed_urls)} ta link yuklanmadi"
 
             # Music download tugmasini qo'shish
-            keyboard = InlineKeyboardMarkup(inline_keyboard=[[
-                InlineKeyboardButton(
-                    text="🎵 Musiqa yuklash",
-                    callback_data=f"group_music:{message.from_user.id}"
-                )
-            ]])
+            keyboard = InlineKeyboardMarkup(
+                inline_keyboard=[
+                    [
+                        InlineKeyboardButton(
+                            text="🎵 Musiqa yuklash",
+                            callback_data=f"group_music:{message.from_user.id}",
+                        )
+                    ]
+                ]
+            )
 
             await message.reply(success_text, reply_markup=keyboard)
 
@@ -192,8 +210,7 @@ async def handle_group_message(message: Message):
         logger.error(f"Group handler error: {e}")
         try:
             await processing_msg.edit_text(
-                f"❌ Xatolik yuz berdi: {str(e)}",
-                reply_markup=None
+                f"❌ Xatolik yuz berdi: {str(e)}", reply_markup=None
             )
         except:
             pass
@@ -220,7 +237,9 @@ async def handle_group_music_callback(callback_query: CallbackQuery):
 
     # Faqat xabar yuborgan user music yuklay oladi
     if callback_query.from_user.id != user_id:
-        await callback_query.answer("❌ Faqat xabar yuborgan foydalanuvchi music yuklay oladi", show_alert=True)
+        await callback_query.answer(
+            "❌ Faqat xabar yuborgan foydalanuvchi music yuklay oladi", show_alert=True
+        )
         return
 
     await callback_query.answer("🎵 Musiqa ajratib olinmoqda...")
@@ -265,12 +284,14 @@ async def handle_group_music_callback(callback_query: CallbackQuery):
         youtube_hits = await get_controller().search(search_query)
         if not youtube_hits:
             youtube_hits = [
-                get_controller().ytdict_to_info({
-                    "title": title,
-                    "artist": artist,
-                    "duration": 0,
-                    "id": track.get("key", ""),
-                })
+                get_controller().ytdict_to_info(
+                    {
+                        "title": title,
+                        "artist": artist,
+                        "duration": 0,
+                        "id": track.get("key", ""),
+                    }
+                )
             ]
 
         # Topilgan musiqa haqida xabar
@@ -335,29 +356,48 @@ async def extract_audio_for_platform(platform: str, url: str, files: list) -> st
             if video_path and Path(video_path).exists():
                 logger.info(f"Extracting audio from Instagram video file: {video_path}")
                 from app.bot.handlers.instagram_handler import extract_audio_simple
+
                 return await extract_audio_simple(video_path)
             else:
                 # Video fayl yo'q bo'lsa URL dan qayta ajratish
                 logger.info(f"Extracting audio from Instagram URL: {url}")
-                from app.bot.handlers.instagram_handler import extract_audio_from_instagram_video_smart
+                from app.bot.handlers.instagram_handler import (
+                    extract_audio_from_instagram_video_smart,
+                )
+
                 return await extract_audio_from_instagram_video_smart(url)
 
         elif platform == "tiktok":
             logger.info(f"Extracting audio from TikTok URL: {url}")
-            from app.bot.handlers.tiktok_handler import extract_audio_from_tiktok_video_smart
+            from app.bot.handlers.tiktok_handler import (
+                extract_audio_from_tiktok_video_smart,
+            )
+
             return await extract_audio_from_tiktok_video_smart(url)
 
         elif platform == "likee":
             logger.info(f"Extracting audio from Likee URL: {url}")
-            from app.bot.handlers.likee_handler import extract_audio_from_likee_video_smart
+            from app.bot.handlers.likee_handler import (
+                extract_audio_from_likee_video_smart,
+            )
+
             return await extract_audio_from_likee_video_smart(url)
 
-        elif platform in ["threads", "twitter", "pinterest", "snapchat", "youtube_shorts"]:
+        elif platform in [
+            "threads",
+            "twitter",
+            "pinterest",
+            "snapchat",
+            "youtube_shorts",
+        ]:
             # Boshqa platformalar uchun video fayldan audio ajratish
             video_path = get_video_file_path(files)
             if video_path and Path(video_path).exists():
-                logger.info(f"Extracting audio from {platform} video file: {video_path}")
+                logger.info(
+                    f"Extracting audio from {platform} video file: {video_path}"
+                )
                 from app.core.utils.audio import extract_audio_from_video
+
                 return extract_audio_from_video(video_path)
             else:
                 logger.warning(f"No video file found for {platform}")
@@ -407,17 +447,17 @@ async def _send_media_files(message: Message, files: list):
             if file_info["type"] == "video":
                 await message.reply_video(
                     video=file_input,
-                    caption=f"📹 Video\n🔗 Via @{message.bot.username if hasattr(message.bot, 'username') else ''}"
+                    caption=f"📹 Video\n🔗 Via @{message.bot.username if hasattr(message.bot, 'username') else ''}",
                 )
             elif file_info["type"] == "image":
                 await message.reply_photo(
                     photo=file_input,
-                    caption=f"🖼 Rasm\n🔗 Via @{message.bot.username if hasattr(message.bot, 'username') else ''}"
+                    caption=f"🖼 Rasm\n🔗 Via @{message.bot.username if hasattr(message.bot, 'username') else ''}",
                 )
             else:
                 await message.reply_document(
                     document=file_input,
-                    caption=f"📄 Media\n🔗 Via @{message.bot.username if hasattr(message.bot, 'username') else ''}"
+                    caption=f"📄 Media\n🔗 Via @{message.bot.username if hasattr(message.bot, 'username') else ''}",
                 )
 
             # MUHIM: Video fayllarni hozircha o'chirmang (music extraction uchun kerak)
@@ -451,7 +491,9 @@ async def _is_bot_mentioned(message: Message) -> bool:
 
             for entity in message.entities:
                 if entity.type == "mention":
-                    mention_text = message.text[entity.offset:entity.offset + entity.length].lower()
+                    mention_text = message.text[
+                        entity.offset : entity.offset + entity.length
+                    ].lower()
                     if bot_username and bot_username in mention_text:
                         return True
 
@@ -466,7 +508,11 @@ def _should_respond_automatically(message: Message) -> bool:
 
     try:
         # Guruh a'zolari soni 50 dan kam bo'lsa avtomatik javob berish
-        if hasattr(message.chat, 'member_count') and message.chat.member_count and message.chat.member_count < 50:
+        if (
+            hasattr(message.chat, "member_count")
+            and message.chat.member_count
+            and message.chat.member_count < 50
+        ):
             return True
     except:
         pass
@@ -474,9 +520,8 @@ def _should_respond_automatically(message: Message) -> bool:
     # Xabar matnida bot nomi yoki kalit so'zlar bo'lsa
     if message.text:
         text_lower = message.text.lower()
-        keywords = ['bot', 'downloader', 'yukla', 'download', 'link']
+        keywords = ["bot", "downloader", "yukla", "download", "link"]
         if any(word in text_lower for word in keywords):
             return True
 
     return False
-

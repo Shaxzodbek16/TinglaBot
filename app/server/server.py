@@ -46,7 +46,6 @@ async def main() -> None:
     dp.message.middleware(CheckSubscriptionMiddleware())
     dp.callback_query.middleware(CheckSubscriptionMiddleware())
 
-
     # Routerlarni qo'shish
     dp.include_router(v1_router)
 

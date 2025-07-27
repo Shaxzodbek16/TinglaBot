@@ -31,7 +31,6 @@ class PlatformType(Enum):
     INSTAGRAM = "instagram"
 
 
-
 class GroupController:
     """Guruh uchun universal media downloader"""
 
@@ -39,35 +38,31 @@ class GroupController:
         self.media_dir = WORKDIR.parent / "media"
         self.platform_patterns = {
             PlatformType.TIKTOK: [
-                r'(?:https?://)?(?:www\.)?(?:tiktok\.com|vm\.tiktok\.com)',
-                r'(?:https?://)?(?:www\.)?tiktok\.com/.*?/video/\d+',
-                r'(?:https?://)?vm\.tiktok\.com/\w+'
+                r"(?:https?://)?(?:www\.)?(?:tiktok\.com|vm\.tiktok\.com)",
+                r"(?:https?://)?(?:www\.)?tiktok\.com/.*?/video/\d+",
+                r"(?:https?://)?vm\.tiktok\.com/\w+",
             ],
             PlatformType.PINTEREST: [
-                r'(?:https?://)?(?:www\.)?pinterest\.com',
-                r'(?:https?://)?pin\.it'
+                r"(?:https?://)?(?:www\.)?pinterest\.com",
+                r"(?:https?://)?pin\.it",
             ],
-            PlatformType.THREADS: [
-                r'(?:https?://)?(?:www\.)?threads\.com'
-            ],
+            PlatformType.THREADS: [r"(?:https?://)?(?:www\.)?threads\.com"],
             PlatformType.TWITTER: [
-                r'(?:https?://)?(?:www\.)?(?:twitter\.com|x\.com)',
-                r'(?:https?://)?(?:mobile\.)?(?:twitter\.com|x\.com)'
+                r"(?:https?://)?(?:www\.)?(?:twitter\.com|x\.com)",
+                r"(?:https?://)?(?:mobile\.)?(?:twitter\.com|x\.com)",
             ],
             PlatformType.LIKEE: [
-                r'(?:https?://)?(?:www\.)?likee\.video',
-                r'(?:https?://)?l\.likee\.video'
+                r"(?:https?://)?(?:www\.)?likee\.video",
+                r"(?:https?://)?l\.likee\.video",
             ],
-            PlatformType.SNAPCHAT: [
-                r'(?:https?://)?(?:www\.)?snapchat\.com'
-            ],
+            PlatformType.SNAPCHAT: [r"(?:https?://)?(?:www\.)?snapchat\.com"],
             PlatformType.YOUTUBE_SHORTS: [
-                r'(?:https?://)?(?:www\.)?youtube\.com/shorts/',
-                r'(?:https?://)?youtu\.be/.*(?:\?|&).*shorts'
+                r"(?:https?://)?(?:www\.)?youtube\.com/shorts/",
+                r"(?:https?://)?youtu\.be/.*(?:\?|&).*shorts",
             ],
             PlatformType.INSTAGRAM: [
-                r'(?:https?://)?(?:www\.)?instagram\.com/(?:p|reel|tv)/'
-            ]
+                r"(?:https?://)?(?:www\.)?instagram\.com/(?:p|reel|tv)/"
+            ],
         }
 
     def detect_platform(self, url: str) -> Optional[PlatformType]:
@@ -83,7 +78,7 @@ class GroupController:
 
     def is_social_media_link(self, text: str) -> bool:
         """Matnda social media link borligini tekshirish"""
-        url_pattern = r'https?://[^\s]+'
+        url_pattern = r"https?://[^\s]+"
         urls = re.findall(url_pattern, text)
 
         for url in urls:
@@ -94,7 +89,7 @@ class GroupController:
 
     def extract_urls(self, text: str) -> list[str]:
         """Matndan URLlarni ajratib olish"""
-        url_pattern = r'https?://[^\s]+'
+        url_pattern = r"https?://[^\s]+"
         return re.findall(url_pattern, text)
 
     async def download_media(self, url: str) -> Dict[str, Any]:
@@ -105,7 +100,7 @@ class GroupController:
             return {
                 "success": False,
                 "message": "❌ Qo'llab-quvvatlanmaydigan platform",
-                "files": []
+                "files": [],
             }
 
         try:
@@ -129,7 +124,7 @@ class GroupController:
                 return {
                     "success": False,
                     "message": f"❌ {platform.value} hali qo'llab-quvvatlanmaydi",
-                    "files": []
+                    "files": [],
                 }
 
         except Exception as e:
@@ -137,7 +132,7 @@ class GroupController:
             return {
                 "success": False,
                 "message": f"❌ Yuklab olishda xatolik: {str(e)}",
-                "files": []
+                "files": [],
             }
 
     async def _download_tiktok(self, url: str) -> Dict[str, Any]:
@@ -151,26 +146,23 @@ class GroupController:
             return {
                 "success": True,
                 "message": "✅ TikTok video yuklandi",
-                "files": [{"type": "video", "path": file_path}]
+                "files": [{"type": "video", "path": file_path}],
             }
 
-        return {
-            "success": False,
-            "message": "❌ TikTok video yuklanmadi",
-            "files": []
-        }
+        return {"success": False, "message": "❌ TikTok video yuklanmadi", "files": []}
 
     async def _download_instagram(self, url: str) -> Dict[str, Any]:
         """Instagram video yuklab olish - Guruh uchun optimallashtirilgan"""
         try:
             from app.bot.handlers.instagram_handler import download_instagram_for_group
+
             return await download_instagram_for_group(url)
         except Exception as e:
             logger.error(f"Instagram download error: {e}")
             return {
                 "success": False,
                 "message": f"❌ Instagram xatolik: {str(e)[:100]}",
-                "files": []
+                "files": [],
             }
 
     async def _download_pinterest(self, url: str) -> Dict[str, Any]:
@@ -178,19 +170,21 @@ class GroupController:
         save_path = self.media_dir / "pinterest"
 
         with PinterestDownloader() as downloader:
-            file_path, media_type = downloader.download(url, str(save_path), "pinterest_media")
+            file_path, media_type = downloader.download(
+                url, str(save_path), "pinterest_media"
+            )
 
         if file_path and Path(file_path).exists():
             return {
                 "success": True,
                 "message": f"✅ Pinterest {media_type} yuklandi",
-                "files": [{"type": media_type, "path": file_path}]
+                "files": [{"type": media_type, "path": file_path}],
             }
 
         return {
             "success": False,
             "message": "❌ Pinterest media yuklanmadi",
-            "files": []
+            "files": [],
         }
 
     async def _download_threads(self, url: str) -> Dict[str, Any]:
@@ -205,19 +199,11 @@ class GroupController:
                     {"type": f["type"], "path": f["path"]}
                     for f in result["downloaded_files"]
                 ]
-                return {
-                    "success": True,
-                    "message": result["message"],
-                    "files": files
-                }
+                return {"success": True, "message": result["message"], "files": files}
         finally:
             controller.close()
 
-        return {
-            "success": False,
-            "message": "❌ Threads media yuklanmadi",
-            "files": []
-        }
+        return {"success": False, "message": "❌ Threads media yuklanmadi", "files": []}
 
     async def _download_twitter(self, url: str) -> Dict[str, Any]:
         """Twitter media yuklab olish"""
@@ -229,17 +215,9 @@ class GroupController:
                 {"type": f["type"], "path": f["path"]}
                 for f in result["downloaded_files"]
             ]
-            return {
-                "success": True,
-                "message": result["message"],
-                "files": files
-            }
+            return {"success": True, "message": result["message"], "files": files}
 
-        return {
-            "success": False,
-            "message": "❌ Twitter media yuklanmadi",
-            "files": []
-        }
+        return {"success": False, "message": "❌ Twitter media yuklanmadi", "files": []}
 
     async def _download_likee(self, url: str) -> Dict[str, Any]:
         """Likee video yuklab olish"""
@@ -250,14 +228,10 @@ class GroupController:
             return {
                 "success": True,
                 "message": "✅ Likee video yuklandi",
-                "files": [{"type": "video", "path": file_path}]
+                "files": [{"type": "video", "path": file_path}],
             }
 
-        return {
-            "success": False,
-            "message": "❌ Likee video yuklanmadi",
-            "files": []
-        }
+        return {"success": False, "message": "❌ Likee video yuklanmadi", "files": []}
 
     async def _download_snapchat(self, url: str) -> Dict[str, Any]:
         """Snapchat video yuklab olish"""
@@ -268,13 +242,13 @@ class GroupController:
             return {
                 "success": True,
                 "message": "✅ Snapchat video yuklandi",
-                "files": [{"type": "video", "path": file_path}]
+                "files": [{"type": "video", "path": file_path}],
             }
 
         return {
             "success": False,
             "message": "❌ Snapchat video yuklanmadi",
-            "files": []
+            "files": [],
         }
 
     async def _download_youtube_shorts(self, url: str) -> Dict[str, Any]:
@@ -288,7 +262,7 @@ class GroupController:
                 return {
                     "success": True,
                     "message": "✅ YouTube Shorts yuklandi",
-                    "files": [{"type": "video", "path": file_path}]
+                    "files": [{"type": "video", "path": file_path}],
                 }
         except Exception as e:
             logger.error(f"YouTube Shorts download error: {e}")
@@ -296,12 +270,18 @@ class GroupController:
         return {
             "success": False,
             "message": "❌ YouTube Shorts yuklanmadi",
-            "files": []
+            "files": [],
         }
 
     def get_supported_platforms(self) -> list[str]:
         """Qo'llab-quvvatlanadigan platformalar ro'yxati"""
         return [
-            "TikTok", "Pinterest", "Threads", "Twitter/X",
-            "Likee", "Snapchat", "YouTube Shorts", "Instagram"
+            "TikTok",
+            "Pinterest",
+            "Threads",
+            "Twitter/X",
+            "Likee",
+            "Snapchat",
+            "YouTube Shorts",
+            "Instagram",
         ]
