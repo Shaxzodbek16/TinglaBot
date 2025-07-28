@@ -35,6 +35,7 @@ async def download_instagram_video_only_mp4(url: str, target_folder=None) -> str
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
         },
     }
+    print(ydl_opts["cookiefile"])
 
     try:
         with YoutubeDL(ydl_opts) as ydl:
