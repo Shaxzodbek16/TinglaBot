@@ -40,7 +40,7 @@ class TikTokDownloader:
             "merge_output_format": "mp4",
             "quiet": False,  # Debug uchun False
             "noplaylist": True,
-            "cookiefile": get_random_cookie_for_instagram(CookieType.TIKTOK.value),
+            "cookies": get_random_cookie_for_instagram(CookieType.TIKTOK.value),
             "verbose": True,  # Debug loglar uchun
         }
 
