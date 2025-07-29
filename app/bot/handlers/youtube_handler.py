@@ -42,7 +42,7 @@ AUDIO_OPTS_SMART = {
     "socket_timeout": 10,
     "retries": 3,
     "fragment_retries": 3,
-    "cookiefile": get_random_cookie_for_youtube(CookieType.YOUTUBE.value),
+    "cookies": get_random_cookie_for_youtube(CookieType.YOUTUBE.value),
     # Add extractaudio for audio-only downloads
     "extractaudio": True,
     # Prefer free formats when available
@@ -63,16 +63,16 @@ VIDEO_OPTS = {
     "socket_timeout": 15,
     "retries": 3,
     "fragment_retries": 3,
-    "cookiefile": get_random_cookie_for_youtube(CookieType.YOUTUBE.value),
+    "cookies": get_random_cookie_for_youtube(CookieType.YOUTUBE.value),
     "merge_output_format": "mp4",  # Ensure consistent output format
 }
-print("Youtube video handler: ", VIDEO_OPTS["cookiefile"])
+print("Youtube video handler: ", VIDEO_OPTS["cookies"])
 
 
 def _get_smart_audio_opts(
     convert_to_mp3: bool = False, allow_large: bool = False
 ) -> dict:
-    AUDIO_OPTS_SMART["cookiefile"] = get_random_cookie_for_youtube(
+    AUDIO_OPTS_SMART["cookies"] = get_random_cookie_for_youtube(
         CookieType.YOUTUBE.value
     )
     opts = AUDIO_OPTS_SMART.copy()
@@ -110,7 +110,7 @@ def _audio_sync(query: str) -> Optional[str]:
 
     for cookie_file in cookies:
         opts = _get_smart_audio_opts()
-        opts["cookiefile"] = cookie_file
+        opts["cookies"] = cookie_file
         print("Trying cookie:", cookie_file)
 
         try:
@@ -144,7 +144,7 @@ def _video_sync(video_id: str, title: str) -> Optional[str]:
 
     for cookie_file in cookies:
         opts = VIDEO_OPTS.copy()
-        opts["cookiefile"] = cookie_file
+        opts["cookies"] = cookie_file
         print("Trying cookie:", cookie_file)
 
         try:
