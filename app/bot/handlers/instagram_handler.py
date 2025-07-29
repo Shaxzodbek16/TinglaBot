@@ -51,7 +51,10 @@ async def download_instagram_video_only_mp4(url: str, target_folder=None) -> str
 
     except Exception as e:
         logger.error(f"Instagram download error: {e}")
-        raise Exception(f"Instagram yuklab olishda xatolik: {str(e)}")
+
+        raise Exception(
+            f"Instagram yuklab olishda xatolik: {str(e)}, cookie: {ydl_opts['cookiefile']}"
+        )
 
 
 def validate_instagram_url(url: str) -> str:

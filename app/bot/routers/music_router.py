@@ -63,7 +63,7 @@ def _start_cleanup_task():
 
 # ── helpers with improvements ─────────────────────────────────────────────────
 def create_keyboard(
-        user_id: int, page: int, add_video: bool = False
+    user_id: int, page: int, add_video: bool = False
 ) -> InlineKeyboardMarkup:
     """Create paginated keyboard with video option."""
     if user_id not in _cache:
@@ -105,9 +105,7 @@ def create_keyboard(
 
     # Video button for media recognition
     if add_video and hits:
-        rows.append(
-            [InlineKeyboardButton(text="🎬", callback_data="music:video:0")]
-        )
+        rows.append([InlineKeyboardButton(text="🎬", callback_data="music:video:0")])
 
     return InlineKeyboardMarkup(inline_keyboard=rows)
 
@@ -147,7 +145,7 @@ def is_cache_valid(user_id: int) -> bool:
     if user_id not in _cache:
         return False
 
-    if CACHE_MAX_AGE == float('inf'):
+    if CACHE_MAX_AGE == float("inf"):
         return True
 
     cache_age = time.time() - _cache[user_id]["timestamp"]
@@ -194,7 +192,7 @@ async def cleanup_cache_loop():
             current_time = time.time()
 
             # Only clean expired cache entries if CACHE_MAX_AGE is not infinite
-            if CACHE_MAX_AGE != float('inf'):
+            if CACHE_MAX_AGE != float("inf"):
                 expired_users = [
                     user_id
                     for user_id, data in _cache.items()
@@ -251,7 +249,7 @@ async def handle_text_query(message: Message):
     if len(query) > 100:
         query = query[:100]
 
-    status_message = await message.answer(_('🔍 Searching...'))
+    status_message = await message.answer(_("🔍 Searching..."))
 
     try:
         hits = await get_controller().search(query)
@@ -402,9 +400,7 @@ async def handle_callbacks(callback: CallbackQuery):
 
             _download_queue[user_id] = time.time()
             hit = _cache[user_id]["hits"][index]
-            status_message = await callback.message.answer(
-                _("⏳ Downloading audio...")
-            )
+            status_message = await callback.message.answer(_("⏳ Downloading audio..."))
 
             await download_and_send_audio(callback.message, status_message, hit)
 
@@ -449,7 +445,9 @@ async def download_and_send_audio(destination: Message, status: Message, info: D
 
     except Exception as e:
         logger.error(f"Audio download error: {e}")
-        await status.edit_text(_("❌ Download error: {error}").format(error=str(e)[:100]))
+        await status.edit_text(
+            _("❌ Download error: {error}").format(error=str(e)[:100])
+        )
 
 
 async def download_and_send_video(destination: Message, status: Message, info: Dict):
@@ -486,7 +484,9 @@ async def download_and_send_video(destination: Message, status: Message, info: D
 
     except Exception as e:
         logger.error(f"Video download error: {e}")
-        await status.edit_text(_("❌ Video download error: {error}").format(error=str(e)[:100]))
+        await status.edit_text(
+            _("❌ Video download error: {error}").format(error=str(e)[:100])
+        )
 
 
 # ── Additional utility functions for cache management ────────────────────────
@@ -505,15 +505,17 @@ def get_cache_stats() -> Dict:
     cache_stats = {
         "total_users": len(_cache),
         "total_download_queue": len(_download_queue),
-        "cache_ages": []
+        "cache_ages": [],
     }
 
     for user_id, data in _cache.items():
         age_seconds = current_time - data["timestamp"]
-        cache_stats["cache_ages"].append({
-            "user_id": user_id,
-            "age_hours": age_seconds / 3600,
-            "hits_count": len(data.get("hits", []))
-        })
+        cache_stats["cache_ages"].append(
+            {
+                "user_id": user_id,
+                "age_hours": age_seconds / 3600,
+                "hits_count": len(data.get("hits", [])),
+            }
+        )
 
     return cache_stats
