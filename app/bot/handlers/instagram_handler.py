@@ -30,7 +30,7 @@ async def download_instagram_video_only_mp4(url: str, target_folder=None) -> str
         "noplaylist": True,
         "quiet": True,
         "no_warnings": True,
-        "cookiefile": get_random_cookie_for_instagram(CookieType.INSTAGRAM.value),
+        "cookies": get_random_cookie_for_instagram(CookieType.INSTAGRAM.value),
         "http_headers": {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
         },
